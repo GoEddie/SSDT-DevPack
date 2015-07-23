@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Nested", "Nested.sqlproj", "{5A32B58D-1E86-409A-8258-AEA0F0A07123}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level1", "Level1", "{ADC7970C-786F-4580-B98F-7B0C75830FFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level2", "Level2", "{341332BB-C251-440C-9A2E-20403C9B767A}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Nested2", "..\Nested2\Nested2.sqlproj", "{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A32B58D-1E86-409A-8258-AEA0F0A07123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A32B58D-1E86-409A-8258-AEA0F0A07123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A32B58D-1E86-409A-8258-AEA0F0A07123}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5A32B58D-1E86-409A-8258-AEA0F0A07123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A32B58D-1E86-409A-8258-AEA0F0A07123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A32B58D-1E86-409A-8258-AEA0F0A07123}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{341332BB-C251-440C-9A2E-20403C9B767A} = {ADC7970C-786F-4580-B98F-7B0C75830FFF}
+		{149AF7A3-029F-4CE6-BCDD-2216336F9BE6} = {341332BB-C251-440C-9A2E-20403C9B767A}
+	EndGlobalSection
+EndGlobal

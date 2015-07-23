@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SSDTDevPack.Common.VSPackage
 {
-    public class VsServiceProvider
+    public static class VsServiceProvider
     {
 
         private static IVsServiceProvider _provider;
