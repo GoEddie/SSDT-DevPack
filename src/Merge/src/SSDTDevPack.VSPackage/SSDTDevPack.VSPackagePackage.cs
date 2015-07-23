@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using SSDTDevPack.Common.VSPackage;
 
 namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 {
@@ -32,18 +33,12 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
     // This attribute registers a tool window exposed by this package.
     [ProvideToolWindow(typeof(MyToolWindow))]
     [Guid(GuidList.guidSSDTDevPack_VSPackagePkgString)]
-    public sealed class SSDTDevPack_VSPackagePackage : Package
+    public sealed class SSDTDevPack_VSPackagePackage : Package, IVsServiceProvider
     {
-        /// <summary>
-        /// Default constructor of the package.
-        /// Inside this method you can place any initialization code that does not require 
-        /// any Visual Studio service because at this point the package object is created but 
-        /// not sited yet inside Visual Studio environment. The place to do all the other 
-        /// initialization is the Initialize method.
-        /// </summary>
+       
         public SSDTDevPack_VSPackagePackage()
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
+            VsServiceProvider.Register(this);
         }
 
         /// <summary>
@@ -118,6 +113,11 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                        OLEMSGICON.OLEMSGICON_INFO,
                        0,        // false
                        out result));
+        }
+
+        public object GetVsService(Type type)
+        {
+            return GetService(type);
         }
 
     }
