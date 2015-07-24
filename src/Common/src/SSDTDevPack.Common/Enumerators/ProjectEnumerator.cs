@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Logging;
 
-namespace SSDTDevPack.Common
+namespace SSDTDevPack.Common.Enumerators
 {
     public class ProjectEnumerator
     {

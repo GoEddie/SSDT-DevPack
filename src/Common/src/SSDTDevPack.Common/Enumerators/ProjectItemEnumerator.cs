@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using EnvDTE;
 
-namespace SSDTDevPack.Common
+namespace SSDTDevPack.Common.Enumerators
 {
     public class ProjectItemEnumerator
     {
@@ -9,7 +9,7 @@ namespace SSDTDevPack.Common
         {
             var items = new List<ProjectItem>();
 
-            for (int i = 1; i <= project.ProjectItems.Count; i++)
+            for (var i = 1; i <= project.ProjectItems.Count; i++)
             {
                 if (project.ProjectItems.Item(i).ProjectItems != null)
                 {
@@ -38,7 +38,6 @@ namespace SSDTDevPack.Common
             }
 
             return items;
-        } 
-
+        }
     }
 }

@@ -45,13 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProjectEnumerator.cs" />
-    <Compile Include="ProjectItemEnumerator.cs" />
+    <Compile Include="Directories.cs" />
+    <Compile Include="DteVsPackageProvider.cs" />
+    <Compile Include="IOleMessageFilter.cs" />
+    <Compile Include="MessageFilter.cs" />
+    <Compile Include="Enumerators\ProjectEnumerator.cs" />
+    <Compile Include="Enumerators\ProjectItemEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
