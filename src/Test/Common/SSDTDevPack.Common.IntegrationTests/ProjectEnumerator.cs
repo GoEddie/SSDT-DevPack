@@ -45,7 +45,8 @@ namespace SSDTDevPack.Common.IntegrationTests
                 MessageFilter.Revoke();
 
                 Assert.AreEqual(2, projects.Count);
-                Console.WriteLine("have 2 PROJECTS");
+                Assert.IsNotNull(projects.FirstOrDefault(p=>p.FileName == "Nested.sqlproj"));
+                Assert.IsNotNull(projects.FirstOrDefault(p => p.FileName == "Nested2.sqlproj"));
 
             }
             catch (Exception e)
@@ -56,6 +57,7 @@ namespace SSDTDevPack.Common.IntegrationTests
         }
 
     }
+
 
     public class MessageFilter : IOleMessageFilter
     {

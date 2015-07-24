@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ProjectEnumerator.cs" />
+    <Compile Include="ProjectItemEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\SavedSettings.cs" />
     <Compile Include="VSPackage\ServiceProvider.cs" />

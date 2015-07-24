@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Common.VSPackage;
@@ -14,16 +12,15 @@ namespace SSDTDevPack.Common
     {
         public IList<Project> Get(string projectType)
         {
-            var dte = VsServiceProvider.Get(typeof(SDTE)) as DTE;
+            var dte = VsServiceProvider.Get(typeof (SDTE)) as DTE;
 
             var projects = new List<Project>();
-            for (int i = 1; i <= dte.Solution.Projects.Count; i++)
+            for (var i = 1; i <= dte.Solution.Projects.Count; i++)
             {
                 var project = dte.Solution.Projects.Item(i);
-               
-                Log.WriteInfo("ProjectEnumerator: Have Project: {0}", project.FullName);   
-                projects.AddRange(GetChildren(projectType, project));
 
+                Log.WriteInfo("ProjectEnumerator: Have Project: {0}", project.FullName);
+                projects.AddRange(GetChildren(projectType, project));
             }
             return projects;
         }
@@ -32,7 +29,7 @@ namespace SSDTDevPack.Common
         {
             var projects = new List<Project>();
 
-            for (var i=1; i<=project.ProjectItems.Count; i++)
+            for (var i = 1; i <= project.ProjectItems.Count; i++)
             {
                 var item = project.ProjectItems.Item(i);
                 if (item.SubProject != null)
@@ -47,9 +44,10 @@ namespace SSDTDevPack.Common
                 }
                 else
                 {
-                    Log.WriteInfo("ProjectEnumerator: Not Adding Project: {0} because it is the incorrect kind (kind={1} + wanted={2})", project.FullName, project.Kind, projectType);
+                    Log.WriteInfo(
+                        "ProjectEnumerator: Not Adding Project: {0} because it is the incorrect kind (kind={1} + wanted={2})",
+                        project.FullName, project.Kind, projectType);
                 }
-                    
             }
 
             if (new Guid(project.Kind).Equals(new Guid(projectType)))
@@ -57,13 +55,9 @@ namespace SSDTDevPack.Common
                 Log.WriteInfo("ProjectEnumerator: Adding Project: {0}", project.FullName);
                 projects.Add(project);
             }
-            
+
 
             return projects;
-        } 
-
-
+        }
     }
-
-    
 }
