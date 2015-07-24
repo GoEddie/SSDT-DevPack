@@ -81,6 +81,12 @@
   <ItemGroup>
     <None Include="Key.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SSDTDevPack.Logging\SSDTDevPack.Logging.csproj">
+      <Project>{F54FDAD9-CD38-4142-BF69-4E1CE83D364A}</Project>
+      <Name>SSDTDevPack.Logging</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
