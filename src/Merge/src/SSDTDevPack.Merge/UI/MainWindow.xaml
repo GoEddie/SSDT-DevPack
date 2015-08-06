@@ -1,0 +1,35 @@
+﻿<UserControl xmlns:UI="clr-namespace:SSDTDevPack.Merge.UI"  x:Class="SSDTDevPack.Merge.UI.MainWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0">
+            <Button Click="ToolbarRefresh_Click">Refresh</Button>
+        </WrapPanel>
+        <DockPanel Grid.Row="1">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TreeView Grid.Column="0" x:Name="ProjectItems" />
+                    <GridSplitter Background="WhiteSmoke" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+                    
+                    <UI:TablePage Grid.Column="1"/>
+
+                </Grid>
+            </ScrollViewer>
+        </DockPanel>
+
+    </Grid>
+</UserControl>

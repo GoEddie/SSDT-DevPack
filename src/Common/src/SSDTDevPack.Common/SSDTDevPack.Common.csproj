@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Enumerators\ProjectEnumerator.cs" />
     <Compile Include="Enumerators\ProjectItemEnumerator.cs" />
+    <Compile Include="Enumerators\ProjectType.cs" />
     <Compile Include="ProjectItems\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\SavedSettings.cs" />
