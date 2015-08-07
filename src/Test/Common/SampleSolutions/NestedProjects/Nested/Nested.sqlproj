@@ -62,7 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ABC\DEF\Script.NotIncluded.sql" />
-    <None Include="ABC\DEF\Script.Predeploy.sql" />
+    <PreDeploy Include="ABC\DEF\Script.Predeploy.sql" />
+    <None Include="Nested.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ABC\DEF\Script.Included.sql" />

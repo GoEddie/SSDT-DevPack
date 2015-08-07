@@ -36,6 +36,9 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DacFxStronglyTypedModel">
+      <HintPath>..\..\..\Merge\src\SSDTDevPack.Merge\packages\DACExtension.1.0.0\lib\net45\DacFxStronglyTypedModel.dll</HintPath>
+    </Reference>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -51,6 +54,16 @@
     <Reference Include="envdte90a, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Dac">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Dac.Extensions">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -72,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dac\ColumnDescriptor.cs" />
     <Compile Include="Enumerators\ProjectEnumerator.cs" />
     <Compile Include="Enumerators\ProjectItemEnumerator.cs" />
     <Compile Include="Enumerators\ProjectType.cs" />
@@ -83,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SSDTDevPack.Logging\SSDTDevPack.Logging.csproj">
@@ -90,6 +105,7 @@
       <Name>SSDTDevPack.Logging</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

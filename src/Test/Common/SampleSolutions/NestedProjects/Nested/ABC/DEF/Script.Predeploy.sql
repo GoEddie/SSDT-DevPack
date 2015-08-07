@@ -1,1 +1,1 @@
-﻿
+﻿print N'@@LOCK_TIMEOUT:  ' + CAST(@@LOCK_TIMEOUT as nvarchar);
