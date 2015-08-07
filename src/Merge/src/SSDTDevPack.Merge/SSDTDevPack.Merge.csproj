@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MergeDescriptor\Merge.cs" />
+    <Compile Include="Parsing\MergeStatementParser.cs" />
+    <Compile Include="Parsing\MergeStatementRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

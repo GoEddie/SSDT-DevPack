@@ -15,8 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EnvDTE;
+using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
+using SSDTDevPack.Merge.Parsing;
 
 namespace SSDTDevPack.Merge.UI
 {
@@ -74,9 +76,11 @@ namespace SSDTDevPack.Merge.UI
         {
             root.Header = project.Name;
 
-            var preDeploy = GetScripts(project, "PreDeploy");
-            var postDeploy = GetScripts(project, "PostDeploy");
-            var other = GetScripts(project, "None");
+            var tables = new TableRepository(DacpacPath.Get(project));
+
+            var preDeploy = GetScripts(project, tables, "PreDeploy");
+            var postDeploy = GetScripts(project, tables, "PostDeploy");
+            var other = GetScripts(project, tables, "None");
 
             root.Items.Add(preDeploy);
             root.Items.Add(postDeploy);
@@ -84,27 +88,28 @@ namespace SSDTDevPack.Merge.UI
             
         }
 
-        private TreeViewItem GetScripts(Project project, string type)
+        private TreeViewItem GetScripts(Project project, TableRepository tables, string type)
         {
             var node = new TreeViewItem();
             node.Header = type;
             
             foreach (ProjectItem item in new ProjectItemEnumerator().Get(project).Where(p => p.HasBuildAction(type)))
             {
-                node.Items.Add(GetScriptNode(item));
+                node.Items.Add(GetScriptNode(tables, item));
             }
             
             return node;
 
         }
 
-        private TreeViewItem GetScriptNode(ProjectItem item)
+        private TreeViewItem GetScriptNode(TableRepository tables, ProjectItem item)
         {
             var node = new TreeViewItem();
             node.Header = item.Name;
 
             //parse the merge statements...
-
+            var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
+            repoitory.Populate();
             return node;
         }
 
