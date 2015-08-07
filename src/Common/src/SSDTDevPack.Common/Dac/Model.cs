@@ -4,12 +4,12 @@ namespace SSDTDevPack.Common.Dac
 {
     public class Model
     {
-        public TSqlTypedModel Get(string path)
+        public static TSqlTypedModel Get(string path)
         {
             return new TSqlTypedModel(path);
         }
 
-        public void Close(TSqlTypedModel model)
+        public static void Close(TSqlTypedModel model)
         {
             model.Dispose();
         }

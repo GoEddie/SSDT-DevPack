@@ -22,7 +22,7 @@ namespace SSDTDevPack.Common.IntegrationTests.Columns
         public void Init()
         {
             _model =
-                new Model().Get(Path.Combine(Directories.GetSampleSolution(),
+                Model.Get(Path.Combine(Directories.GetSampleSolution(),
                     @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
         }
 
@@ -48,7 +48,7 @@ namespace SSDTDevPack.Common.IntegrationTests.Columns
         public void Init()
         {
             _model =
-                new Model().Get(Path.Combine(Directories.GetSampleSolution(),
+                Model.Get(Path.Combine(Directories.GetSampleSolution(),
                     @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
         }
 
