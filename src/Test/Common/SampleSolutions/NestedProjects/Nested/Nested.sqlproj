@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="ABC\DEF\Script.Included.sql" />
+    <Build Include="TheTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="ABC\DEF\Script.PostDeploy.sql" />

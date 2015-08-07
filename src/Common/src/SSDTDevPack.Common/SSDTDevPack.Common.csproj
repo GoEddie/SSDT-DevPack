@@ -86,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dac\ColumnDescriptor.cs" />
+    <Compile Include="Dac\LiteralConverter.cs" />
+    <Compile Include="Dac\Model.cs" />
+    <Compile Include="Dac\ObjectIdentifierExtensions.cs" />
     <Compile Include="Enumerators\ProjectEnumerator.cs" />
     <Compile Include="Enumerators\ProjectItemEnumerator.cs" />
     <Compile Include="Enumerators\ProjectType.cs" />
