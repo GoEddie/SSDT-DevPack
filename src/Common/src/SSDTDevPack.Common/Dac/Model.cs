@@ -8,5 +8,10 @@ namespace SSDTDevPack.Common.Dac
         {
             return new TSqlTypedModel(path);
         }
+
+        public void Close(TSqlTypedModel model)
+        {
+            model.Dispose();
+        }
     }
 }

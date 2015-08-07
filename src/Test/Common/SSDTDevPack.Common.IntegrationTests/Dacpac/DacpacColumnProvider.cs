@@ -12,6 +12,32 @@ using SSDTDevPack.Common.Dac;
 
 namespace SSDTDevPack.Common.IntegrationTests.Columns
 {
+
+    [TestFixture]
+    public class DacpacTableProvider
+    {
+        private TSqlTypedModel _model;
+
+        [TestFixtureSetUp]
+        public void Init()
+        {
+            _model =
+                new Model().Get(Path.Combine(Directories.GetSampleSolution(),
+                    @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
+        }
+
+        [Test]
+        public void gets_table_name()
+        {
+            var table = _model.GetObject<TSqlTable>(new ObjectIdentifier("dbo", "TheTable"), DacQueryScopes.UserDefined);
+            Assert.IsNotNull(table);
+            var descriptor = new TableDescriptor(table);
+            Assert.AreEqual("dbo", descriptor.Name.GetSchema());
+            Assert.AreEqual("TheTable", descriptor.Name.GetName());
+            
+        }
+    }
+
     [TestFixture]
     public class DacpacColumnProvider
     {

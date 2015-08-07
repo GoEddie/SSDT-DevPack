@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Columns\DacpacColumnProvider.cs" />
+    <Compile Include="Dacpac\DacpacColumnProvider.cs" />
     <Compile Include="Directories.cs" />
     <Compile Include="DteVsPackageProvider.cs" />
     <Compile Include="IOleMessageFilter.cs" />
