@@ -9,33 +9,32 @@ using SSDTDevPack.Common.Dac;
 
 namespace SSDTDevPack.Merge.MergeDescriptor
 {
-
-    class InScriptDescriptor
+    public class InScriptDescriptor
     {
+        public InScriptDescriptor(int scriptOffset, int scriptLength, string filePath)
+        {
+            ScriptOffset = scriptOffset;
+            ScriptLength = scriptLength;
+            FilePath = filePath;
+        }
+
         public int ScriptOffset { get; set; }
         public int ScriptLength { get; set; }
         public string FilePath { get; set; }
     }
 
-    class Merge
+    public class Merge
     {
         public MergeStatement Statement { get; set; }
 
         public InScriptDescriptor ScriptDescriptor { get; set; }
 
-        public DataTable Date { get; set; }
+        public DataTable Data { get; set; }
 
         public TableDescriptor Table;
 
         public Identifier Name;
 
         public MergeOptions Option { get; set; }
-    }
-
-    public class MergeOptions
-    {
-        public bool HasUpdate { get; set; }
-        public bool HasInsert { get; set; }
-        public bool HasDelete { get; set; }
     }
 }

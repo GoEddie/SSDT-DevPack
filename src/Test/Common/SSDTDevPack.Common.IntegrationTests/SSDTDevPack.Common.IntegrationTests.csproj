@@ -56,6 +56,7 @@
     <Compile Include="Directories.cs" />
     <Compile Include="DteVsPackageProvider.cs" />
     <Compile Include="IOleMessageFilter.cs" />
+    <Compile Include="MergeStatementRepository\MergeStatementRepositoryTests.cs" />
     <Compile Include="MessageFilter.cs" />
     <Compile Include="Enumerators\ProjectEnumerator.cs" />
     <Compile Include="Enumerators\ProjectItemEnumerator.cs" />
@@ -72,6 +73,10 @@
     <ProjectReference Include="..\..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">
       <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
       <Name>SSDTDevPack.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Merge\src\SSDTDevPack.Merge\SSDTDevPack.Merge.csproj">
+      <Project>{EF0F4A6D-68A4-4745-A3D5-2118A1608721}</Project>
+      <Name>SSDTDevPack.Merge</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
