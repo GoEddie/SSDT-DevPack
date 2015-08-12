@@ -71,13 +71,23 @@ namespace SSDTDevPack.Merge.Parsing
                 merge.ScriptDescriptor = new InScriptDescriptor(mergeStatement.StartOffset,
                     mergeStatement.FragmentLength, _path);
                 merge.Statement = mergeStatement;
+
+                bool includeIdentityColumns = false;
+                foreach (DataRow row in merge.Data.Rows)
+                {
+                    if (merge.Table.Columns.FirstOrDefault(p => p.IsIdentity) != null && merge.Table.Columns.Where(p => p.IsIdentity).Any(col => row[col.Name.GetName()] != null))
+                    {
+                        includeIdentityColumns = true;
+                    }
+                }
+
                 merge.Option =
                     new MergeOptions(
                         mergeStatement.MergeSpecification.ActionClauses.Any(p => p.Condition == MergeCondition.Matched),
                         mergeStatement.MergeSpecification.ActionClauses.Any(
                             p => p.Condition == MergeCondition.NotMatchedByTarget),
                         mergeStatement.MergeSpecification.ActionClauses.Any(
-                            p => p.Condition == MergeCondition.NotMatchedBySource), false);
+                            p => p.Condition == MergeCondition.NotMatchedBySource), includeIdentityColumns);
 
                 Merges.Add(merge);
             }

@@ -110,6 +110,13 @@ namespace SSDTDevPack.Merge.UI
             //parse the merge statements...
             var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
             repoitory.Populate();
+
+            foreach (var merge in repoitory.Get())
+            {
+                node.Items.Add(merge.Name.Value);
+            }
+
+
             return node;
         }
 

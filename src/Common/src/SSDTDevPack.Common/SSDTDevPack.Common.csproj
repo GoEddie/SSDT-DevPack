@@ -97,6 +97,7 @@
     <Compile Include="Enumerators\ProjectType.cs" />
     <Compile Include="ProjectItems\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptDom\Quote.cs" />
     <Compile Include="ScriptDom\ScriptParser.cs" />
     <Compile Include="Settings\SavedSettings.cs" />
     <Compile Include="VSPackage\ServiceProvider.cs" />

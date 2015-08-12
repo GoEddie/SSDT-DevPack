@@ -38,7 +38,7 @@ namespace SSDTDevPack.Common.IntegrationTests.MergeWriter
             }
             m.Name = m.Table.Name.ToIdentifier();
 
-            m.Option = new MergeOptions(true, true, false, false);
+            m.Option = new MergeOptions(true, true, false, true);
 
 
             var writer = new Merge.MergeDescriptor.MergeWriter(m);

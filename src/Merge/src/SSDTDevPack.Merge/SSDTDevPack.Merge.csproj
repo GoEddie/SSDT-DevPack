@@ -75,7 +75,6 @@
   <ItemGroup>
     <Compile Include="MergeDescriptor\Merge.cs" />
     <Compile Include="MergeDescriptor\MergeOptions.cs" />
-    <Compile Include="MergeDescriptor\Quote.cs" />
     <Compile Include="Parsing\MergeStatementParser.cs" />
     <Compile Include="Parsing\MergeStatementRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

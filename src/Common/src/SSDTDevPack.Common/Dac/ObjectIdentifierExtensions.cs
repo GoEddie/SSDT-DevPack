@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Dac.Model;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
+using SSDTDevPack.Merge.MergeDescriptor;
 
 namespace SSDTDevPack.Common.Dac
 {
@@ -33,9 +34,9 @@ namespace SSDTDevPack.Common.Dac
         public static bool EqualsName(this ObjectIdentifier source, SchemaObjectName target)
         {
             if (target.SchemaIdentifier == null)
-                return source.GetName() == target.BaseIdentifier.Value;
+                return Quote.Name(source.GetName()) == Quote.Name(target.BaseIdentifier.Value);
 
-            return source.GetSchema() == target.SchemaIdentifier.Value && source.GetName() == target.BaseIdentifier.Value;
+            return Quote.Name(source.GetSchema()) == Quote.Name(target.SchemaIdentifier.Value) && Quote.Name(source.GetName()) == Quote.Name(target.BaseIdentifier.Value);
         }
 
         public static Identifier ToIdentifier(this ObjectIdentifier source)

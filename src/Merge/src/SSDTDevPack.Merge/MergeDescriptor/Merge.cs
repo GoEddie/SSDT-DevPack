@@ -60,6 +60,38 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             var merge = CreateMerge();
 
             var script = merge.GetScript();
+
+            var scriptFile = GetScriptFile(_merge.ScriptDescriptor.FilePath);
+
+            if (_merge.ScriptDescriptor.OriginalText != null)
+            {
+                scriptFile.Replace(_merge.ScriptDescriptor.OriginalText, script);
+            }
+            else
+            {
+                scriptFile += "GO\r\n" + script;
+            }
+
+            WriteScriptFile(_merge.ScriptDescriptor.FilePath, scriptFile);
+
+        }
+
+        private void WriteScriptFile(string filePath, string scriptFile)
+        {
+            using (var writer = new StreamWriter(filePath))
+            {
+                writer.Write(scriptFile);
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        private string GetScriptFile(string filePath)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
         private MergeStatement CreateMerge()
