@@ -71,6 +71,7 @@ namespace SSDTDevPack.Merge.Parsing
                 merge.ScriptDescriptor = new InScriptDescriptor(mergeStatement.StartOffset,
                     mergeStatement.FragmentLength, _path);
                 merge.Statement = mergeStatement;
+                merge.Table = table;
 
                 bool includeIdentityColumns = false;
                 foreach (DataRow row in merge.Data.Rows)
