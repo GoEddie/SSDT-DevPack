@@ -77,7 +77,7 @@ namespace SSDTDevPack.Merge.Parsing
                         mergeStatement.MergeSpecification.ActionClauses.Any(
                             p => p.Condition == MergeCondition.NotMatchedByTarget),
                         mergeStatement.MergeSpecification.ActionClauses.Any(
-                            p => p.Condition == MergeCondition.NotMatchedBySource));
+                            p => p.Condition == MergeCondition.NotMatchedBySource), false);
 
                 Merges.Add(merge);
             }

@@ -38,6 +38,34 @@ namespace SSDTDevPack.Common.Dac
             return source.GetSchema() == target.SchemaIdentifier.Value && source.GetName() == target.BaseIdentifier.Value;
         }
 
+        public static Identifier ToIdentifier(this ObjectIdentifier source)
+        {
+            return new Identifier()
+            {
+                Value = source.GetName()
+            };
+        }
+
+        public static SchemaObjectName ToSchemaObjectName(this ObjectIdentifier source)
+        {
+            var target = new SchemaObjectName();
+            target.Identifiers.Add(source.GetSchema().ToScriptDomIdentifier());
+            target.Identifiers.Add(source.GetName().ToScriptDomIdentifier());
+            
+            return target;
+        }
+
+    }
+
+    public static class StringExtensions
+    {
+        public static Identifier ToScriptDomIdentifier(this string source)
+        {
+            return new Identifier()
+            {
+                Value = source
+            };
+        }
     }
 
     public static class SchemaObjectNameExtensions
