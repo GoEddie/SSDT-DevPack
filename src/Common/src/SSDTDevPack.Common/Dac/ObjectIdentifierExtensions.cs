@@ -32,6 +32,9 @@ namespace SSDTDevPack.Common.Dac
 
         public static bool EqualsName(this ObjectIdentifier source, SchemaObjectName target)
         {
+            if (target.SchemaIdentifier == null)
+                return source.GetName() == target.BaseIdentifier.Value;
+
             return source.GetSchema() == target.SchemaIdentifier.Value && source.GetName() == target.BaseIdentifier.Value;
         }
 

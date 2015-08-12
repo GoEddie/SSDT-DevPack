@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.ScriptDom;
@@ -14,14 +12,16 @@ namespace SSDTDevPack.Merge.Parsing
 {
     public class MergeStatementRepository
     {
-        private readonly TableRepository _tables;
         private readonly string _path;
+        private readonly TableRepository _tables;
 
         public MergeStatementRepository(TableRepository tables, string path)
         {
             _tables = tables;
             _path = path;
         }
+
+        public List<MergeDescriptor.Merge> Merges { get; set; }
 
         public List<MergeDescriptor.Merge> Get()
         {
@@ -52,24 +52,35 @@ namespace SSDTDevPack.Merge.Parsing
                 var table = _tables.Get().FirstOrDefault(p => p.Name.EqualsName(name));
                 if (table == null)
                 {
-                    Log.WriteInfo("Error Parsing Merge Statement, Could not find table name ({0}) in the TableRepository", name.BaseIdentifier.Value);
+                    Log.WriteInfo(
+                        "Error Parsing Merge Statement, Could not find table name ({0}) in the TableRepository",
+                        name.BaseIdentifier.Value);
                     continue;
                 }
+
+                if (!(mergeStatement.MergeSpecification.TableReference is InlineDerivedTable))
+                {
+                    Log.WriteInfo("Error Parsing Merge Statement, Could not find InlineDerivedTable");
+                    continue;
+                }
+
 
                 var merge = new MergeDescriptor.Merge();
                 merge.Name = name.ToIdentifier();
                 merge.Data = GetDataFromMerge(mergeStatement, table);
-                merge.ScriptDescriptor = new InScriptDescriptor(mergeStatement.StartOffset, mergeStatement.FragmentLength, _path);
+                merge.ScriptDescriptor = new InScriptDescriptor(mergeStatement.StartOffset,
+                    mergeStatement.FragmentLength, _path);
                 merge.Statement = mergeStatement;
                 merge.Option =
                     new MergeOptions(
                         mergeStatement.MergeSpecification.ActionClauses.Any(p => p.Condition == MergeCondition.Matched),
-                        mergeStatement.MergeSpecification.ActionClauses.Any(p => p.Condition == MergeCondition.NotMatchedByTarget),
-                        mergeStatement.MergeSpecification.ActionClauses.Any(p => p.Condition == MergeCondition.NotMatchedBySource));
-            
+                        mergeStatement.MergeSpecification.ActionClauses.Any(
+                            p => p.Condition == MergeCondition.NotMatchedByTarget),
+                        mergeStatement.MergeSpecification.ActionClauses.Any(
+                            p => p.Condition == MergeCondition.NotMatchedBySource));
+
                 Merges.Add(merge);
             }
-
         }
 
         private DataTable GetDataFromMerge(MergeStatement mergeStatement, TableDescriptor table)
@@ -81,12 +92,6 @@ namespace SSDTDevPack.Merge.Parsing
             }
 
             var inlineTable = mergeStatement.MergeSpecification.TableReference as InlineDerivedTable;
-            if (inlineTable == null)
-            {
-                Log.WriteInfo("Error Parsing Merge Statement, Could not find InlineDerivedTable");
-                return null;
-            }
-
 
             foreach (var row in inlineTable.RowValues)
             {
@@ -117,8 +122,5 @@ namespace SSDTDevPack.Merge.Parsing
 
             return dataTable;
         }
-
-        public List<MergeDescriptor.Merge> Merges { get; set; }
-
     }
 }

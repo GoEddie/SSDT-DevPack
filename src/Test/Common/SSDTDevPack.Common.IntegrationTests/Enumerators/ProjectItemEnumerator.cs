@@ -37,7 +37,7 @@ namespace SSDTDevPack.Common.IntegrationTests
             VsServiceProvider.Register(new DteVsPackageProvider(dte));
             MessageFilter.Register();
 
-            Thread.Sleep(30*1000);
+           // Thread.Sleep(30*1000);
 
             while (true)
             {
