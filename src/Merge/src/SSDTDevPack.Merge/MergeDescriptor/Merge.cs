@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,18 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             ScriptOffset = scriptOffset;
             ScriptLength = scriptLength;
             FilePath = filePath;
+
+            using (var reader = new StreamReader(filePath))
+            {
+                OriginalText = reader.ReadToEnd().Substring(scriptOffset, scriptLength);
+            }
+
         }
 
         public int ScriptOffset { get; set; }
         public int ScriptLength { get; set; }
         public string FilePath { get; set; }
+        public string OriginalText { get; set; }
     }
 
     public class Merge
