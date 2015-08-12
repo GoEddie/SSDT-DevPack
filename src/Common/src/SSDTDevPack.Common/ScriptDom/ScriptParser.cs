@@ -50,9 +50,20 @@ namespace SSDTDevPack.Common.ScriptDom
                     if (line.StartsWith(":"))
                     {
                         scriptBuffer.Append("--");
-                    }
 
-                    scriptBuffer.AppendLine(line);
+                        if (line.Length < 2)
+                        {
+                            Log.WriteInfo("ScriptParser - found : import but line length < 2 - this is a problem");
+                            return new StringReader(scriptBuffer.ToString());
+                        }
+
+                        scriptBuffer.AppendLine(line.Substring(2));
+                    }
+                    else
+                    {
+                        scriptBuffer.AppendLine(line);    
+                    }
+                    
                 }
             }
 

@@ -9,7 +9,7 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-
+:r .\dssdsds.sql
 GO
 MERGE INTO dbo.TheTable
  AS TARGET

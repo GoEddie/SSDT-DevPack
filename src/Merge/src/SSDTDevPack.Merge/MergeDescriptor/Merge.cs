@@ -37,4 +37,19 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         public MergeOptions Option { get; set; }
     }
+
+    public class MergeWriter
+    {
+        public MergeWriter(Merge merge)
+        {
+            
+        }
+
+        public void Write()
+        {
+            
+        }
+
+    }
+
 }
