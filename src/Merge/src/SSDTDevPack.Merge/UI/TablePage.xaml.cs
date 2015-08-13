@@ -23,6 +23,14 @@ namespace SSDTDevPack.Merge.UI
         public TablePage()
         {
             InitializeComponent();
+            
+            God.DataTableChanged += () =>
+            {
+                Grid.ItemsSource = null;
+
+                if (God.CurrentMergeData != null)
+                    Grid.ItemsSource = God.CurrentMergeData.DefaultView;
+            };
         }
     }
 }

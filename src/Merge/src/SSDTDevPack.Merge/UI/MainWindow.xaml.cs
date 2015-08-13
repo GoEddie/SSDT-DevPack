@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EnvDTE;
+using Microsoft.Win32;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
@@ -75,6 +76,7 @@ namespace SSDTDevPack.Merge.UI
         private void CreateProjectDefaults(TreeViewItem root, Project project)
         {
             root.Header = project.Name;
+            root.Selected += mergeNode_Selected;
 
             var tables = new TableRepository(DacpacPath.Get(project));
 
@@ -92,7 +94,7 @@ namespace SSDTDevPack.Merge.UI
         {
             var node = new TreeViewItem();
             node.Header = type;
-            
+       
             foreach (ProjectItem item in new ProjectItemEnumerator().Get(project).Where(p => p.HasBuildAction(type)))
             {
                 node.Items.Add(GetScriptNode(tables, item));
@@ -107,17 +109,49 @@ namespace SSDTDevPack.Merge.UI
             var node = new TreeViewItem();
             node.Header = item.Name;
 
+       
             //parse the merge statements...
             var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
             repoitory.Populate();
 
             foreach (var merge in repoitory.Get())
             {
-                node.Items.Add(merge.Name.Value);
+                var mergeNode = new TreeViewItem();
+                mergeNode.Header = merge.Name.Value;
+                mergeNode.Tag = merge;
+              
+                node.Items.Add(mergeNode);
             }
 
 
             return node;
+        }
+
+        void ClearTablePage()
+        {
+            God.CurrentMergeData = null;
+            God.DataTableChanged.Invoke();
+        }
+
+        void mergeNode_Selected(object sender, RoutedEventArgs e)
+        {
+            var node = e.Source as TreeViewItem;
+            if (node == null)
+            {
+                ClearTablePage();
+                return;
+            }
+
+            var merge = node.Tag as MergeDescriptor.Merge;
+
+            if (merge == null)
+            {
+                ClearTablePage();
+                return;
+            }
+
+            God.CurrentMergeData = merge.Data;
+            God.DataTableChanged.Invoke();
         }
 
         private void ToolbarRefresh_Click(object sender, RoutedEventArgs e)

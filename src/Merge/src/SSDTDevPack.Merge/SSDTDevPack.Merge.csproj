@@ -84,6 +84,7 @@
     <Compile Include="UI\TablePage.xaml.cs">
       <DependentUpon>TablePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\UIProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">

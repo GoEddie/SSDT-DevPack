@@ -73,10 +73,11 @@ namespace SSDTDevPack.Merge.Parsing
                 merge.Statement = mergeStatement;
                 merge.Table = table;
 
-                bool includeIdentityColumns = false;
+                var includeIdentityColumns = false;
                 foreach (DataRow row in merge.Data.Rows)
                 {
-                    if (merge.Table.Columns.FirstOrDefault(p => p.IsIdentity) != null && merge.Table.Columns.Where(p => p.IsIdentity).Any(col => row[col.Name.GetName()] != null))
+                    if (merge.Table.Columns.FirstOrDefault(p => p.IsIdentity) != null &&
+                        merge.Table.Columns.Where(p => p.IsIdentity).Any(col => row[col.Name.GetName()] != null))
                     {
                         includeIdentityColumns = true;
                     }
