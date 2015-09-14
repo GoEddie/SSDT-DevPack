@@ -1,2 +1,2 @@
-﻿select jsdfhsjkhqa;
-sdasdioajcoajca
+﻿--select jsdfhsjkhqa;
+--sdasdioajcoajca

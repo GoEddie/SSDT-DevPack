@@ -1,38 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using EnvDTE;
-using Microsoft.Win32;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
+using SSDTDevPack.Merge.MergeDescriptor;
 using SSDTDevPack.Merge.Parsing;
 
 namespace SSDTDevPack.Merge.UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
-            
-            if (Assembly.GetCallingAssembly().FullName != "WinFormHost.Merge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")
+
+            if (Assembly.GetCallingAssembly().FullName !=
+                "WinFormHost.Merge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")
                 PopulateTreeview();
         }
 
@@ -48,7 +38,7 @@ namespace SSDTDevPack.Merge.UI
             var projects = new ProjectEnumerator().Get(ProjectType.SSDT);
 
             var root = Dispatcher.Invoke(() => new TreeViewItem());
-            
+
             foreach (var project in projects)
             {
                 var node = GetProjectNode(project);
@@ -60,16 +50,12 @@ namespace SSDTDevPack.Merge.UI
                 root.Header = "Solution";
                 ProjectItems.Items.Add(root);
             });
-
         }
 
         private TreeViewItem GetProjectNode(Project project)
         {
             var root = Dispatcher.Invoke(() => new TreeViewItem());
             Dispatcher.Invoke(() => CreateProjectDefaults(root, project));
-            
-
-
             return root;
         }
 
@@ -87,21 +73,19 @@ namespace SSDTDevPack.Merge.UI
             root.Items.Add(preDeploy);
             root.Items.Add(postDeploy);
             root.Items.Add(other);
-            
         }
 
         private TreeViewItem GetScripts(Project project, TableRepository tables, string type)
         {
             var node = new TreeViewItem();
             node.Header = type;
-       
-            foreach (ProjectItem item in new ProjectItemEnumerator().Get(project).Where(p => p.HasBuildAction(type)))
+
+            foreach (var item in new ProjectItemEnumerator().Get(project).Where(p => p.HasBuildAction(type)))
             {
                 node.Items.Add(GetScriptNode(tables, item));
             }
-            
-            return node;
 
+            return node;
         }
 
         private TreeViewItem GetScriptNode(TableRepository tables, ProjectItem item)
@@ -109,7 +93,7 @@ namespace SSDTDevPack.Merge.UI
             var node = new TreeViewItem();
             node.Header = item.Name;
 
-       
+
             //parse the merge statements...
             var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
             repoitory.Populate();
@@ -119,7 +103,7 @@ namespace SSDTDevPack.Merge.UI
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
-              
+
                 node.Items.Add(mergeNode);
             }
 
@@ -127,13 +111,13 @@ namespace SSDTDevPack.Merge.UI
             return node;
         }
 
-        void ClearTablePage()
+        private void ClearTablePage()
         {
             God.CurrentMergeData = null;
             God.DataTableChanged.Invoke();
         }
 
-        void mergeNode_Selected(object sender, RoutedEventArgs e)
+        private void mergeNode_Selected(object sender, RoutedEventArgs e)
         {
             var node = e.Source as TreeViewItem;
             if (node == null)
@@ -149,17 +133,36 @@ namespace SSDTDevPack.Merge.UI
                 ClearTablePage();
                 return;
             }
-
+            God.Merge = merge;
             God.CurrentMergeData = merge.Data;
             God.DataTableChanged.Invoke();
         }
 
         private void ToolbarRefresh_Click(object sender, RoutedEventArgs e)
         {
+            Task.Run(() => { PopulateTreeview(); });
+        }
+
+        private void ToolbarSave_Click(object sender, RoutedEventArgs e)
+        {
             Task.Run(() =>
             {
-                PopulateTreeview();
+                Dispatcher.Invoke(SaveCurrent);
             });
         }
+
+        private void SaveCurrent()
+        {
+            if (God.Merge == null)
+                return;
+
+            var writer = new MergeWriter(God.Merge);
+            writer.Write();
+            
+            //If they go mad clicking around in the ui while we are saving this will likely cause issues....
+            if(God.CurrentMergeData != null)
+                God.DataTableChanged();
+        }
+
     }
 }

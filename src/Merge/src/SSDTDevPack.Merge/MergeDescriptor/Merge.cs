@@ -44,6 +44,8 @@ namespace SSDTDevPack.Merge.MergeDescriptor
         public Identifier Name;
 
         public MergeOptions Option { get; set; }
+
+        
     }
 
     public class MergeWriter
@@ -65,7 +67,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
             if (_merge.ScriptDescriptor.OriginalText != null)
             {
-                scriptFile.Replace(_merge.ScriptDescriptor.OriginalText, script);
+                scriptFile = scriptFile.Replace(_merge.ScriptDescriptor.OriginalText, script);
             }
             else
             {
@@ -73,6 +75,8 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             }
 
             WriteScriptFile(_merge.ScriptDescriptor.FilePath, scriptFile);
+
+            _merge.ScriptDescriptor.OriginalText = script;
 
         }
 
@@ -116,9 +120,15 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         private void BuildActions(MergeSpecification specification)
         {
-            BuildInsertAction(specification);
-            BuildUpdateAction(specification);
-            BuildDeleteAction(specification);
+
+            if(_merge.Option.HasInsert)
+                BuildInsertAction(specification);
+
+            if (_merge.Option.HasUpdate)
+                BuildUpdateAction(specification);
+
+            if (_merge.Option.HasDelete)
+                BuildDeleteAction(specification);
         }
 
         private void BuildDeleteAction(MergeSpecification specification)

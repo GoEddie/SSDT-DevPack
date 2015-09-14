@@ -1,0 +1,3 @@
+trying to parse publish profile (didn't exist so crashed)
+
+if dacpac not built then does't work (target invocation error)

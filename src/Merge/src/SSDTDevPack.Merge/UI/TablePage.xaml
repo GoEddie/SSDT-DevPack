@@ -8,11 +8,13 @@
              xmlns:ui="clr-namespace:SSDTDevPack.Merge.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <VirtualizingStackPanel>
+    <VirtualizingStackPanel Background="WhiteSmoke">
         
          <Label />
         <DataGrid Height="100" AutoGenerateColumns="True" x:Name="Grid"></DataGrid>
         
-        <CheckBox />
+        <CheckBox x:Name="DoUpdate" Click="DoUpdate_OnClick">Do Update</CheckBox>
+        <CheckBox x:Name="DoInsert" Click="DoInsert_OnClick">Do Insert</CheckBox>
+        <CheckBox x:Name="DoDelete" Click="DoDelete_OnClick">Do Delete</CheckBox>
     </VirtualizingStackPanel>
 </UserControl>

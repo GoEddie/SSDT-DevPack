@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DacFxStronglyTypedModel">
-      <HintPath>..\..\..\Merge\src\SSDTDevPack.Merge\packages\DACExtension.1.0.0\lib\net45\DacFxStronglyTypedModel.dll</HintPath>
+      <HintPath>..\..\..\..\..\DACExtensions\DacFxStronglyTypedModel\bin\Debug\DacFxStronglyTypedModel.dll</HintPath>
     </Reference>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -55,13 +55,13 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Data.Tools.Schema.Sql">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\120\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Dac">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\120\Microsoft.SqlServer.Dac.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Dac.Extensions">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.Extensions.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\120\Microsoft.SqlServer.Dac.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -105,7 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SSDTDevPack.Logging\SSDTDevPack.Logging.csproj">

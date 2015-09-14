@@ -6,13 +6,14 @@
              mc:Ignorable="d"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Button Click="ToolbarRefresh_Click">Refresh</Button>
+            <Button Click="ToolbarRefresh_Click" Margin="5,5, 0, 0">Refresh</Button>
+            <Button Click="ToolbarSave_Click" Margin="5,5, 0, 0">Save</Button>
         </WrapPanel>
         <DockPanel Grid.Row="1">
             <ScrollViewer>
