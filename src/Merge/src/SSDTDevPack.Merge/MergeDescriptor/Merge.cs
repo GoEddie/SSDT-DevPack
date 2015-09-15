@@ -65,7 +65,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
             var scriptFile = GetScriptFile(_merge.ScriptDescriptor.FilePath);
 
-            if (_merge.ScriptDescriptor.OriginalText != null)
+            if (!String.IsNullOrEmpty(_merge.ScriptDescriptor.OriginalText))
             {
                 scriptFile = scriptFile.Replace(_merge.ScriptDescriptor.OriginalText, script);
             }
@@ -427,7 +427,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                 case LiteralType.Binary:
                     return new BinaryLiteral { Value = value };
                 case LiteralType.String:
-                    return new StringLiteral { Value = value.Replace("'", "''") };
+                    return new StringLiteral { Value = value /*.Replace("'", "''")*/ };
                 case LiteralType.Null:
                     return new NullLiteral { Value = value };
                 case LiteralType.Default:
