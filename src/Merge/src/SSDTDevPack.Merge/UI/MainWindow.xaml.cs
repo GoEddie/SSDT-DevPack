@@ -270,9 +270,14 @@ namespace SSDTDevPack.Merge.UI
 
         }
 
+
         private void TableMenu_Clear(object sender, RoutedEventArgs e)
         {
-    
+            if (God.CurrentMergeData == null)
+                return;
+
+            God.CurrentMergeData.Rows.Clear();
+            God.DataTableChanged();
 
         }
 
