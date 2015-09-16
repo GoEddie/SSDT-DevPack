@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
@@ -29,6 +32,14 @@ namespace SSDTDevPack.Merge.UI
         private void ClearWindows()
         {
             ProjectItems.Items.Clear();
+            if (God.CurrentMergeData != null)
+            {
+                God.CurrentMergeData = null;
+                God.Merge = null;
+                
+                if(God.DataTableChanged != null)
+                    God.DataTableChanged();
+            }
         }
 
         public void PopulateTreeview()
@@ -85,6 +96,7 @@ namespace SSDTDevPack.Merge.UI
                 node.Items.Add(GetScriptNode(tables, item));
             }
 
+            
             return node;
         }
 
@@ -92,7 +104,6 @@ namespace SSDTDevPack.Merge.UI
         {
             var node = new TreeViewItem();
             node.Header = item.Name;
-
 
             //parse the merge statements...
             var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
@@ -103,10 +114,24 @@ namespace SSDTDevPack.Merge.UI
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
-
+                mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                 node.Items.Add(mergeNode);
             }
 
+            node.ContextMenu = ProjectItems.Resources["FileContext"] as ContextMenu;
+
+            if (item.Properties.Item("FullPath") == null)
+            {
+                MessageBox.Show("Error unable to get propert FullPath on script file, unable to build tree");
+                return null;
+            }
+
+
+            node.Tag = new ScriptNodeTag()
+            {
+                ScriptPath = item.Properties.Item("FullPath").Value.ToString(),
+                Tables = tables
+            }; 
 
             return node;
         }
@@ -117,8 +142,37 @@ namespace SSDTDevPack.Merge.UI
             God.DataTableChanged.Invoke();
         }
 
+        private TreeViewItem _lastNode;
+
         private void mergeNode_Selected(object sender, RoutedEventArgs e)
         {
+            if (_lastNode != null && _lastNode.Equals(e.Source as TreeViewItem))
+            {
+                return;
+            }
+
+            //Not really happy with this - will leave it for now
+            //if (God.CurrentMergeData != null && God.CurrentMergeData.GetChanges() != null)
+            //{
+            //    var result =
+            //        MessageBox.Show(
+            //            "You have unsaved changes to the current merge statement, do you want to save them? Press Yes to Save, No to discard or Cancel",
+            //            "Save?", MessageBoxButton.YesNoCancel);
+            //    switch (result)
+            //    {
+            //        case MessageBoxResult.Cancel:
+            //            return;
+
+            //        case MessageBoxResult.No:
+            //            God.CurrentMergeData.RejectChanges();
+            //            break;
+
+            //        case MessageBoxResult.Yes:
+            //            SaveCurrent();
+            //            break;
+            //    }
+            //}
+
             var node = e.Source as TreeViewItem;
             if (node == null)
             {
@@ -136,6 +190,8 @@ namespace SSDTDevPack.Merge.UI
             God.Merge = merge;
             God.CurrentMergeData = merge.Data;
             God.DataTableChanged.Invoke();
+
+            _lastNode = node;
         }
 
         private void ToolbarRefresh_Click(object sender, RoutedEventArgs e)
@@ -164,5 +220,68 @@ namespace SSDTDevPack.Merge.UI
                 God.DataTableChanged();
         }
 
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = ProjectItems.SelectedItem as TreeViewItem;
+            if (null == item)
+                return;
+
+            var tag = item.Tag as ScriptNodeTag;
+
+            if (tag == null)
+            {
+                return;
+            }
+            
+
+            var tableRepository = tag.Tables;
+
+            if (tableRepository == null)
+            {
+                MessageBox.Show("Unable to read table repository - try refreshing");
+                return;
+            }
+
+            var tables = tableRepository.Get().OrderBy(p=>p.Name.GetSchema() + p.Name.GetName());
+            var tableList = new List<string>();
+
+            foreach (var table in tables)
+            {
+                tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema(), table.Name.GetName()));
+            }
+
+            var dialog = new AddFileDialog(tableList);
+            dialog.ShowDialog();
+
+            var mergeTable =
+                tables.FirstOrDefault(
+                    p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == dialog.GetSelectedTable());
+
+            var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath);
+            God.Merge = merge;
+            God.CurrentMergeData = merge.Data;
+            God.DataTableChanged();
+
+            var mergeNode = new TreeViewItem();
+            mergeNode.Header = merge.Name.Value;
+            mergeNode.Tag = merge;
+            mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
+            item.Items.Add(mergeNode);
+
+        }
+
+        private void TableMenu_Clear(object sender, RoutedEventArgs e)
+        {
+            if (God.CurrentMergeData == null)
+                return;
+
+            God.CurrentMergeData.Rows.Clear();
+        }
+    }
+
+    class ScriptNodeTag
+    {
+        public string ScriptPath;
+        public TableRepository Tables;
     }
 }

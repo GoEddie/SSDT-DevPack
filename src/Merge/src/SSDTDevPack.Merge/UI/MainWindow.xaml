@@ -6,7 +6,10 @@
              mc:Ignorable="d"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              d:DesignHeight="300" d:DesignWidth="300">
+
     <Grid Background="WhiteSmoke">
+
+
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -23,7 +26,20 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     
-                    <TreeView Grid.Column="0" x:Name="ProjectItems" />
+                    <TreeView Grid.Column="0" x:Name="ProjectItems" >
+                        <TreeView.Resources>
+                            <ContextMenu x:Key="FileContext" x:Name="ScriptsContextMenu">
+                                <MenuItem Header="Add Table" Click="MenuItem_OnClick"></MenuItem>
+                                <MenuItem Header="Import Table"></MenuItem>
+                                <MenuItem Header="Import Multiple Tables"></MenuItem>
+                            </ContextMenu>
+                            <ContextMenu x:Key="TableContext" x:Name="TableContextMenu">
+                                <MenuItem Header="Clear Data" Click="TableMenu_Clear"></MenuItem>
+                                <MenuItem Header="Import Data"></MenuItem>
+                            </ContextMenu>
+
+                        </TreeView.Resources>                        
+                    </TreeView>
                     <GridSplitter Background="WhiteSmoke" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
                     
                     <UI:TablePage Grid.Column="1"/>

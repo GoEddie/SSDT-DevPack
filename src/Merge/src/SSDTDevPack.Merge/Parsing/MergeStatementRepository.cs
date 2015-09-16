@@ -68,10 +68,13 @@ namespace SSDTDevPack.Merge.Parsing
                 var merge = new MergeDescriptor.Merge();
                 merge.Name = name.ToIdentifier();
                 merge.Data = GetDataFromMerge(mergeStatement, table);
+                merge.Data.AcceptChanges();
                 merge.ScriptDescriptor = new InScriptDescriptor(mergeStatement.StartOffset,
                     mergeStatement.FragmentLength, _path);
                 merge.Statement = mergeStatement;
                 merge.Table = table;
+
+                //NEXT CHECK DATATABLE GETCHANGES and CHECKBOXES TO SEE IF THERE HAVE BEEN ANY CHANGES, PROmPT TO SAVE
 
                 var includeIdentityColumns = false;
                 foreach (DataRow row in merge.Data.Rows)
