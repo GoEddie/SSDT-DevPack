@@ -74,7 +74,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MergeDescriptor\Merge.cs" />
@@ -83,11 +85,23 @@
     <Compile Include="Parsing\MergeStatementParser.cs" />
     <Compile Include="Parsing\MergeStatementRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\AddFileDialog.cs">
+    <Compile Include="UI\AddTableDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\AddFileDialog.Designer.cs">
-      <DependentUpon>AddFileDialog.cs</DependentUpon>
+    <Compile Include="UI\AddTableDialog.Designer.cs">
+      <DependentUpon>AddTableDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ConnectDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ConnectDialog.Designer.cs">
+      <DependentUpon>ConnectDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ImportSingleTableDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImportSingleTableDialog.Designer.cs">
+      <DependentUpon>ImportSingleTableDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -96,6 +110,7 @@
       <DependentUpon>TablePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UIProperties.cs" />
+    <Compile Include="UI\UiSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">
@@ -122,8 +137,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UI\AddFileDialog.resx">
-      <DependentUpon>AddFileDialog.cs</DependentUpon>
+    <EmbeddedResource Include="UI\AddTableDialog.resx">
+      <DependentUpon>AddTableDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ConnectDialog.resx">
+      <DependentUpon>ConnectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImportSingleTableDialog.resx">
+      <DependentUpon>ImportSingleTableDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

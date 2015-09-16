@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace SSDTDevPack.Merge.UI
 {
-    public partial class AddFileDialog : Form
+    public partial class AddTableDialog : Form
     {
         private readonly List<string> _tableList;
 
-        public AddFileDialog(List<string> tableList)
+        public AddTableDialog(List<string> tableList)
         {
             _tableList = tableList;
             InitializeComponent();
@@ -31,6 +31,10 @@ namespace SSDTDevPack.Merge.UI
 
         public string GetSelectedTable()
         {
+
+            if (tableListDropDown.SelectedIndex < 0)
+                return null;
+
             return tableListDropDown.Items[tableListDropDown.SelectedIndex] as string;
         }
 

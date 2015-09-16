@@ -1,6 +1,6 @@
-﻿namespace WinFormHost.Merge
+﻿namespace SqlConnectionTest
 {
-    partial class Form1
+    partial class ConnectDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.mainWindow1 = new SSDTDevPack.Merge.UI.MainWindow();
+            this.sqlConnectionDialog1 = new SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog(ConnectionAvailable);
             this.SuspendLayout();
             // 
             // elementHost1
@@ -37,20 +37,19 @@
             this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost1.Location = new System.Drawing.Point(0, 0);
             this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(284, 261);
+            this.elementHost1.Size = new System.Drawing.Size(412, 281);
             this.elementHost1.TabIndex = 0;
             this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.mainWindow1;
+            this.elementHost1.Child = this.sqlConnectionDialog1;
             // 
             // ConnectDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(412, 281);
             this.Controls.Add(this.elementHost1);
-            this.Name = "Form1";
+            this.Name = "ConnectDialog";
             this.Text = "ConnectDialog";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
         }
@@ -58,7 +57,7 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private SSDTDevPack.Merge.UI.MainWindow mainWindow1;
+        private SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog sqlConnectionDialog1;
     }
 }
 

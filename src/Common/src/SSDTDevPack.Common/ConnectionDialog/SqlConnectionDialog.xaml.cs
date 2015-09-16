@@ -24,12 +24,16 @@ namespace SSDTDevPack.Common.ConnectionDialog
     {
         private readonly Action<string> _completeNotification;
 
+        public SqlConnectionDialog()
+        {
+            //just for windows designer support, domn't actually use it
+        }
+
         public SqlConnectionDialog(Action<string> completeNotification)
         {
             _completeNotification = completeNotification;
             InitializeComponent();
             Database.Focus();
-            
         }
 
         private string _connectionString;
@@ -105,7 +109,7 @@ namespace SSDTDevPack.Common.ConnectionDialog
         {
             _connectionString = string.Format("SERVER={0};{1};Initial Catalog={2};", SearchTextBox.Text,
                ((String.IsNullOrEmpty(TextUser.Text)
-                   ? "IntegratedSecurity=SSPI"
+                   ? "Integrated Security=SSPI"
                    : string.Format("UID={0};PWD={1};", TextUser.Text, TextPass.Text)
             )), Database.Text);
 

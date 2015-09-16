@@ -76,6 +76,10 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Merge\src\SSDTDevPack.Merge\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -108,14 +112,15 @@
     <Compile Include="Enumerators\ProjectType.cs" />
     <Compile Include="ProjectItems\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptDom\Quote.cs" />
-    <Compile Include="ScriptDom\ScriptParser.cs" />
+    <Compile Include="ProjectItems\ScriptDom\Quote.cs" />
+    <Compile Include="ProjectItems\ScriptDom\ScriptParser.cs" />
     <Compile Include="Settings\SavedSettings.cs" />
     <Compile Include="VSPackage\ServiceProvider.cs" />
     <Compile Include="VSPackage\IVsServiceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SSDTDevPack.Logging\SSDTDevPack.Logging.csproj">

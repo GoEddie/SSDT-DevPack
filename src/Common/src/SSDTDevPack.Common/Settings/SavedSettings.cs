@@ -13,6 +13,11 @@ namespace SSDTDevPack.Common.Settings
             
         }
 
+        public void SaveSetting(string name, string value)
+        {
+            
+        }
+
         public string GetSettingString(string name)
         {
             return null;

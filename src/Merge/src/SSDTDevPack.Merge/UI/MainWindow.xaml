@@ -30,7 +30,7 @@
                         <TreeView.Resources>
                             <ContextMenu x:Key="FileContext" x:Name="ScriptsContextMenu">
                                 <MenuItem Header="Add Table" Click="MenuItem_OnClick"></MenuItem>
-                                <MenuItem Header="Import Table"></MenuItem>
+                                <MenuItem Header="Import Table" Click="ImportTable_Click"></MenuItem>
                                 <MenuItem Header="Import Multiple Tables"></MenuItem>
                             </ContextMenu>
                             <ContextMenu x:Key="TableContext" x:Name="TableContextMenu">

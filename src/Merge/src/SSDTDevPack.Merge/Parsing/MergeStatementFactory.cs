@@ -12,13 +12,18 @@ namespace SSDTDevPack.Merge.Parsing
 {
     public class MergeStatementFactory
     {
-        public MergeDescriptor.Merge Build(TableDescriptor table, string scriptFile)
+        public MergeDescriptor.Merge Build(TableDescriptor table, string scriptFile, DataTable data = null)
         {
             
             var merge = new MergeDescriptor.Merge();
             merge.Name = table.Name.ToIdentifier();
 
-            merge.Data = BuildDataTableDefinition( table);
+            if(data == null)
+                merge.Data = BuildDataTableDefinition( table);
+            else
+            {
+                merge.Data = data;
+            }
             merge.ScriptDescriptor = new InScriptDescriptor(0,0, scriptFile);
             merge.Statement = new MergeStatement();
             merge.Table = table;
