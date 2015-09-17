@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
@@ -20,6 +18,8 @@ namespace SSDTDevPack.Merge.UI
     /// </summary>
     public partial class MainWindow
     {
+        private TreeViewItem _lastNode;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,8 +36,8 @@ namespace SSDTDevPack.Merge.UI
             {
                 God.CurrentMergeData = null;
                 God.Merge = null;
-                
-                if(God.DataTableChanged != null)
+
+                if (God.DataTableChanged != null)
                     God.DataTableChanged();
             }
         }
@@ -96,7 +96,7 @@ namespace SSDTDevPack.Merge.UI
                 node.Items.Add(GetScriptNode(tables, item));
             }
 
-            
+
             return node;
         }
 
@@ -127,11 +127,11 @@ namespace SSDTDevPack.Merge.UI
             }
 
 
-            node.Tag = new ScriptNodeTag()
+            node.Tag = new ScriptNodeTag
             {
                 ScriptPath = item.Properties.Item("FullPath").Value.ToString(),
                 Tables = tables
-            }; 
+            };
 
             return node;
         }
@@ -141,8 +141,6 @@ namespace SSDTDevPack.Merge.UI
             God.CurrentMergeData = null;
             God.DataTableChanged.Invoke();
         }
-
-        private TreeViewItem _lastNode;
 
         private void mergeNode_Selected(object sender, RoutedEventArgs e)
         {
@@ -201,23 +199,31 @@ namespace SSDTDevPack.Merge.UI
 
         private void ToolbarSave_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
-            {
-                Dispatcher.Invoke(SaveCurrent);
-            });
+            Task.Run(() => { Dispatcher.Invoke(SaveCurrent); });
         }
 
         private void SaveCurrent()
         {
-            if (God.Merge == null)
-                return;
+            foreach (var merge in God.MergesToSave)
+            {
+                if (merge.Data.ExtendedProperties.ContainsKey("Changed") &&
+                    (bool) merge.Data.ExtendedProperties["Changed"])
+                {
+                    var writer = new MergeWriter(merge);
+                    writer.Write();
+                    merge.Data.ExtendedProperties.Remove("Changed");
+                }
+            }
 
-            var writer = new MergeWriter(God.Merge);
-            writer.Write();
-            
-            //If they go mad clicking around in the ui while we are saving this will likely cause issues....
-            if(God.CurrentMergeData != null)
-                God.DataTableChanged();
+            //if (God.Merge == null)
+            //    return;
+
+            //var writer = new MergeWriter(God.Merge);
+            //writer.Write();
+
+            ////If they go mad clicking around in the ui while we are saving this will likely cause issues....
+            //if(God.CurrentMergeData != null)
+            //    God.DataTableChanged();
         }
 
         private void MenuItem_OnClick(object sender, RoutedEventArgs e)
@@ -232,7 +238,7 @@ namespace SSDTDevPack.Merge.UI
             {
                 return;
             }
-            
+
 
             var tableRepository = tag.Tables;
 
@@ -242,7 +248,7 @@ namespace SSDTDevPack.Merge.UI
                 return;
             }
 
-            var tables = tableRepository.Get().OrderBy(p=>p.Name.GetSchema() + p.Name.GetName());
+            var tables = tableRepository.Get().OrderBy(p => p.Name.GetSchema() + p.Name.GetName());
             var tableList = new List<string>();
 
             foreach (var table in tables)
@@ -267,9 +273,7 @@ namespace SSDTDevPack.Merge.UI
             mergeNode.Tag = merge;
             mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
             item.Items.Add(mergeNode);
-
         }
-
 
         private void TableMenu_Clear(object sender, RoutedEventArgs e)
         {
@@ -278,7 +282,6 @@ namespace SSDTDevPack.Merge.UI
 
             God.CurrentMergeData.Rows.Clear();
             God.DataTableChanged();
-
         }
 
         private void ImportTable_Click(object sender, RoutedEventArgs e)
@@ -333,9 +336,60 @@ namespace SSDTDevPack.Merge.UI
             mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
             item.Items.Add(mergeNode);
         }
+
+        private void ImportTheShit(object sender, RoutedEventArgs e)
+        {
+            var item = ProjectItems.SelectedItem as TreeViewItem;
+            if (null == item)
+                return;
+
+            var tag = item.Tag as ScriptNodeTag;
+
+            if (tag == null)
+            {
+                return;
+            }
+
+            var tableRepository = tag.Tables;
+
+            if (tableRepository == null)
+            {
+                MessageBox.Show("Unable to read table repository - try refreshing");
+                return;
+            }
+
+            var tables = tableRepository.Get().OrderBy(p => p.Name.GetSchema() + p.Name.GetName());
+            var tableList = new List<string>();
+
+            foreach (var table in tables)
+            {
+                tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema(), table.Name.GetName()));
+            }
+
+            var dialog = new ImportMultipleTablesDialog(tableList);
+            dialog.ShowDialog();
+
+            foreach (var import in dialog.GetImportedTables())
+            {
+                var mergeTable =
+                    tables.FirstOrDefault(
+                        p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == import.Name);
+
+                var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath, import.Data);
+                God.Merge = merge;
+                God.CurrentMergeData = merge.Data;
+                God.DataTableChanged();
+
+                var mergeNode = new TreeViewItem();
+                mergeNode.Header = merge.Name.Value;
+                mergeNode.Tag = merge;
+                mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
+                item.Items.Add(mergeNode);
+            }
+        }
     }
 
-    class ScriptNodeTag
+    internal class ScriptNodeTag
     {
         public string ScriptPath;
         public TableRepository Tables;

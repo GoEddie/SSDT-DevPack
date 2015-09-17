@@ -97,6 +97,12 @@
     <Compile Include="UI\ConnectDialog.Designer.cs">
       <DependentUpon>ConnectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ImportMultipleTablesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImportMultipleTablesDialog.Designer.cs">
+      <DependentUpon>ImportMultipleTablesDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ImportSingleTableDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ConnectDialog.resx">
       <DependentUpon>ConnectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImportMultipleTablesDialog.resx">
+      <DependentUpon>ImportMultipleTablesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ImportSingleTableDialog.resx">
       <DependentUpon>ImportSingleTableDialog.cs</DependentUpon>

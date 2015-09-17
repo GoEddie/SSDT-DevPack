@@ -18,6 +18,13 @@ namespace SSDTDevPack.Merge.UI
         public static MergeDescriptor.Merge Merge { get; set; }
 
         public static Action DataTableChanged { get; set; }
+
+        public static List<MergeDescriptor.Merge> MergesToSave { get; set; }
+
+        static God()
+        {
+            MergesToSave = new List<MergeDescriptor.Merge>();
+        }
     }
 
 

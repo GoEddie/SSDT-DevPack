@@ -36,7 +36,13 @@ namespace SSDTDevPack.Merge.UI
 
                 if (God.CurrentMergeData != null)
                 {
+                    if (God.CurrentMergeData.ExtendedProperties.ContainsKey("Changed"))
+                    {
+                        God.MergesToSave.Add(God.Merge);
+                    }
+                    
                     Grid.ItemsSource = God.CurrentMergeData.DefaultView;
+                    
                     _inUpdate = true;
                     DoUpdate.IsChecked = God.Merge.Option.HasUpdate;
                     DoDelete.IsChecked = God.Merge.Option.HasDelete;

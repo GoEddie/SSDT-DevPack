@@ -52,6 +52,22 @@ namespace SSDTDevPack.Merge.Parsing
                 dataTable.Columns.Add(new DataColumn(col.Name.GetName()));
             }
 
+
+            dataTable.RowChanged += (sender, args) =>
+            {
+                dataTable.ExtendedProperties["Changed"] = true;
+            };
+
+            dataTable.TableNewRow += (sender, args) =>
+            {
+                dataTable.ExtendedProperties["Changed"] = true;
+            };
+
+            dataTable.RowDeleting += (sender, args) =>
+            {
+                dataTable.ExtendedProperties["Changed"] = true;
+            };
+
             return dataTable;
         }
     }

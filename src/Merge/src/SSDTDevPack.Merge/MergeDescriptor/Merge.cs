@@ -71,6 +71,9 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             }
             else
             {
+                if (!scriptFile.EndsWith("\r\n"))
+                    scriptFile += "\r\n";
+                                  
                 scriptFile += "GO\r\n" + script;
             }
 
