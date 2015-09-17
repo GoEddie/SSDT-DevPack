@@ -31,6 +31,11 @@ namespace SSDTDevPack.Common.Dac
             return null;
         }
 
+        public static string GetSchemaObjectName(this ObjectIdentifier name)
+        {
+            return string.Format("{0}.{1}", name.GetSchema(), name.GetName());
+        }
+
         public static bool EqualsName(this ObjectIdentifier source, SchemaObjectName target)
         {
             if (target.SchemaIdentifier == null)
