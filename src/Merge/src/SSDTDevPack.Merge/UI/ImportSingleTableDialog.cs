@@ -98,7 +98,7 @@ namespace SSDTDevPack.Merge.UI
             }
             catch (Exception ex)
             {
-                
+                MessageBox.Show("Unable to import table: " + ex.Message);
             }
         }
 

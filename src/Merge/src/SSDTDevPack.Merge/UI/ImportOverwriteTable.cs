@@ -90,7 +90,7 @@ namespace SSDTDevPack.Merge.UI
             }
             catch (Exception ex)
             {
-                
+                MessageBox.Show("Error overwriting existing table: " + ex.Message);
             }
         }
 
