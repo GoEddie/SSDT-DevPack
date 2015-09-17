@@ -19,6 +19,8 @@ namespace SSDTDevPack.Merge.UI
         {
             _tableList = tableList;
             InitializeComponent();
+
+           
         }
 
         private void AddFileDialog_Load(object sender, EventArgs e)

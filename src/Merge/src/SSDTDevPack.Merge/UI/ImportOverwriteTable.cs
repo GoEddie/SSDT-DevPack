@@ -11,54 +11,46 @@ using System.Windows.Forms;
 
 namespace SSDTDevPack.Merge.UI
 {
-    public partial class ImportSingleTableDialog : Form
+    public partial class ImportOverwriteTableDialog : Form
     {
-       private readonly List<string> _tableList;
+        private readonly string _table;
+        private readonly List<string> _tableList;
         
        private void ImportSingleTable_Load(object sender, EventArgs e)
         {
-            foreach (var table in _tableList)
-            {
-                tableListDropDown.Items.Add(table);
-            }
+           
         }
 
-        public string GetSelectedTable()
+
+       public ImportOverwriteTableDialog(string table)
         {
-            if (tableListDropDown.SelectedIndex < 0)
-                return null;
+           _table = table;
+           InitializeComponent();
 
-            return tableListDropDown.Items[tableListDropDown.SelectedIndex] as string;
-        }
 
-        public ImportSingleTableDialog(List<string> tableList)
-        {
-            InitializeComponent();
-             _tableList = tableList;
+           if (!string.IsNullOrEmpty(UiSettings.ConnectionString))
+           {
+               connectionString.Text = UiSettings.ConnectionString;
+           }
 
-             if (!string.IsNullOrEmpty(UiSettings.ConnectionString))
-             {
-                 connectionString.Text = UiSettings.ConnectionString;
-             }
+           Closing += (sender, args) =>
+           {
+               if (!string.IsNullOrEmpty(connectionString.Text))
+               {
+                   UiSettings.ConnectionString = connectionString.Text;
+               }
+           };
 
-             Closing += (sender, args) =>
-             {
-                 if (!string.IsNullOrEmpty(connectionString.Text))
-                 {
-                     UiSettings.ConnectionString = connectionString.Text;
-                 }
-             };
-
-             connectionString.KeyDown += (sender, args) =>
-             {
-                 if (args.KeyCode == Keys.Enter)
-                 {
-                     if (string.IsNullOrEmpty(connectionString.Text))
-                     {
-                         button1.PerformClick();
-                     }
-                 }
-             };
+           connectionString.KeyDown += (sender, args) =>
+           {
+               if (args.KeyCode == Keys.Enter)
+               {
+                   if (string.IsNullOrEmpty(connectionString.Text))
+                   {
+                       button1.PerformClick();
+                   }
+               }
+           };
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -83,7 +75,7 @@ namespace SSDTDevPack.Merge.UI
                     con.Open();
                     using (var cmd = con.CreateCommand())
                     {
-                        var table = GetSelectedTable();
+                        var table = _table;
                         if (string.IsNullOrEmpty(table))
                             return;
 

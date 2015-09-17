@@ -29,13 +29,13 @@
                     <TreeView Grid.Column="0" x:Name="ProjectItems" >
                         <TreeView.Resources>
                             <ContextMenu x:Key="FileContext" x:Name="ScriptsContextMenu">
-                                <MenuItem Header="Add Table" Click="MenuItem_OnClick"></MenuItem>
+                                <MenuItem Header="Add Table" Click="MenuItem_AddTableOnClick"></MenuItem>
                                 <MenuItem Header="Import Table" Click="ImportTable_Click"></MenuItem>
-                                <MenuItem Header="Import Multiple Tables" Click="ImportTheShit"></MenuItem>
+                                <MenuItem Header="Import Multiple Tables" Click="ImportMultipleTables"></MenuItem>
                             </ContextMenu>
                             <ContextMenu x:Key="TableContext" x:Name="TableContextMenu">
                                 <MenuItem Header="Clear Data" Click="TableMenu_Clear"></MenuItem>
-                                <MenuItem Header="Import Data"></MenuItem>
+                                <MenuItem Header="Import Data" Click="ImportOverwrite_Click"></MenuItem>
                             </ContextMenu>
 
                         </TreeView.Resources>                        

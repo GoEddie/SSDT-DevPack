@@ -16,6 +16,7 @@
                 </connectionDialog:WatermarkService.Watermark>
             </TextBox>
         </AdornerDecorator>
+        
 
         <AdornerDecorator MaxHeight="30" Margin="5,10, 5, 0">
             <TextBox x:Name="TextUser" Height="26" KeyUp="SearchTextBox_OnKeyUp">

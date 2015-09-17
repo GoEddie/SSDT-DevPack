@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.sqlConnectionDialog1 = new SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog(ConnectionAvailable);
+            this.sqlConnectionDialog1 = new SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog();
             this.SuspendLayout();
             // 
             // elementHost1
@@ -58,6 +58,7 @@
 
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog sqlConnectionDialog1;
+
     }
 }
 

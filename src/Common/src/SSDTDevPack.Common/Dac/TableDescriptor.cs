@@ -15,7 +15,7 @@ namespace SSDTDevPack.Common.Dac
 
         private List<ColumnDescriptor> BuildColumnDescriptors(TSqlTable table)
         {
-            return table.Columns.Select(column => new ColumnDescriptor(column)).ToList();
+            return table.Columns.Where(column => column.ColumnType == ColumnType.Column).Select(column => new ColumnDescriptor(column)).ToList();
         }
 
         public List<ColumnDescriptor> Columns { get; private set; }

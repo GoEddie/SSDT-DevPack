@@ -1,4 +1,4 @@
-﻿namespace SqlConnectionTest
+﻿namespace SSDTDevPack.Merge.UI
 {
     partial class ConnectDialog
     {
@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectDialog));
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.sqlConnectionDialog1 = new SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog(ConnectionAvailable);
+            this.dialog = new SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog();
             this.SuspendLayout();
             // 
             // elementHost1
@@ -40,7 +41,7 @@
             this.elementHost1.Size = new System.Drawing.Size(412, 281);
             this.elementHost1.TabIndex = 0;
             this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.sqlConnectionDialog1;
+            this.elementHost1.Child = this.dialog;
             // 
             // ConnectDialog
             // 
@@ -48,6 +49,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(412, 281);
             this.Controls.Add(this.elementHost1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ConnectDialog";
             this.Text = "ConnectDialog";
             this.ResumeLayout(false);
@@ -56,8 +58,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Integration.ElementHost elementHost1;
         private SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog sqlConnectionDialog1;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private SSDTDevPack.Common.ConnectionDialog.SqlConnectionDialog dialog;
     }
 }
 

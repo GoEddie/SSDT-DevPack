@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.ScriptDom;
@@ -67,14 +68,19 @@ namespace SSDTDevPack.Merge.Parsing
 
                 var merge = new MergeDescriptor.Merge();
                 merge.Name = name.ToIdentifier();
+                
                 merge.Data = GetDataFromMerge(mergeStatement, table);
+                if (null == merge.Data)
+                {
+                    continue;   //can't do anything with this
+                }
+                
                 merge.Data.AcceptChanges();
                 merge.ScriptDescriptor = new InScriptDescriptor(mergeStatement.StartOffset,
                     mergeStatement.FragmentLength, _path);
                 merge.Statement = mergeStatement;
                 merge.Table = table;
 
-                //NEXT CHECK DATATABLE GETCHANGES and CHECKBOXES TO SEE IF THERE HAVE BEEN ANY CHANGES, PROmPT TO SAVE
 
                 var includeIdentityColumns = false;
                 foreach (DataRow row in merge.Data.Rows)
@@ -125,6 +131,10 @@ namespace SSDTDevPack.Merge.Parsing
                         if (value == null)
                         {
                             Log.WriteInfo("Error Parsing Merge Statement, Could not convert column to Literal: {0}", col);
+                            MessageBox.Show("Error we expected to get a literal parsing a merge statement for the " +
+                                            table.Name.GetName() + " table but we got a " + col.ToString()
+                                            +
+                                            "\r\nCheck that you don't have an unquoted string or another impossible type");
                             return null;
                         }
 

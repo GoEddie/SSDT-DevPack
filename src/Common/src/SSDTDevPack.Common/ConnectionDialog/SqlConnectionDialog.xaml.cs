@@ -1,42 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SSDTDevPack.Common.ConnectionDialog
 {
     /// <summary>
-    /// Interaction logic for SqlConnectionDialog.xaml
+    ///     Interaction logic for SqlConnectionDialog.xaml
     /// </summary>
     public partial class SqlConnectionDialog : UserControl
     {
-        private readonly Action<string> _completeNotification;
+        private Action<string> _completeNotification;
+        private string _connectionString;
 
         public SqlConnectionDialog()
         {
-            //just for windows designer support, domn't actually use it
-        }
-
-        public SqlConnectionDialog(Action<string> completeNotification)
-        {
-            _completeNotification = completeNotification;
             InitializeComponent();
             Database.Focus();
         }
 
-        private string _connectionString;
+        public void SetNotification(Action<string> completeNotification)
+        {
+            _completeNotification = completeNotification;
+        }
 
         public string GetConnectionString()
         {
@@ -46,7 +35,7 @@ namespace SSDTDevPack.Common.ConnectionDialog
         private void Connect_OnClick(object sender, RoutedEventArgs e)
         {
             _connectionString = string.Format("SERVER={0};{1};", SearchTextBox.Text,
-                ((String.IsNullOrEmpty(TextUser.Text)
+                ((string.IsNullOrEmpty(TextUser.Text)
                     ? "Integrated Security=SSPI"
                     : string.Format("UID={0};PWD={1};", TextUser.Text, TextPass.Text))));
 
@@ -61,7 +50,6 @@ namespace SSDTDevPack.Common.ConnectionDialog
                 {
                     using (var con = new SqlConnection(_connectionString))
                     {
-
                         con.Open();
                         using (var cmd = con.CreateCommand())
                         {
@@ -72,7 +60,7 @@ namespace SSDTDevPack.Common.ConnectionDialog
                                 while (sdr.Read())
                                 {
                                     var name = sdr[0].ToString();
-                                    Dispatcher.Invoke(() =>  Database.Items.Add(name));
+                                    Dispatcher.Invoke(() => Database.Items.Add(name));
                                 }
                             }
                         }
@@ -84,8 +72,6 @@ namespace SSDTDevPack.Common.ConnectionDialog
                         Database.IsDropDownOpen = true;
                         TestConnection.IsEnabled = true;
                     });
-
-
                 }
                 catch (Exception ex)
                 {
@@ -94,7 +80,6 @@ namespace SSDTDevPack.Common.ConnectionDialog
 
                 Dispatcher.Invoke(() => Cursor = Cursors.Arrow);
             });
-
         }
 
         private void SearchTextBox_OnKeyUp(object sender, KeyEventArgs e)
@@ -108,14 +93,13 @@ namespace SSDTDevPack.Common.ConnectionDialog
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
             _connectionString = string.Format("SERVER={0};{1};Initial Catalog={2};", SearchTextBox.Text,
-               ((String.IsNullOrEmpty(TextUser.Text)
-                   ? "Integrated Security=SSPI"
-                   : string.Format("UID={0};PWD={1};", TextUser.Text, TextPass.Text)
-            )), Database.Text);
+                ((string.IsNullOrEmpty(TextUser.Text)
+                    ? "Integrated Security=SSPI"
+                    : string.Format("UID={0};PWD={1};", TextUser.Text, TextPass.Text)
+                    )), Database.Text);
 
 
             _completeNotification(_connectionString);
-
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

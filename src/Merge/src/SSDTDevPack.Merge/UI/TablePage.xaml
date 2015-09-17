@@ -8,13 +8,21 @@
              xmlns:ui="clr-namespace:SSDTDevPack.Merge.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <VirtualizingStackPanel Background="WhiteSmoke">
-        
+    <Grid Background="WhiteSmoke">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
          <Label />
-        <DataGrid Height="100" AutoGenerateColumns="True" x:Name="Grid"></DataGrid>
+        <CheckBox x:Name="DoUpdate" Grid.Row="1" Click="DoUpdate_OnClick">Do Update</CheckBox>
+        <CheckBox x:Name="DoInsert" Grid.Row="2" Click="DoInsert_OnClick">Do Insert</CheckBox>
+        <CheckBox x:Name="DoDelete" Grid.Row="3" Click="DoDelete_OnClick">Do Delete</CheckBox>
         
-        <CheckBox x:Name="DoUpdate" Click="DoUpdate_OnClick">Do Update</CheckBox>
-        <CheckBox x:Name="DoInsert" Click="DoInsert_OnClick">Do Insert</CheckBox>
-        <CheckBox x:Name="DoDelete" Click="DoDelete_OnClick">Do Delete</CheckBox>
-    </VirtualizingStackPanel>
+        <DataGrid AutoGenerateColumns="True" Grid.Row="4" x:Name="Grid"></DataGrid>
+        
+        
+    </Grid>
 </UserControl>

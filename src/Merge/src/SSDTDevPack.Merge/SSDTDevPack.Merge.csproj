@@ -103,6 +103,12 @@
     <Compile Include="UI\ImportMultipleTablesDialog.Designer.cs">
       <DependentUpon>ImportMultipleTablesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ImportOverwriteTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImportOverwriteTable.Designer.cs">
+      <DependentUpon>ImportOverwriteTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ImportSingleTableDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,9 +158,15 @@
     <EmbeddedResource Include="UI\ImportMultipleTablesDialog.resx">
       <DependentUpon>ImportMultipleTablesDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImportOverwriteTable.resx">
+      <DependentUpon>ImportOverwriteTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\ImportSingleTableDialog.resx">
       <DependentUpon>ImportSingleTableDialog.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="069085-black-paint-splatter-icon-alphanumeric-letter-m.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
