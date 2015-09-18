@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[TheTable]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT IDENTITY NOT NULL PRIMARY KEY,
 	[name] varchar(max) null,
 	[fun] int
 )

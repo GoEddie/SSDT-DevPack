@@ -81,7 +81,6 @@ namespace SSDTDevPack.Common.IntegrationTests.Columns
             var descriptor = new TableDescriptor(table);
             Assert.IsTrue(descriptor.Columns.First().IsIdentity);
             Assert.IsFalse(descriptor.Columns.Last().IsIdentity);
-
         }
 
 

@@ -194,6 +194,7 @@ namespace SSDTDevPack.Merge.UI
 
                 if (merge == null)
                 {
+                    _lastNode = null;
                     ClearTablePage();
                     return;
                 }

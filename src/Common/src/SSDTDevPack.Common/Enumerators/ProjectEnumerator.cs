@@ -36,7 +36,8 @@ namespace SSDTDevPack.Common.Enumerators
                     projects.AddRange(GetChildren(projectType, item.SubProject));
                 }
 
-                if (new Guid(item.Kind).Equals(new Guid(projectType)))
+                if (/*new Guid(item.Kind).Equals(new Guid(projectType))*/
+                    item.Kind == projectType)
                 {
                     Log.WriteInfo("ProjectEnumerator: Adding Project: {0}", project.FullName);
                     projects.Add(item.SubProject);

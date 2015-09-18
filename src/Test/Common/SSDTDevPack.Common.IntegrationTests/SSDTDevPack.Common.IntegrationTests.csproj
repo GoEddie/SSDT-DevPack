@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DacFxStronglyTypedModel">
-      <HintPath>..\..\..\..\..\DACExtensions\DacFxStronglyTypedModel\bin\Debug\DacFxStronglyTypedModel.dll</HintPath>
+    <Reference Include="DacFxStronglyTypedModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=47c4959f71a2400a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\DacFxStronglyTypedModel.dll</HintPath>
     </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>

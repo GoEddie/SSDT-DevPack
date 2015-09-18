@@ -18,8 +18,16 @@ namespace SSDTDevPack.Common.IntegrationTests.MergeWriter
         public void test()
         {
             var tableRepository = new TableRepository(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
+            
             var m = new Merge.MergeDescriptor.Merge();
 
+            var tempFile = Path.Combine(Path.GetTempPath(),
+                Guid.NewGuid().ToString().Replace("-", "").Replace("{", "").Replace("}", ""));
+
+            File.CreateText(tempFile).Close();
+
+            m.ScriptDescriptor = new InScriptDescriptor(0, 0, tempFile);
+            m.ScriptDescriptor.OriginalText = null;
             m.Table = tableRepository.Get().First(p=>p.Name.GetName() == "TheTable");
             m.Data = new DataTable();
             foreach (var c in m.Table.Columns)
@@ -42,7 +50,9 @@ namespace SSDTDevPack.Common.IntegrationTests.MergeWriter
 
 
             var writer = new Merge.MergeDescriptor.MergeWriter(m);
-            writer.Write();
+            Assert.DoesNotThrow(writer.Write);
+
+            File.Delete(tempFile);
         }
     }
 }

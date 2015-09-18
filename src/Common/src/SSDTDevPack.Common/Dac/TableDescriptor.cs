@@ -35,6 +35,10 @@ namespace SSDTDevPack.Common.Dac
             {
                 foreach (TSqlColumn column in table.Columns.Where(column => column.ColumnType == ColumnType.Column))
                 {
+                    if (column.ObjectType == UserDefinedType.TypeClass)
+                    {
+                     
+                    }
                     var descriptor = new ColumnDescriptor(column);
 
                 }
