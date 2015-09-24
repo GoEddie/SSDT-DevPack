@@ -46,17 +46,19 @@ namespace SSDTDevPack.Common.Dac
 
         public static Identifier ToIdentifier(this ObjectIdentifier source)
         {
+            var name = source.GetName();
+
             return new Identifier()
             {
-                Value = source.GetName()
+                Value = name.Quote() 
             };
         }
 
         public static SchemaObjectName ToSchemaObjectName(this ObjectIdentifier source)
         {
             var target = new SchemaObjectName();
-            target.Identifiers.Add(source.GetSchema().ToScriptDomIdentifier());
-            target.Identifiers.Add(source.GetName().ToScriptDomIdentifier());
+            target.Identifiers.Add(source.GetSchema().ToScriptDomIdentifier().Quote());
+            target.Identifiers.Add(source.GetName().ToScriptDomIdentifier().Quote());
             
             return target;
         }
@@ -71,6 +73,27 @@ namespace SSDTDevPack.Common.Dac
             {
                 Value = source
             };
+        }
+
+        public static string Quote(this string source)
+        {
+            if (!source.StartsWith("["))
+                source = "[" + source;
+
+            if (!source.EndsWith("]"))
+                source = source + "]";
+
+            return source;
+
+        }
+    }
+
+    public static class IdentifierExtensions
+    {
+        public static Identifier Quote(this Identifier src)
+        {
+            src.Value = src.Value.Quote();
+            return src;
         }
     }
 

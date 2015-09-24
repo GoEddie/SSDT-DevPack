@@ -78,6 +78,7 @@ namespace SSDTDevPack.Common.IntegrationTests
         [STAThread]
         [TestCase("VisualStudio.DTE.12.0")]
         [TestCase("VisualStudio.DTE.14.0")]
+        [Ignore]
         public void finds_all_ssdt_projects_in_a_solution(string dteVersion)
         {
             try

@@ -74,6 +74,7 @@ namespace SSDTDevPack.Common.IntegrationTests
         [STAThread]
         [TestCase("VisualStudio.DTE.12.0")]
         [TestCase("VisualStudio.DTE.14.0")]
+        [Ignore]
         public void finds_all_files_in_a_project(string dteVersion)
         {
             try
@@ -101,6 +102,7 @@ namespace SSDTDevPack.Common.IntegrationTests
         [Test]
         [TestCase("VisualStudio.DTE.12.0")]
         [TestCase("VisualStudio.DTE.14.0")]
+        [Ignore]
         public void finds_files_with_specific_build_action(string dteVersion)
         {
             try

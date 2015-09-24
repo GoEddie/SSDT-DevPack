@@ -172,6 +172,7 @@ namespace SSDTDevPack.Merge.UI
             God.DataTableChanged.Invoke();
         }
 
+
         private void mergeNode_Selected(object sender, RoutedEventArgs e)
         {
             try
@@ -226,6 +227,14 @@ namespace SSDTDevPack.Merge.UI
         {
             try
             {
+                //save current...
+                if (God.Merge.Data.ExtendedProperties.ContainsKey("Changed") && (bool)God.Merge.Data.ExtendedProperties["Changed"])
+                {
+                    var writer = new MergeWriter(God.Merge);
+                    writer.Write();
+                    God.Merge.Data.ExtendedProperties.Remove("Changed");
+                }
+
                 foreach (var merge in God.MergesToSave)
                 {
                     if (merge.Data.ExtendedProperties.ContainsKey("Changed") &&
@@ -236,6 +245,8 @@ namespace SSDTDevPack.Merge.UI
                         merge.Data.ExtendedProperties.Remove("Changed");
                     }
                 }
+
+                
 
             }
             catch (Exception ex)
@@ -284,16 +295,13 @@ namespace SSDTDevPack.Merge.UI
                         p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == dialog.GetSelectedTable());
 
                 var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath);
-                God.Merge = merge;
-                God.CurrentMergeData = merge.Data;
-                God.DataTableChanged();
-
+              
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
                 mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                 item.Items.Add(mergeNode);
-                mergeNode.Focus();
+
             }
             catch (Exception ex)
             {
@@ -361,17 +369,14 @@ namespace SSDTDevPack.Merge.UI
                 }
 
                 var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath, dialog.ImportedData);
-                God.Merge = merge;
                 merge.Data.ExtendedProperties["Changed"] = true;
-                God.CurrentMergeData = merge.Data;
-                God.DataTableChanged();
-
+                
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
                 mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                 item.Items.Add(mergeNode);
-                mergeNode.Focus();
+                
             }
             catch (Exception ex)
             {
@@ -420,16 +425,13 @@ namespace SSDTDevPack.Merge.UI
                             p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == import.Name);
 
                     var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath, import.Data);
-                    God.Merge = merge;
-                    God.CurrentMergeData = merge.Data;
-                    God.DataTableChanged();
                     merge.Data.ExtendedProperties["Changed"] = true;
                     var mergeNode = new TreeViewItem();
                     mergeNode.Header = merge.Name.Value;
                     mergeNode.Tag = merge;
                     mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                     item.Items.Add(mergeNode);
-                    mergeNode.Focus();
+                    
                 }
             }
             catch (Exception ex)

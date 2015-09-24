@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="354e4235-c369-4a8f-a855-0318891c0903" Version="0.1" Language="en-US" Publisher="The Agile SQL Club" />
+    <Identity Id="354e4235-c369-4a8f-a855-0318891c0903" Version="0.1" Language="en-US" Publisher="Ed Elliott - The Agile SQL Club" />
     <DisplayName>SSDTDevPack.VSPackage</DisplayName>
-    <Description xml:space="preserve">
-      The Agile SQL Club SSDT Dev Pack.
-
-      https://the.agilesql.club/Projects/SSDT-Dev-Pack
+    <Description xml:space="preserve">The Agile SQL Club devpack, tools to help SSDT database projects + dacpacs. Includes MergUi
     </Description>
+    <MoreInfo>https://the.agilesql.club/Projects/SSDT-Dev-Pack</MoreInfo>
+    <License>LICENSE</License>
     <Icon>Resources\069085-black-paint-splatter-icon-alphanumeric-letter-m.ico</Icon>
+    <Tags>SSDT, MergeUi</Tags>
   </Metadata>
   <Installation InstalledByMsi="false">
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0]" />
+    <InstallationTarget Version="[12.0,14.0]" Id="Microsoft.VisualStudio.Pro" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.12.0" DisplayName="Visual Studio MPF 12.0" d:Source="Installed" Version="[12.0]" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.12.0" DisplayName="Visual Studio MPF 12.0" d:Source="Installed" Version="[12.0,14.0]" />
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
