@@ -28,20 +28,16 @@ namespace SSDTDevPack.Merge.UI
 
             if (Assembly.GetCallingAssembly().FullName !=
                 "WinFormHost.Merge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")
-               
+
                 WaitForPopulateTreeView();
         }
 
         private async void WaitForPopulateTreeView()
         {
             Cursor = Cursors.Wait;
-            await Task.Run(() =>
-            {
-                PopulateTreeview();
-            });
+            await Task.Run(() => { PopulateTreeview(); });
 
             Cursor = Cursors.Arrow;
-
         }
 
         private void ClearWindows()
@@ -70,7 +66,6 @@ namespace SSDTDevPack.Merge.UI
 
             try
             {
-
                 var projects = new ProjectEnumerator().Get(ProjectType.SSDT);
 
                 var root = Dispatcher.Invoke(() => new TreeViewItem());
@@ -163,7 +158,7 @@ namespace SSDTDevPack.Merge.UI
                 Tables = tables
             };
 
-            return node;    
+            return node;
         }
 
         private void ClearTablePage()
@@ -171,7 +166,6 @@ namespace SSDTDevPack.Merge.UI
             God.CurrentMergeData = null;
             God.DataTableChanged.Invoke();
         }
-
 
         private void mergeNode_Selected(object sender, RoutedEventArgs e)
         {
@@ -228,7 +222,8 @@ namespace SSDTDevPack.Merge.UI
             try
             {
                 //save current...
-                if (God.Merge.Data.ExtendedProperties.ContainsKey("Changed") && (bool)God.Merge.Data.ExtendedProperties["Changed"])
+                if (God.Merge.Data.ExtendedProperties.ContainsKey("Changed") &&
+                    (bool) God.Merge.Data.ExtendedProperties["Changed"])
                 {
                     var writer = new MergeWriter(God.Merge);
                     writer.Write();
@@ -245,9 +240,6 @@ namespace SSDTDevPack.Merge.UI
                         merge.Data.ExtendedProperties.Remove("Changed");
                     }
                 }
-
-                
-
             }
             catch (Exception ex)
             {
@@ -295,13 +287,12 @@ namespace SSDTDevPack.Merge.UI
                         p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == dialog.GetSelectedTable());
 
                 var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath);
-              
+
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
                 mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                 item.Items.Add(mergeNode);
-
             }
             catch (Exception ex)
             {
@@ -370,13 +361,12 @@ namespace SSDTDevPack.Merge.UI
 
                 var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath, dialog.ImportedData);
                 merge.Data.ExtendedProperties["Changed"] = true;
-                
+
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
                 mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                 item.Items.Add(mergeNode);
-                
             }
             catch (Exception ex)
             {
@@ -431,7 +421,6 @@ namespace SSDTDevPack.Merge.UI
                     mergeNode.Tag = merge;
                     mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                     item.Items.Add(mergeNode);
-                    
                 }
             }
             catch (Exception ex)
@@ -443,7 +432,7 @@ namespace SSDTDevPack.Merge.UI
         private void ImportOverwrite_Click(object sender, RoutedEventArgs e)
         {
             try
-            {  
+            {
                 var item = ProjectItems.SelectedItem as TreeViewItem;
                 if (null == item)
                     return;
@@ -452,7 +441,9 @@ namespace SSDTDevPack.Merge.UI
                 if (merge == null)
                     return;
 
-                var dialog = new ImportOverwriteTableDialog(string.Format("{0}.{1}", merge.Table.Name.GetSchema(), merge.Table.Name.GetName()));
+                var dialog =
+                    new ImportOverwriteTableDialog(string.Format("{0}.{1}", merge.Table.Name.GetSchema(),
+                        merge.Table.Name.GetName()));
                 dialog.ShowDialog();
                 merge.Data.ExtendedProperties["Changed"] = true;
                 merge.Data = dialog.ImportedData;
