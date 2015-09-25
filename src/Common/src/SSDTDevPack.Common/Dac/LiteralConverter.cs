@@ -42,6 +42,18 @@ namespace SSDTDevPack.Common.Dac
             throw new ArgumentException("Unknown literal type");
         }
 
+        public static bool IsNText(ObjectIdentifier name)
+        {
+            switch (name.GetName())
+            {
+                case "nchar":
+                case "nvarchar":
+                case "ntext":
+                    return true;
+            }
+
+            return false;
+        }
 
         public static LiteralType GetLiteralType(ObjectIdentifier name)
         {
@@ -89,7 +101,6 @@ namespace SSDTDevPack.Common.Dac
                 case "varbinary":
                 case "image":
                     return LiteralType.Binary;
-
 
             }
 

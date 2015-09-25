@@ -45,7 +45,9 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         public MergeOptions Option { get; set; }
 
-        
+
+        public MergeStatement CustommMerger { get; set; } //used when we read from disk as they may have changed 
+                                                          //something and so we just want to control which conditions are shown and the data
     }
 
     public class MergeWriter
@@ -59,7 +61,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         public void Write()
         {       
-            var merge = CreateMerge();
+            var merge = _merge.CustommMerger == null ? CreateMerge() : UpdateMerge();
 
             var script = merge.GetScript();
 
@@ -82,7 +84,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             _merge.ScriptDescriptor.OriginalText = script;
 
         }
-
+        
         private void WriteScriptFile(string filePath, string scriptFile)
         {
             using (var writer = new StreamWriter(filePath))
@@ -101,9 +103,22 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             }
         }
 
+        private MergeStatement UpdateMerge()
+        {
+            var merge = _merge.CustommMerger;
+
+            merge.MergeSpecification.ActionClauses.Clear();
+            BuildActions(merge.MergeSpecification);
+            SetInlineTableData(merge.MergeSpecification);
+            return merge;
+        }
+
+
         private MergeStatement CreateMerge()
         {
-            var merge = new MergeStatement();
+
+
+            var merge =  new MergeStatement();
             var specification = merge.MergeSpecification = new MergeSpecification();
             
             SetTableAlias(specification);
@@ -123,6 +138,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         private void BuildActions(MergeSpecification specification)
         {
+
 
             if(_merge.Option.HasInsert)
                 BuildInsertAction(specification);
@@ -398,6 +414,12 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             
             foreach (DataRow row in _merge.Data.Rows)
             {
+                if (row.RowState == DataRowState.Deleted)
+                    continue;
+
+                if (row.HasErrors)
+                    continue;
+
                 var rowValue = new RowValue();
                 
                 foreach (var col in _merge.Table.Columns.Where(p => !p.IsIdentity || _merge.Option.WriteIdentityColumns))
@@ -409,7 +431,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                     }
                     else
                     {
-                        rowValue.ColumnValues.Add(GetColumnValue(value.ToString(), col.DataType));
+                        rowValue.ColumnValues.Add(GetColumnValue(value.ToString(), col.DataType, col.IsNText));
                     }
                 }
 
@@ -417,7 +439,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             }
         }
 
-        private static ScalarExpression GetColumnValue(string value, LiteralType type)
+        private static ScalarExpression GetColumnValue(string value, LiteralType type, bool isUnicode)
         {
             switch (type)
             {
@@ -430,7 +452,9 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                 case LiteralType.Binary:
                     return new BinaryLiteral { Value = value };
                 case LiteralType.String:
-                    return new StringLiteral { Value = value /*.Replace("'", "''")*/ };
+
+                    return  new StringLiteral { Value = value , IsNational = isUnicode};
+                   
                 case LiteralType.Null:
                     return new NullLiteral { Value = value };
                 case LiteralType.Default:

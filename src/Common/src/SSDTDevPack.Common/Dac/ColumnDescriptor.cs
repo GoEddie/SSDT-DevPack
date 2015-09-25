@@ -14,6 +14,8 @@ namespace SSDTDevPack.Common.Dac
         {
             Name = column.Name;
             DataType = LiteralConverter.GetLiteralType(column.DataType.FirstOrDefault().Name);
+            IsNText = LiteralConverter.IsNText(column.DataType.FirstOrDefault().Name);
+
             DataLength = column.Length;
 
             IsIdentity = column.IsIdentity;
@@ -28,6 +30,7 @@ namespace SSDTDevPack.Common.Dac
         public int DataLength { get; set; }
         public bool IsKey { get; set; }
         public bool IsIdentity { get; set; }
-        
+
+        public bool IsNText { get; set; }
     }
 }

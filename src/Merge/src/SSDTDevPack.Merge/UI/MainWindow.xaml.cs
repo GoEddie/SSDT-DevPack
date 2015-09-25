@@ -13,6 +13,10 @@ using SSDTDevPack.Common.ProjectItems;
 using SSDTDevPack.Merge.MergeDescriptor;
 using SSDTDevPack.Merge.Parsing;
 
+//  when generatingt merge statements, if unicode column, the N isn't added
+//  if no key columns - should put a warning on the datagrid
+//  (if i modify the script, make sure it isn't deleted?? - lost change when i manually entered in key columns - didn't push refresh
+
 namespace SSDTDevPack.Merge.UI
 {
     /// <summary>

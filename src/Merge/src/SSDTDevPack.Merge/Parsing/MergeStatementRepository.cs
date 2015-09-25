@@ -67,6 +67,7 @@ namespace SSDTDevPack.Merge.Parsing
 
 
                 var merge = new MergeDescriptor.Merge();
+                merge.CustommMerger = mergeStatement;
                 merge.Name = name.ToIdentifier();
                 
                 merge.Data = GetDataFromMerge(mergeStatement, table);
