@@ -4,17 +4,19 @@
     {
 
 
-        public MergeOptions(bool hasUpdate, bool hasInsert, bool hasDelete, bool writeIdentityColumns)
+        public MergeOptions(bool hasUpdate, bool hasInsert, bool hasDelete, bool hasSearchKeys)
         {
             HasUpdate = hasUpdate;
             HasInsert = hasInsert;
             HasDelete = hasDelete;
-            WriteIdentityColumns = writeIdentityColumns;
+            
+            HasSearchKeys = hasSearchKeys;
         }
 
         public bool HasUpdate { get; set; }
         public bool HasInsert { get; set; }
         public bool HasDelete { get; set; }
-        public bool WriteIdentityColumns { get; set; }
+
+        public bool HasSearchKeys { get; set; }
     }
 }

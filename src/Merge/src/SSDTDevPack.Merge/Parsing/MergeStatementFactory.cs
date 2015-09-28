@@ -28,19 +28,11 @@ namespace SSDTDevPack.Merge.Parsing
             merge.Statement = new MergeStatement();
             merge.Table = table;
 
-            var includeIdentityColumns = false;
-            foreach (DataRow row in merge.Data.Rows)
-            {
-                if (merge.Table.Columns.FirstOrDefault(p => p.IsIdentity) != null &&
-                    merge.Table.Columns.Where(p => p.IsIdentity).Any(col => row[col.Name.GetName()] != null))
-                {
-                    includeIdentityColumns = true;
-                }
-            }
+           
 
             merge.Data.AcceptChanges();
 
-            merge.Option = new MergeOptions(true, true, true, includeIdentityColumns);
+            merge.Option = new MergeOptions(true, true, true, merge.Table.Columns.Any(p=>p.IsKey));
             return merge;
         }
 

@@ -14,14 +14,15 @@
             <RowDefinition Height="15"></RowDefinition>
             <RowDefinition Height="15"></RowDefinition>
             <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
          <Label />
         <CheckBox x:Name="DoUpdate" Grid.Row="1" Click="DoUpdate_OnClick">Do Update</CheckBox>
         <CheckBox x:Name="DoInsert" Grid.Row="2" Click="DoInsert_OnClick">Do Insert</CheckBox>
         <CheckBox x:Name="DoDelete" Grid.Row="3" Click="DoDelete_OnClick">Do Delete</CheckBox>
-        
-        <DataGrid AutoGenerateColumns="True" Grid.Row="4" x:Name="Grid"></DataGrid>
+        <TextBlock x:Name="NoKeysWarning" Foreground="Red" IsEnabled="False" Grid.Row="4" TextWrapping="Wrap" Visibility="Hidden" >There are no keys we can use to build the join to this table, you will see "ON SOURCE.[???] = TARGET.[???] - you will need to manually update this to a column that can be used to join to the in-line table</TextBlock>
+        <DataGrid AutoGenerateColumns="True"  Grid.Row="5" x:Name="Grid"></DataGrid>
         
         
     </Grid>

@@ -45,7 +45,6 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         public MergeOptions Option { get; set; }
 
-
         public MergeStatement CustommMerger { get; set; } //used when we read from disk as they may have changed 
                                                           //something and so we just want to control which conditions are shown and the data
     }
@@ -192,7 +191,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             var insertSource = action.Source = new ValuesInsertSource();
             var row = new RowValue();
 
-            foreach (var column in _merge.Table.Columns.Where(p=> !p.IsIdentity || _merge.Option.WriteIdentityColumns))
+            foreach (var column in _merge.Table.Columns)
             {
                 var colRef = new ColumnReferenceExpression();
                 colRef.ColumnType = ColumnType.Regular;
@@ -221,7 +220,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
         {
             var isNulls = new List<BooleanIsNullExpression>();
 
-            foreach (var descriptor in _merge.Table.Columns.Where(p=>!p.IsIdentity ||_merge.Option.WriteIdentityColumns))
+            foreach (var descriptor in _merge.Table.Columns)
             {
                 var nullExpression = new NullIfExpression();
 
@@ -277,7 +276,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
         private UpdateMergeAction CreateUpdateSetActions(MergeActionClause clause)
         {
             var action = (clause.Action = new UpdateMergeAction()) as UpdateMergeAction;
-            foreach (var col in _merge.Table.Columns.Where(p=>!p.IsIdentity|| _merge.Option.WriteIdentityColumns))
+            foreach (var col in _merge.Table.Columns)
             {
                 var setClause = new AssignmentSetClause();
                 setClause.AssignmentKind = AssignmentKind.Equals;
@@ -297,13 +296,13 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
         private void BuildSearchCondition(MergeSpecification specification)
         {
-            if (_merge.Table.Columns.Count(p => p.IsKey && (!p.IsIdentity || _merge.Option.WriteIdentityColumns)) > 1)
+            if (_merge.Table.Columns.Count(p => p.IsKey) > 1)
             {
                 BuildMultiKeySearchCondition(specification);
                 return;
             }
 
-            if (_merge.Table.Columns.Count(p => p.IsKey && (!p.IsIdentity || _merge.Option.WriteIdentityColumns)) == 0)
+            if (_merge.Table.Columns.Count(p => p.IsKey) == 0)
             {
                 //OutputWindowMessage.WriteMessage("The table: {0} does not contain a primary key so it isn't possible to work out what the columns the merge should check.",
                 //    _targetTableName);
@@ -328,7 +327,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
         {
             var comparisons = new List<BooleanComparisonExpression>();
 
-            foreach (var column in _merge.Table.Columns.Where(p => p.IsKey && (!p.IsIdentity || _merge.Option.WriteIdentityColumns)))
+            foreach (var column in _merge.Table.Columns.Where(p => p.IsKey))
             {
                 var condition = new BooleanComparisonExpression();
                 comparisons.Add(CreateSearchCondition(column.Name.GetName(), condition));
@@ -392,7 +391,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             var table = (specification.TableReference = new InlineDerivedTable()) as InlineDerivedTable;
             table.Alias = new Identifier { Value = MergeIdentifierStrings.SourceName };
 
-            foreach (var col in _merge.Table.Columns.Where( p=> (!p.IsIdentity || _merge.Option.WriteIdentityColumns)) )
+            foreach (var col in _merge.Table.Columns)
             {
                 table.Columns.Add(col.Name.ToIdentifier());
             }
@@ -422,7 +421,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
                 var rowValue = new RowValue();
                 
-                foreach (var col in _merge.Table.Columns.Where(p => !p.IsIdentity || _merge.Option.WriteIdentityColumns))
+                foreach (var col in _merge.Table.Columns)
                 {
                     var value = row[col.Name.GetName()];
                     if (value == DBNull.Value)

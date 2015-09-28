@@ -33,6 +33,7 @@ namespace SSDTDevPack.Merge.UI
                 DoUpdate.IsChecked = false;
                 DoDelete.IsChecked = false;
                 DoInsert.IsChecked = false;
+                NoKeysWarning.Visibility = Visibility.Hidden;
 
                 if (God.CurrentMergeData != null)
                 {
@@ -47,6 +48,10 @@ namespace SSDTDevPack.Merge.UI
                     DoUpdate.IsChecked = God.Merge.Option.HasUpdate;
                     DoDelete.IsChecked = God.Merge.Option.HasDelete;
                     DoInsert.IsChecked = God.Merge.Option.HasInsert;
+
+                    if (!God.Merge.Option.HasSearchKeys)
+                        NoKeysWarning.Visibility = Visibility.Visible;
+
                     _inUpdate = false;
                 }
             };  

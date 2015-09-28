@@ -83,14 +83,26 @@ namespace SSDTDevPack.Merge.Parsing
                 merge.Table = table;
 
 
-                var includeIdentityColumns = false;
-                foreach (DataRow row in merge.Data.Rows)
+                bool hasSearchKeys = false;
+                var searchCondition = mergeStatement.MergeSpecification.SearchCondition as BooleanComparisonExpression;
+                if (null != searchCondition)
                 {
-                    if (merge.Table.Columns.FirstOrDefault(p => p.IsIdentity) != null &&
-                        merge.Table.Columns.Where(p => p.IsIdentity).Any(col => row[col.Name.GetName()] != null))
+                    var col = searchCondition.FirstExpression as ColumnReferenceExpression;
+                    if (col != null)
                     {
-                        includeIdentityColumns = true;
+                        var searchColName = col.MultiPartIdentifier.Identifiers.Last();
+                        if (searchColName.Value == "???")
+                        {
+                            hasSearchKeys = false;
+                        }
+                        else
+                        {
+                            hasSearchKeys = true;
+
+                        }
+
                     }
+
                 }
 
                 merge.Option =
@@ -99,7 +111,9 @@ namespace SSDTDevPack.Merge.Parsing
                         mergeStatement.MergeSpecification.ActionClauses.Any(
                             p => p.Condition == MergeCondition.NotMatchedByTarget),
                         mergeStatement.MergeSpecification.ActionClauses.Any(
-                            p => p.Condition == MergeCondition.NotMatchedBySource), includeIdentityColumns);
+                            p => p.Condition == MergeCondition.NotMatchedBySource)
+                            ,hasSearchKeys
+                            );
 
                 Merges.Add(merge);
             }
