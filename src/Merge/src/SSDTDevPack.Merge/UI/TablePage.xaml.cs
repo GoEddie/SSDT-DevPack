@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +56,8 @@ namespace SSDTDevPack.Merge.UI
                     _inUpdate = false;
                 }
             };  
+
+            
         }
 
         private void DoUpdate_OnClick(object sender, RoutedEventArgs e)
@@ -65,7 +68,13 @@ namespace SSDTDevPack.Merge.UI
             if (God.Merge != null)
             {
                 God.Merge.Option.HasUpdate = DoUpdate.IsChecked.Value;
+                SetTableChanged(God.CurrentMergeData);
             }
+        }
+
+        private void SetTableChanged(DataTable currentMergeData)
+        {
+            currentMergeData.ExtendedProperties["Changed"] = true;
         }
 
         private void DoDelete_OnClick(object sender, RoutedEventArgs e)
@@ -76,6 +85,7 @@ namespace SSDTDevPack.Merge.UI
             if (God.Merge != null)
             {
                 God.Merge.Option.HasDelete = DoDelete.IsChecked.Value;
+                SetTableChanged(God.CurrentMergeData);
             }
         }
         private void DoInsert_OnClick(object sender, RoutedEventArgs e)
@@ -86,14 +96,8 @@ namespace SSDTDevPack.Merge.UI
             if (God.Merge != null)
             {
                 God.Merge.Option.HasInsert = DoInsert.IsChecked.Value;
+                SetTableChanged(God.CurrentMergeData);
             }
         }
     }
 }
-
-
-//NEXT TODO - Save when something changes
-//  THE SAVING IS GOIN SCREWREY - tick the check boxes and saves fon't apepar to happen?? may be a ui not updating thing??
-//clear checkboxes on move away
-//new merge button when right click script
-//import tables button when right click on script

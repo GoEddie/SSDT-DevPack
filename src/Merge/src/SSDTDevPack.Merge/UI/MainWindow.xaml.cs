@@ -140,6 +140,7 @@ namespace SSDTDevPack.Merge.UI
 
             foreach (var merge in repoitory.Get())
             {
+                merge.Data.ExtendedProperties["Changed"] = false;
                 var mergeNode = new TreeViewItem();
                 mergeNode.Header = merge.Name.Value;
                 mergeNode.Tag = merge;
@@ -234,6 +235,8 @@ namespace SSDTDevPack.Merge.UI
                     God.Merge.Data.ExtendedProperties.Remove("Changed");
                 }
 
+                
+
                 foreach (var merge in God.MergesToSave)
                 {
                     if (merge.Data.ExtendedProperties.ContainsKey("Changed") &&
@@ -244,6 +247,8 @@ namespace SSDTDevPack.Merge.UI
                         merge.Data.ExtendedProperties.Remove("Changed");
                     }
                 }
+
+                God.MergesToSave.Clear();
             }
             catch (Exception ex)
             {

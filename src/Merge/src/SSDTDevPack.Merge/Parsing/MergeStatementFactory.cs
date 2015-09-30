@@ -44,6 +44,7 @@ namespace SSDTDevPack.Merge.Parsing
                 dataTable.Columns.Add(new DataColumn(col.Name.GetName()));
             }
 
+            dataTable.AcceptChanges();
 
             dataTable.RowChanged += (sender, args) =>
             {

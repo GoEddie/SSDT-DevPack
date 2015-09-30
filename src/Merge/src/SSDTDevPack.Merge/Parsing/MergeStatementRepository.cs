@@ -160,7 +160,8 @@ namespace SSDTDevPack.Merge.Parsing
                 dataTable.Rows.Add(dataTableRow);
             }
 
-
+            dataTable.AcceptChanges();
+           
             dataTable.RowChanged += (sender, args) =>
             {
                 dataTable.ExtendedProperties["Changed"] = true;
