@@ -285,7 +285,7 @@ namespace SSDTDevPack.Merge.UI
 
                 foreach (var table in tables)
                 {
-                    tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema(), table.Name.GetName()));
+                    tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema().Quote(), table.Name.GetName().Quote()));
                 }
 
                 var dialog = new AddTableDialog(tableList);
@@ -293,7 +293,7 @@ namespace SSDTDevPack.Merge.UI
 
                 var mergeTable =
                     tables.FirstOrDefault(
-                        p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == dialog.GetSelectedTable());
+                        p => string.Format("{0}.{1}", p.Name.GetSchema().Quote(), p.Name.GetName().Quote()) == dialog.GetSelectedTable());
 
                 var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath);
 
@@ -353,7 +353,7 @@ namespace SSDTDevPack.Merge.UI
 
                 foreach (var table in tables)
                 {
-                    tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema(), table.Name.GetName()));
+                    tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema().Quote(), table.Name.GetName().Quote()));
                 }
 
                 var dialog = new ImportSingleTableDialog(tableList);
@@ -361,7 +361,7 @@ namespace SSDTDevPack.Merge.UI
 
                 var mergeTable =
                     tables.FirstOrDefault(
-                        p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == dialog.GetSelectedTable());
+                        p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName().Quote()) == dialog.GetSelectedTable().Quote());
 
                 if (dialog.ImportedData == null)
                 {
@@ -411,7 +411,7 @@ namespace SSDTDevPack.Merge.UI
 
                 foreach (var table in tables)
                 {
-                    tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema(), table.Name.GetName()));
+                    tableList.Add(string.Format("{0}.{1}", table.Name.GetSchema().Quote(), table.Name.GetName().Quote()));
                 }
 
                 var dialog = new ImportMultipleTablesDialog(tableList);
@@ -421,7 +421,7 @@ namespace SSDTDevPack.Merge.UI
                 {
                     var mergeTable =
                         tables.FirstOrDefault(
-                            p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName()) == import.Name);
+                            p => string.Format("{0}.{1}", p.Name.GetSchema().Quote(), p.Name.GetName().Quote()) == import.Name);
 
                     var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath, import.Data);
                     merge.Data.ExtendedProperties["Changed"] = true;
