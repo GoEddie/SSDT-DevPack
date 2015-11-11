@@ -53,8 +53,13 @@ namespace SSDTDevPack.Merge.UI
            };
         }
 
+        private bool _allow = false;
+
         private void button1_Click(object sender, EventArgs e)
         {
+
+            _allow = true;
+
             var connectionDialog = new ConnectDialog();
             connectionDialog.ShowDialog();
 

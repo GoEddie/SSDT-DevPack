@@ -228,7 +228,7 @@ namespace SSDTDevPack.Merge.UI
             try
             {
                 //save current...
-                if (God.Merge.Data.ExtendedProperties.ContainsKey("Changed") &&
+                if (God.Merge != null && God.Merge.Data.ExtendedProperties.ContainsKey("Changed") &&
                     (bool) God.Merge.Data.ExtendedProperties["Changed"])
                 {
                     var writer = new MergeWriter(God.Merge);
@@ -292,9 +292,14 @@ namespace SSDTDevPack.Merge.UI
                 var dialog = new AddTableDialog(tableList);
                 dialog.ShowDialog();
 
+                var tableName = dialog.GetSelectedTable();
+
+                if (String.IsNullOrEmpty(tableName))
+                    return;
+
                 var mergeTable =
                     tables.FirstOrDefault(
-                        p => string.Format("{0}.{1}", p.Name.GetSchema().Quote(), p.Name.GetName().Quote()) == dialog.GetSelectedTable());
+                        p => string.Format("{0}.{1}", p.Name.GetSchema().Quote(), p.Name.GetName().Quote()) == tableName);
 
                 var merge = new MergeStatementFactory().Build(mergeTable, tag.ScriptPath);
 
@@ -446,6 +451,8 @@ namespace SSDTDevPack.Merge.UI
                     mergeNode.Tag = merge;
                     mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
                     item.Items.Add(mergeNode);
+
+                    God.MergesToSave.Add(merge);
                 }
             }
             catch (Exception ex)

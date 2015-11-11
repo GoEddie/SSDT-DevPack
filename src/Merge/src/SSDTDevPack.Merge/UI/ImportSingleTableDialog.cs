@@ -25,6 +25,9 @@ namespace SSDTDevPack.Merge.UI
 
         public string GetSelectedTable()
         {
+            if (!_allow)
+                return null;
+
             if (tableListDropDown.SelectedIndex < 0)
                 return null;
 
@@ -74,8 +77,11 @@ namespace SSDTDevPack.Merge.UI
 
         public DataTable ImportedData { get; private set; }
 
+        private bool _allow = false;
+
         private void import_Click(object sender, EventArgs e)
         {
+            _allow = true;
             try
             {
                 using (var con = new SqlConnection(connectionString.Text))

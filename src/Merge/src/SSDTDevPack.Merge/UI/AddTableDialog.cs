@@ -33,6 +33,8 @@ namespace SSDTDevPack.Merge.UI
 
         public string GetSelectedTable()
         {
+            if (!_allow)
+                return null;
 
             if (tableListDropDown.SelectedIndex < 0)
                 return null;
@@ -45,8 +47,11 @@ namespace SSDTDevPack.Merge.UI
 
         }
 
+        bool _allow = false;
+
         private void button1_Click(object sender, EventArgs e)
         {
+            _allow = true;
             this.Close();
         }
 
