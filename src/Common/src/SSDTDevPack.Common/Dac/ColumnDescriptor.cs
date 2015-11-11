@@ -13,6 +13,7 @@ namespace SSDTDevPack.Common.Dac
         public ColumnDescriptor(TSqlColumn column)
         {
             Name = column.Name;
+            UnderlyingType = column.DataType.FirstOrDefault().Name.GetName();
             DataType = LiteralConverter.GetLiteralType(column.DataType.FirstOrDefault().Name);
             IsNText = LiteralConverter.IsNText(column.DataType.FirstOrDefault().Name);
 
@@ -23,6 +24,7 @@ namespace SSDTDevPack.Common.Dac
 
         }
 
+        public string UnderlyingType { get; set; }
         public ObjectIdentifier Name { get; set; }
         public LiteralType DataType { get; set; }
         public int DataTypeLength { get; set; }

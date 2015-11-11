@@ -224,13 +224,16 @@ namespace SSDTDevPack.Merge.MergeDescriptor
             {
                 var nullExpression = new NullIfExpression();
 
-                var first =
-                    (nullExpression.FirstExpression = new ColumnReferenceExpression()) as ColumnReferenceExpression;
-                first.MultiPartIdentifier =  MultiPartIdentifierBuilder.Get(MergeIdentifierStrings.SourceName, descriptor.Name.GetName());
+                //var first =
+                //    (nullExpression.FirstExpression = new ColumnReferenceExpression()) as ColumnReferenceExpression;
+                //first.MultiPartIdentifier =  MultiPartIdentifierBuilder.Get(MergeIdentifierStrings.SourceName, descriptor.Name.GetName());
 
-                var second =
-                    (nullExpression.SecondExpression = new ColumnReferenceExpression()) as ColumnReferenceExpression;
-                second.MultiPartIdentifier = MultiPartIdentifierBuilder.Get(MergeIdentifierStrings.TargetName, descriptor.Name.GetName());
+                //var second =
+                //    (nullExpression.SecondExpression = new ColumnReferenceExpression()) as ColumnReferenceExpression;
+                //second.MultiPartIdentifier = MultiPartIdentifierBuilder.Get(MergeIdentifierStrings.TargetName, descriptor.Name.GetName());
+
+                nullExpression.FirstExpression = GetColumnOrCastColumn(descriptor, MergeIdentifierStrings.SourceName);
+                nullExpression.SecondExpression = GetColumnOrCastColumn(descriptor, MergeIdentifierStrings.TargetName);
 
                 var isNullExpresson = new BooleanIsNullExpression();
                 isNullExpresson.Expression = nullExpression;
@@ -240,6 +243,27 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
             return isNulls;
         }
+
+        private ScalarExpression GetColumnOrCastColumn(ColumnDescriptor column, string tableName)
+        {
+            var columnReference = new ColumnReferenceExpression();
+            columnReference.MultiPartIdentifier = MultiPartIdentifierBuilder.Get(tableName, column.Name.GetName());
+
+            if (column.UnderlyingType == "xml")
+            {
+                var cast = new CastCall();
+                var type = new SqlDataTypeReference();
+                type.SqlDataTypeOption = SqlDataTypeOption.NVarChar;
+                type.Parameters.Add(new MaxLiteral());
+                
+                cast.DataType = type;
+                cast.Parameter = columnReference;
+                return cast;
+            }
+
+            return columnReference;
+        }
+
 
         private static List<BooleanBinaryExpression> CreateExpressionTreeForUpdateSearch(List<BooleanIsNullExpression> isNulls)
         {
@@ -451,7 +475,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                 case LiteralType.Binary:
                     return new BinaryLiteral { Value = value };
                 case LiteralType.String:
-
+               
                     return  new StringLiteral { Value = value , IsNational = isUnicode};
                    
                 case LiteralType.Null:

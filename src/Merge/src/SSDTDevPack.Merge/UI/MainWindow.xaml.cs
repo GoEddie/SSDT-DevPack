@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -359,9 +360,10 @@ namespace SSDTDevPack.Merge.UI
                 var dialog = new ImportSingleTableDialog(tableList);
                 dialog.ShowDialog();
 
-                var mergeTable =
-                    tables.FirstOrDefault(
-                        p => string.Format("{0}.{1}", p.Name.GetSchema(), p.Name.GetName().Quote()) == dialog.GetSelectedTable().Quote());
+                var mergeTable = GetMergeTable(dialog, tables);
+
+                    //tables.FirstOrDefault(
+                //    p => dialog.GetSelectedTable().Quote() == dialog.GetSelectedTable().Quote());
 
                 if (dialog.ImportedData == null)
                 {
@@ -381,6 +383,20 @@ namespace SSDTDevPack.Merge.UI
             {
                 MessageBox.Show("Unable to import table: " + ex.Message);
             }
+        }
+
+        private TableDescriptor GetMergeTable(ImportSingleTableDialog dialog, IOrderedEnumerable<TableDescriptor> tables)
+        {
+            foreach (var table in tables)
+            {
+                 if (dialog.GetSelectedTable().Quote() ==
+                    string.Format("{0}.{1}", table.Name.GetSchema().Quote(), table.Name.GetName().Quote()))
+                {
+                    return table;
+                }
+            }
+
+            return null;
         }
 
         private void ImportMultipleTables(object sender, RoutedEventArgs e)

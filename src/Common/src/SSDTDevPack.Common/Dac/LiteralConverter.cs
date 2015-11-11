@@ -49,6 +49,7 @@ namespace SSDTDevPack.Common.Dac
                 case "nchar":
                 case "nvarchar":
                 case "ntext":
+                case "xml":
                     return true;
             }
 
