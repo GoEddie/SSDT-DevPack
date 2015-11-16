@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SSDTDevPack.Merge")]
+[assembly: AssemblyTitle("SSDTDevPack.NameConstraints")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SSDTDevPack.Merge")]
-[assembly: AssemblyCopyright("NO Copyright Ed Elliott 2015")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("SSDTDevPack.NameConstraints")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2cadb850-5531-4e54-ab17-9b8940aebec2")]
+[assembly: Guid("8dd634f0-f97c-4cf1-ab2a-9e6500e49b87")]
 
 // Version information for an assembly consists of the following four values:
 //

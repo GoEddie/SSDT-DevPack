@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows;
 using Microsoft.SqlServer.Dac.Extensions.Prototype;
 using Microsoft.SqlServer.Dac.Model;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
+using ColumnType = Microsoft.SqlServer.Dac.Model.ColumnType;
 
 namespace SSDTDevPack.Common.Dac
 {
@@ -13,7 +15,26 @@ namespace SSDTDevPack.Common.Dac
         {
             Columns = BuildColumnDescriptors(table);
             Name = table.Name;
+            Constraints = BuildConstraints(table);
+            
         }
+
+        private IEnumerable<Constraint> BuildConstraints(TSqlTable table)
+        {
+            var constraints = new List<Constraint>();
+
+            foreach (var c in table.PrimaryKeyConstraints)
+            {
+                constraints.Add(new Constraint()
+                {
+                    Name = c.Name, Type = ConstraintType.PrimaryKey
+                });
+            }
+
+
+            return constraints;
+        }
+
 
         private List<ColumnDescriptor> BuildColumnDescriptors(TSqlTable table)
         {
@@ -25,7 +46,7 @@ namespace SSDTDevPack.Common.Dac
 
                 return null;
             }
-
+            
             return table.Columns.Where(column => column.ColumnType == ColumnType.Column).Select(column => new ColumnDescriptor(column)).ToList();
         }
 
@@ -52,6 +73,21 @@ namespace SSDTDevPack.Common.Dac
         }
 
         public List<ColumnDescriptor> Columns { get; private set; }
+        public IEnumerable<Constraint> Constraints { get; private set; }
         public ObjectIdentifier Name { get; set; }
+        
+    }
+
+    public enum ConstraintType
+    {
+        PrimaryKey,
+        ForeignKey,
+        Check
+    }
+
+    public class Constraint
+    {
+        public ConstraintType Type;
+        public ObjectIdentifier  Name;
     }
 }

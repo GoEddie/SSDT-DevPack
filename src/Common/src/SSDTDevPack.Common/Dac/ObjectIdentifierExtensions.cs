@@ -109,4 +109,31 @@ namespace SSDTDevPack.Common.Dac
             return source.BaseIdentifier;
         }
     }
+
+    public static class TableNameComparer
+    {
+        public static bool AreSame(ObjectIdentifier id, SchemaObjectName son)
+        {
+            switch (id.Parts.Count)
+            {
+                case 4:
+                    return id.Parts[0] == son.ServerIdentifier.Value && id.Parts[1] == son.DatabaseIdentifier.Value
+                           && id.Parts[2] == son.SchemaIdentifier.Value && id.Parts[3] == son.BaseIdentifier.Value;
+
+                case 3:
+                    return id.Parts[0] == son.DatabaseIdentifier.Value
+                           && id.Parts[1] == son.SchemaIdentifier.Value && id.Parts[2] == son.BaseIdentifier.Value;
+
+                case 2:
+                    return id.Parts[0] == son.SchemaIdentifier.Value && id.Parts[1] == son.BaseIdentifier.Value;
+
+                case 1:
+                    return id.Parts[0] == son.BaseIdentifier.Value;
+
+
+            }
+
+            return false;
+        }
+    }
 }
