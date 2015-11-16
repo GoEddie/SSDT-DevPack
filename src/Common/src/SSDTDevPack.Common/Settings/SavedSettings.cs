@@ -29,15 +29,27 @@ namespace SSDTDevPack.Common.Settings
         {
            XmlSerializer serializer = new XmlSerializer(typeof(Settings));
 
-           StreamReader reader = new StreamReader(GetPath("config.xml"));
-           var settings = (Settings)serializer.Deserialize(reader);
-           reader.Close();
+
+           var settings = GetSettings(serializer);
 
 
-           if (String.IsNullOrEmpty(settings.PrimaryKeyName))
+            if (String.IsNullOrEmpty(settings.PrimaryKeyName))
                 settings.PrimaryKeyName = primaryKeyNameTemplate;
 
            return settings;    
+        }
+
+        private static Settings GetSettings(XmlSerializer serializer)
+        {
+            if (File.Exists(GetPath("config.xml")))
+            {
+                StreamReader reader = new StreamReader(GetPath("config.xml"));
+                var settings = (Settings) serializer.Deserialize(reader);
+                reader.Close();
+                return settings;
+            }
+
+            return new Settings();
         }
 
         private static string GetPath(string file)
