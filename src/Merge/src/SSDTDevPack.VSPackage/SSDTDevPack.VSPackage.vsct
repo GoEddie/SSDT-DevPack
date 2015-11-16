@@ -22,6 +22,8 @@
       <IDSymbol name="SSDTDevPackQuickDeploy" value="0x0100" />
       <IDSymbol name="SSDTDevPackMergeUi" value="0x0101" />
       <IDSymbol name="SSDTDevPackNameConstraints" value="0x0102" />
+      <IDSymbol name="SSDTDevPackCreatetSQLtSchema" value="0x0103" />
+      
 
 
     </GuidSymbol>
@@ -35,7 +37,7 @@
   <Commands package="guidSSDTDevPack_VSPackagePkg">
 
     <Menus>
-      <Menu guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" priority="0x0100" type="Menu">
+      <Menu guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" priority="0x0100" parent="Menu">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="MyMenuGroup" />
         <Strings>
           <ButtonText>SSDT Dev Pack</ButtonText>
@@ -59,7 +61,7 @@
 
     <Buttons>
 
-      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" priority="0x0100" type="MenuButton">
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" priority="0x0100" parent="MenuButton">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
@@ -76,14 +78,21 @@
         </Strings>
       </Button>-->
 
-      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackNameConstraints" priority="0x0102" type="Button">
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackCreatetSQLtSchema" priority="0x0102" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Create tSQLt Class</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackNameConstraints" priority="0x0102" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
         <Strings>
           <ButtonText>Name Constraints</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackMergeUi" priority="0x0100" type="Button">
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackMergeUi" priority="0x0100" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
@@ -92,7 +101,10 @@
       </Button>
 
 
-      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackMergeUi" priority="0x0100" type="Button">
+      
+      
+      
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackMergeUi" priority="0x0100" parent="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>

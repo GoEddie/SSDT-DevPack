@@ -3,12 +3,15 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using SSDTDevPack.Common.SolutionBrowser;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.NameConstraints;
+using SSDTDevPack.tSQLtStubber;
 
 namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 {
@@ -63,7 +66,37 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 menuItem = new MenuCommand(NameConstraintsCalled, menuCommandID);
                 mcs.AddCommand(menuItem);
 
+
+                menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
+                    (int)PkgCmdIDList.SSDTDevPackCreatetSQLtSchema);
+                menuItem = new MenuCommand(CreatetSQLtSchema, menuCommandID);
+                mcs.AddCommand(menuItem);
+
             }
+        }
+
+        private void CreatetSQLtSchema(object sender, EventArgs e)
+        {
+            var dte = (DTE)GetService(typeof(DTE));
+            // var projects = new ProjectEnumerator().Get(ProjectType.SSDT);
+            
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return;
+            }
+
+            var ep = doc.StartPoint.CreateEditPoint();
+
+            ep.EndOfDocument();
+
+            var length = ep.AbsoluteCharOffset;
+            ep.StartOfDocument();
+
+            var originalText = ep.GetText(length);
+
+            var builder = new SchemaBuilder(originalText);
+            builder.CreateSchemas();
         }
 
         private void MenuItemCallback(object sender, EventArgs e)

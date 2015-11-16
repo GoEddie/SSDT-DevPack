@@ -43,6 +43,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ProjectWithConstraints", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NameConstraints.IntegrationTests", "..\..\..\Test\NameConstraints\NameConstraints.IntegrationTests\NameConstraints.IntegrationTests.csproj", "{EBD5DAE2-030E-4616-B6BB-B47101E9C8C1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tSQLtStubber", "tSQLtStubber", "{AEBDFD2A-E81C-428F-8183-F867EA326302}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.tSQLtStubber", "..\..\..\tSQLtStubber\SSDTDevPack.tSQLtStubber\SSDTDevPack.tSQLtStubber.csproj", "{570FE172-C718-4904-849D-641BB7395BD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +103,10 @@ Global
 		{EBD5DAE2-030E-4616-B6BB-B47101E9C8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBD5DAE2-030E-4616-B6BB-B47101E9C8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBD5DAE2-030E-4616-B6BB-B47101E9C8C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{570FE172-C718-4904-849D-641BB7395BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{570FE172-C718-4904-849D-641BB7395BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{570FE172-C718-4904-849D-641BB7395BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{570FE172-C718-4904-849D-641BB7395BD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,5 +127,6 @@ Global
 		{289C1F12-3F83-4061-B88E-04493B015102} = {DE72FFC0-5479-4D95-8E6F-4C1ACBE2E6CA}
 		{52FA5B53-4761-44B0-8C1B-7218EE8A9594} = {D49C24B8-62AE-4783-A6B8-D3C7F4DB1EC8}
 		{EBD5DAE2-030E-4616-B6BB-B47101E9C8C1} = {D49C24B8-62AE-4783-A6B8-D3C7F4DB1EC8}
+		{570FE172-C718-4904-849D-641BB7395BD4} = {AEBDFD2A-E81C-428F-8183-F867EA326302}
 	EndGlobalSection
 EndGlobal

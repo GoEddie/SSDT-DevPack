@@ -202,6 +202,10 @@
       <Project>{289C1F12-3F83-4061-B88E-04493B015102}</Project>
       <Name>SSDTDevPack.NameConstraints</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\tSQLtStubber\SSDTDevPack.tSQLtStubber\SSDTDevPack.tSQLtStubber.csproj">
+      <Project>{570FE172-C718-4904-849D-641BB7395BD4}</Project>
+      <Name>SSDTDevPack.tSQLtStubber</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SSDTDevPack.Merge\SSDTDevPack.Merge.csproj">
       <Project>{EF0F4A6D-68A4-4745-A3D5-2118A1608721}</Project>
       <Name>SSDTDevPack.Merge</Name>

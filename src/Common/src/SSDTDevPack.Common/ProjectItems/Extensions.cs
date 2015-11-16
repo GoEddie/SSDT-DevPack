@@ -13,5 +13,14 @@ namespace SSDTDevPack.Common.ProjectItems
         {
             return item.Properties != null && item.Properties.Cast<Property>().Any(property => property.Name == "BuildAction" && property.Value.ToString() == buildAction);
         }
+
+        public static string GetStringProperty(this EnvDTE.ProjectItem item, string propertyName)
+        {
+            var prop = item.Properties.Cast<Property>().FirstOrDefault(property => property.Name == propertyName);
+            if (prop != null)
+                return prop.Value;
+
+            return null;
+        }
     }
 }
