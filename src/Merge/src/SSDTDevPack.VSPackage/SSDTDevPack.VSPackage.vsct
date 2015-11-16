@@ -61,16 +61,6 @@
 
     <Buttons>
 
-      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" priority="0x0100" parent="MenuButton">
-        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
-        <Strings>
-          <ButtonText>SSDT Dev Pack</ButtonText>
-          <CommandName>SSDT Dev Pack</CommandName>
-        </Strings>
-
-      </Button>
-
       <!--<Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackQuickDeploy" priority="0x0100" type="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
         <Strings>
