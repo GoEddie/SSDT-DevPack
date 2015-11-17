@@ -23,8 +23,9 @@
       <IDSymbol name="SSDTDevPackMergeUi" value="0x0101" />
       <IDSymbol name="SSDTDevPackNameConstraints" value="0x0102" />
       <IDSymbol name="SSDTDevPackCreatetSQLtSchema" value="0x0103" />
-      
+      <IDSymbol name="SSDTDevPackCreatetSQLtTestStub" value="0x0104" />
 
+      
 
     </GuidSymbol>
 
@@ -74,6 +75,14 @@
           <ButtonText>Create tSQLt Class</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackCreatetSQLtTestStub" priority="0x0102" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Create tSQLt Test</ButtonText>
+        </Strings>
+      </Button>
+
+      
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackNameConstraints" priority="0x0102" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />

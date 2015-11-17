@@ -12,6 +12,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         public const uint SSDTDevPackMergeUi = 0x101;
         public const uint SSDTDevPackNameConstraints = 0x102;
         public const uint SSDTDevPackCreatetSQLtSchema = 0x103;
+        public const uint SSDTDevPackCreatetSQLtTestStub = 0x104;
 
 
     };

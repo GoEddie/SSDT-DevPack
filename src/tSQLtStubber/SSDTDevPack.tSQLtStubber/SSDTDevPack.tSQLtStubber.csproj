@@ -36,6 +36,10 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DacFxStronglyTypedModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1a0f01223f199a5b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\DacFxStronglyTypedModel.dll</HintPath>
+    </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -53,8 +57,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ScriptBuilder.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="ParametersHelper.cs" />
+    <Compile Include="ProcedureVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemaBuilder.cs" />
+    <Compile Include="TestBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">

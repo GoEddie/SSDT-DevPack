@@ -108,6 +108,7 @@
     <Compile Include="Dac\LiteralConverter.cs" />
     <Compile Include="Dac\Model.cs" />
     <Compile Include="Dac\ObjectIdentifierExtensions.cs" />
+    <Compile Include="Dac\ProcedureRepository.cs" />
     <Compile Include="Dac\TableDescriptor.cs" />
     <Compile Include="Dac\TableRepository.cs" />
     <Compile Include="Enumerators\ProjectEnumerator.cs" />

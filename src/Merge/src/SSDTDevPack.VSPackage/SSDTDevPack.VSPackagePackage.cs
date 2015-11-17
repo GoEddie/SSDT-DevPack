@@ -72,7 +72,42 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 menuItem = new MenuCommand(CreatetSQLtSchema, menuCommandID);
                 mcs.AddCommand(menuItem);
 
+                menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
+                   (int)PkgCmdIDList.SSDTDevPackCreatetSQLtTestStub);
+                menuItem = new MenuCommand(CreatetSQLtTest, menuCommandID);
+                mcs.AddCommand(menuItem);
+
             }
+        }
+
+        private void CreatetSQLtTest(object sender, EventArgs e)
+        {
+            var dte = (DTE)GetService(typeof(DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return;
+            }
+
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return;
+            }
+
+            var ep = doc.StartPoint.CreateEditPoint();
+
+            ep.EndOfDocument();
+
+            var length = ep.AbsoluteCharOffset;
+            ep.StartOfDocument();
+
+            var originalText = ep.GetText(length);
+
+            var builder = new TestBuilder(originalText, dte.ActiveDocument.ProjectItem.ContainingProject);
+            builder.Go();
+            //  builder.CreateTests();
+
         }
 
         private void CreatetSQLtSchema(object sender, EventArgs e)
@@ -156,4 +191,6 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
         }
     }
+
+   
 }

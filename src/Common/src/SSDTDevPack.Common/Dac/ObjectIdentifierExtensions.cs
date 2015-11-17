@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.SqlServer.Dac.Model;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Merge.MergeDescriptor;
@@ -41,16 +38,23 @@ namespace SSDTDevPack.Common.Dac
             if (target.SchemaIdentifier == null)
                 return Quote.Name(source.GetName()) == Quote.Name(target.BaseIdentifier.Value);
 
-            return Quote.Name(source.GetSchema()) == Quote.Name(target.SchemaIdentifier.Value) && Quote.Name(source.GetName()) == Quote.Name(target.BaseIdentifier.Value);
+            return Quote.Name(source.GetSchema()) == Quote.Name(target.SchemaIdentifier.Value) &&
+                   Quote.Name(source.GetName()) == Quote.Name(target.BaseIdentifier.Value);
+        }
+
+        public static bool EqualsName(this SchemaObjectName source, SchemaObjectName target)
+        {
+            return source.BaseIdentifier.Quote() == target.BaseIdentifier.Quote() &&
+                   source.SchemaIdentifier.Quote() == target.SchemaIdentifier.Quote();
         }
 
         public static Identifier ToIdentifier(this ObjectIdentifier source)
         {
             var name = source.GetName();
 
-            return new Identifier()
+            return new Identifier
             {
-                Value = name.Quote() 
+                Value = name.Quote()
             };
         }
 
@@ -59,17 +63,16 @@ namespace SSDTDevPack.Common.Dac
             var target = new SchemaObjectName();
             target.Identifiers.Add(source.GetSchema().ToScriptDomIdentifier().Quote());
             target.Identifiers.Add(source.GetName().ToScriptDomIdentifier().Quote());
-            
+
             return target;
         }
-
     }
 
     public static class StringExtensions
     {
         public static Identifier ToScriptDomIdentifier(this string source)
         {
-            return new Identifier()
+            return new Identifier
             {
                 Value = source
             };
@@ -95,7 +98,6 @@ namespace SSDTDevPack.Common.Dac
                 source = source.Substring(0, source.Length - 1);
 
             return source;
-
         }
     }
 
@@ -140,11 +142,33 @@ namespace SSDTDevPack.Common.Dac
 
                 case 1:
                     return id.Parts[0] == son.BaseIdentifier.Value;
-
-
             }
 
             return false;
+        }
+    }
+
+    public static class ObjectNameExtensions
+    {
+        public static Identifier ToIdentifier(this string src)
+        {
+            var id = new Identifier {Value = src};
+            return id;
+        }
+
+        public static SchemaObjectName ToSchemaObjectName(this string src)
+        {
+            var name = new SchemaObjectName();
+            name.Identifiers.Add(src.ToIdentifier());
+            return name;
+        }
+
+    }
+
+    public class NameConversionException : Exception
+    {
+        public NameConversionException(string message)
+        {
         }
     }
 }
