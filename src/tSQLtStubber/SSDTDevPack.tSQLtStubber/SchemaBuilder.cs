@@ -71,6 +71,8 @@ namespace SSDTDevPack.tSQLtStubber
             var classFolder = folder.ProjectItems.AddFromTemplate("Schema", name.UnQuote() + ".sql");
             var filePath = classFolder.GetStringProperty("FullPath");
             File.WriteAllText(filePath, script);
+
+            classFolder.Open().Visible = true;
         }
 
     }
