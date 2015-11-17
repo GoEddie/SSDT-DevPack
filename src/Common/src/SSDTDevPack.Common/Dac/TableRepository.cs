@@ -31,7 +31,7 @@ namespace SSDTDevPack.Common.Dac
 
             _tables = dacTables.Select(t => new TableDescriptor(t)).ToList();
 
-            Model.Close(model);
+            Model.Close(_path);
 
         }
     }

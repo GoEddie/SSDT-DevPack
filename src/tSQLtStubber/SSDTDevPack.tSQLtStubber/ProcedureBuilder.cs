@@ -10,15 +10,24 @@ using SSDTDevPack.Common.Dac;
 
 namespace SSDTDevPack.tSQLtStubber
 {
+    enum CodeType
+    {
+        Procedure,
+        Function
+    }
+    //TODO I added function in a hurry, this should be split into two classes which inherit common code
     public class ProcedureBuilder : ScriptBuilder
     {
         private readonly ExecuteStatement _execProc = new ExecuteStatement();
+        private readonly SelectStatement _functionSelect = new SelectStatement();
         private readonly List<Parameter> _parameters = new List<Parameter>();
         private readonly List<ObjectIdentifier> _tables = new List<ObjectIdentifier>();
         private readonly CreateProcedureStatement _testProcedure = new CreateProcedureStatement();
+        private readonly CodeType CodeType;
 
         public ProcedureBuilder(string testSchema, string testName, TSqlProcedure procedureUnderTest)
         {
+            CodeType = CodeType.Procedure;
             _testProcedure.StatementList = new StatementList();
             foreach (var t in procedureUnderTest.BodyDependencies)
             {
@@ -39,6 +48,30 @@ namespace SSDTDevPack.tSQLtStubber
             CreateExecForProcUnderTest(procedureUnderTest.Name);
         }
 
+        public ProcedureBuilder(string testSchema, string testName, TSqlTableValuedFunction procedureUnderTest)
+        {
+            CodeType = CodeType.Function;
+            _testProcedure.StatementList = new StatementList();
+            foreach (var t in procedureUnderTest.BodyDependencies)
+            {
+                if (t.ObjectType == ModelSchema.Table)
+                {
+                    //table to fake
+                    var table = new TSqlTable(t.Element);
+                    AddTable(table.Name);
+                }
+            }
+
+            foreach (var p in procedureUnderTest.Parameters)
+            {
+                AddParameter(p.Name.GetName().UnQuote(), GetParameterType(p.DataType));
+            }
+
+            CreateTestProcedureDefinition(testSchema, testName);
+            CreateSelectForFunctionUnderTest(procedureUnderTest.Name);
+        }
+
+        
         private SqlDataType GetParameterType(IEnumerable<ISqlDataType> dataType)
         {
             foreach (var type in dataType)
@@ -74,6 +107,26 @@ namespace SSDTDevPack.tSQLtStubber
             _execProc.ExecuteSpecification.ExecutableEntity = entity;
         }
 
+        private void CreateSelectForFunctionUnderTest(ObjectIdentifier name)
+        {
+            var select = new QuerySpecification();
+            select.SelectElements.Add(new SelectStarExpression());
+
+            var from = new FromClause();
+            var reference = new SchemaObjectFunctionTableReference();
+            foreach (var p in _parameters)
+            {
+                reference.Parameters.Add(new VariableReference(){Name = p.Name});
+            }
+            
+            reference.SchemaObject = name.ToSchemaObjectName();
+            from.TableReferences.Add(reference);
+
+            select.FromClause = from;
+            _functionSelect.QueryExpression = select;
+        }
+
+
         public void AddParameter(string name, SqlDataType type)
         {
             _parameters.Add(new Parameter(name, type));
@@ -94,14 +147,20 @@ namespace SSDTDevPack.tSQLtStubber
             {
                 CreateFakeTableDefinition(table);
             }
-
+            
             foreach (var parameter in _parameters)
             {
                 CreateDeclareVariableDefinitionForParmeter(parameter.Name, parameter.Type);
-                CreateParameterForCalleeStoredProc(parameter);
-            }
 
-            _testProcedure.StatementList.Statements.Add(_execProc);
+                if (CodeType == CodeType.Procedure)
+                    CreateParameterForCalleeStoredProc(parameter);
+            }
+            
+            if(CodeType == CodeType.Procedure)
+                _testProcedure.StatementList.Statements.Add(_execProc);
+            else
+                _testProcedure.StatementList.Statements.Add(_functionSelect);
+
 
             CreateAssertDefinition();
         }

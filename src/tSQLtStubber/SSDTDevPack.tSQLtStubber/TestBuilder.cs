@@ -33,7 +33,8 @@ namespace SSDTDevPack.tSQLtStubber
             var visitor = new ProcedureVisitor();
             fragment.Accept(visitor);
 
-            using (var repository = new ProcedureRepository(DacpacPath.Get(_sourceProject)))
+            using (var procedureRepository = new ProcedureRepository(DacpacPath.Get(_sourceProject)))
+            using (var functionRepository = new FunctionRepository(DacpacPath.Get(_sourceProject)))
             {
                 foreach (var procedure in visitor.Procedures)
                 {
@@ -51,10 +52,10 @@ namespace SSDTDevPack.tSQLtStubber
                     }
                     
                     var parentProjectItem = destination;
-
+                        
                     var name = browser.GetObjectName();
                     
-                    var proc = repository.FirstOrDefault(p => p.Name.EqualsName(procedure.ProcedureReference.Name));
+                    var proc = procedureRepository.FirstOrDefault(p => p.Name.EqualsName(procedure.ProcedureReference.Name));
                     if (proc == null)
                     {
                         MessageBox.Show(string.Format("Cannot find stored procedure {0} in project compiled dacpac", procedure.ProcedureReference.Name));
@@ -65,6 +66,38 @@ namespace SSDTDevPack.tSQLtStubber
                     var script = testBuilder.GetScript();
 
                     CreateNewFile(parentProjectItem, name , script);
+                }
+
+                foreach (var procedure in visitor.Functions)
+                {
+                    var browser = new SolutionBrowserForm("test " + procedure.Name.BaseIdentifier.Value.UnQuote() + " does something");
+                    browser.ShowDialog();
+
+                    var destination = browser.DestinationItem;
+                    if (destination == null)
+                        continue;
+
+                    if (String.IsNullOrEmpty(DacpacPath.Get(_sourceProject)) && !File.Exists(DacpacPath.Get(_sourceProject)))
+                    {
+                        MessageBox.Show("Cannot find dacpac for project");
+                        return;
+                    }
+
+                    var parentProjectItem = destination;
+
+                    var name = browser.GetObjectName();
+
+                    var proc = functionRepository.FirstOrDefault(p => p.Name.EqualsName(procedure.Name));
+                    if (proc == null)
+                    {
+                        MessageBox.Show(string.Format("Cannot find stored procedure {0} in project compiled dacpac", procedure.Name));
+                        return;
+                    }
+
+                    var testBuilder = new ProcedureBuilder(procedure.Name.BaseIdentifier.Value.UnQuote(), name, proc);
+                    var script = testBuilder.GetScript();
+
+                    CreateNewFile(parentProjectItem, name, script);
                 }
             }
         }

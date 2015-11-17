@@ -56,6 +56,35 @@ namespace SSDTDevPack.tSQLtStubber
                 var folder = parentProjectItem.ProjectItems.AddFolder(name.UnQuote());
                 CreateNewFile(folder, name, script);
             }
+
+            foreach (var procedure in visitor.Functions)
+            {
+                var browser = new SolutionBrowserForm(procedure
+                    .Name.BaseIdentifier.Value.Quote());
+                browser.ShowDialog();
+
+                var destination = browser.DestinationItem;
+                if (destination == null)
+                    continue;
+
+                var parentProjectItem = destination;
+
+                var name = browser.GetObjectName();
+                var script = GetScript(name);
+
+                for (var i = 1; i <= parentProjectItem.ProjectItems.Count; i++)
+                {
+                    var item = parentProjectItem.ProjectItems.Item(i);
+                    if (item.Name.UnQuote() == name.UnQuote())
+                    {
+                        CreateNewFile(item, name, script);
+                        return;
+                    }
+                }
+
+                var folder = parentProjectItem.ProjectItems.AddFolder(name.UnQuote());
+                CreateNewFile(folder, name, script);
+            }
         }
 
         private static void CreateNewFile(ProjectItem folder, string name, string script)
