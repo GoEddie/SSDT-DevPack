@@ -15,6 +15,8 @@
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidSSDTDevPack_VSPackageCmdSet" value="{a60f097a-ca84-43f0-b08d-a45b6ccd476a}">
 
+      <IDSymbol name="tSQLtGroup" value="0x1019" />
+      <IDSymbol name="tSQLtSubMenu" value="0x1021" />
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="SubMenu" value="0x1020" />
       <IDSymbol name="SubMenu" value="0x1100" />
@@ -45,8 +47,8 @@
           <CommandName>SSDT Dev Pack</CommandName>
         </Strings>
       </Menu>
+     
     </Menus>
-
     <Groups>
 
       <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="MyMenuGroup" priority="0x0600">
@@ -57,6 +59,9 @@
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
       </Group>
 
+      <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="tSQLtGroup" priority="0x0600">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
+      </Group>
 
     </Groups>
 
@@ -70,13 +75,13 @@
       </Button>-->
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackCreatetSQLtSchema" priority="0x0102" parent="Button">
-        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="tSQLtGroup" />
         <Strings>
           <ButtonText>Create tSQLt Class</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackCreatetSQLtTestStub" priority="0x0102" parent="Button">
-        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="tSQLtGroup" />
         <Strings>
           <ButtonText>Create tSQLt Test</ButtonText>
         </Strings>

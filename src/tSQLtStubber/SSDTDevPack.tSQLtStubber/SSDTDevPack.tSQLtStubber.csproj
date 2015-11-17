@@ -63,6 +63,7 @@
     <Compile Include="ProcedureVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaBuilder.cs" />
+    <Compile Include="ProcedureBuilder.cs" />
     <Compile Include="TestBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
