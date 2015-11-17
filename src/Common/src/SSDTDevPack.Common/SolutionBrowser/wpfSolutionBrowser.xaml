@@ -14,12 +14,12 @@
         
         <WrapPanel Grid.Row="0">
             <Label>Choose the name &amp; location to place the new object....</Label>
-            <TextBox x:Name="ObjectName" MinWidth="75" ></TextBox>
+            <TextBox x:Name="ObjectName" Margin="20,0, 0,0" MinWidth="200" ></TextBox>
             
         </WrapPanel>
         
         
         <TreeView Grid.Row="1" x:Name="Tree"></TreeView>
-        <Button Grid.Row="2" HorizontalAlignment="Right" Click="Ok_Click">Done</Button>
+        <Button Grid.Row="2" HorizontalAlignment="Right" Click="Ok_Click" MinWidth="75">OK</Button>
     </Grid>
 </UserControl>

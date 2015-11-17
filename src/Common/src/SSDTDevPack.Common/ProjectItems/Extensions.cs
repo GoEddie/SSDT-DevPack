@@ -16,6 +16,9 @@ namespace SSDTDevPack.Common.ProjectItems
 
         public static string GetStringProperty(this EnvDTE.ProjectItem item, string propertyName)
         {
+            if (item.Properties == null)
+                return null;
+
             var prop = item.Properties.Cast<Property>().FirstOrDefault(property => property.Name == propertyName);
             if (prop != null)
                 return prop.Value;

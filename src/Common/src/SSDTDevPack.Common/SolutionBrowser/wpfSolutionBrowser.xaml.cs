@@ -1,38 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using EnvDTE;
 using SSDTDevPack.Common.Enumerators;
+using SSDTDevPack.Common.ProjectItems;
 
 namespace SSDTDevPack.Common.SolutionBrowser
 {
     /// <summary>
-    /// Interaction logic for wpfSolutionBrowser.xaml
+    ///     Interaction logic for wpfSolutionBrowser.xaml
     /// </summary>
     public partial class wpfSolutionBrowser : UserControl
     {
+        private ProjectItem _defaultPath;
+        private ProjectItem _destinationItem;
+        private bool _okClicked;
+        private SolutionBrowserForm _parent;
+
         public wpfSolutionBrowser()
         {
             InitializeComponent();
         }
 
-        private SolutionBrowserForm _parent;
-
-        public void Fill(SolutionBrowserForm parent, string projectType, string objectName)
+        public void Fill(SolutionBrowserForm parent, string projectType, string objectName,
+            ProjectItem defaultPath = null)
         {
             ObjectName.Text = objectName;
             _parent = parent;
+            _defaultPath = defaultPath;
 
             var enumerator = new ProjectEnumerator();
             foreach (var project in enumerator.Get(projectType))
@@ -43,19 +38,30 @@ namespace SSDTDevPack.Common.SolutionBrowser
 
                 for (var i = 1; i <= project.ProjectItems.Count; i++)
                 {
-                    var node = AddChildren(project.ProjectItems.Item(i));
+                    var expandParent = false;
+                    var node = AddChildren(project.ProjectItems.Item(i), out expandParent);
 
-                    if(node != null)
+                    if (node != null)
+                    {
                         newNode.Items.Add(node);
+                        if (expandParent)
+                        {
+                            newNode.IsExpanded = true;
+                            node.IsExpanded = true;
+                        }
+                    }
                 }
 
                 Tree.Items.Add(newNode);
             }
         }
 
-        private TreeViewItem AddChildren(ProjectItem item)
+        private TreeViewItem AddChildren(ProjectItem item, out bool expandParent)
         {
-            if (item.Name != null && item.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase))  //dirty, should examine the parent...
+            expandParent = false;
+
+            if (item.Name != null && item.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase))
+                //dirty, should examine the parent...
             {
                 return null;
             }
@@ -64,29 +70,56 @@ namespace SSDTDevPack.Common.SolutionBrowser
             node.Header = item.Name;
             node.Tag = item;
 
+            if (_defaultPath != null && _defaultPath.GetStringProperty("FullPath") == item.GetStringProperty("FullPath"))
+            {
+                node.IsSelected = true;
+                node.IsExpanded = true;
+                _destinationItem = item;
+                expandParent = true;
+            }
+
             if (item.ProjectItems == null)
                 return node;
+
+            var resetExpandParent = false;
+            var expandThis = expandParent;
 
             for (var i = 1; i <= item.ProjectItems.Count; i++)
             {
                 var child = item.ProjectItems.Item(i);
                 if (!child.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase))
                 {
-                    var newNode = AddChildren(child);
+                    var newNode = AddChildren(child, out expandParent);
                     node.Items.Add(newNode);
+                    if (expandParent)
+                    {
+                        node.IsExpanded = true;
+                        resetExpandParent = true;
+                    }
                 }
             }
 
-
+            expandParent = expandThis || resetExpandParent;
             return node;
         }
 
-        public ProjectItem DestinationItem { get; private set; }
+        public ProjectItem GetDestinationItem()
+        {
+            if (_okClicked)
+                return _destinationItem;
 
-        public string GetObjectName() {  return ObjectName.Text; } 
+            return null;
+        }
+
+        public string GetObjectName()
+        {
+            return ObjectName.Text;
+        }
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
+            _okClicked = true;
+
             var node = Tree.SelectedValue as TreeViewItem;
             if (node == null)
             {
@@ -97,7 +130,7 @@ namespace SSDTDevPack.Common.SolutionBrowser
             var item = node.Tag as ProjectItem;
             if (item != null)
             {
-                DestinationItem = item;
+                _destinationItem = item;
             }
 
             _parent.Close();

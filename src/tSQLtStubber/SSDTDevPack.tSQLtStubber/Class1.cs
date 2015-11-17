@@ -112,7 +112,7 @@ namespace SSDTDevPack.tSQLtStubber
         private string GetSchema(string schemaName)
         {
             var createSchema = new CreateSchemaStatement();
-            createSchema.Name = new Identifier {Value = schemaName, QuoteType = QuoteType.SquareBracket};
+            createSchema.Name = new Identifier {Value = schemaName.UnQuote(), QuoteType = QuoteType.SquareBracket};
             createSchema.Owner = new Identifier { Value = "dbo" };
 
             return GenerateScript(createSchema);

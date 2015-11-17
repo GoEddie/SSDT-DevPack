@@ -84,6 +84,17 @@ namespace SSDTDevPack.Common.Dac
                 source = source + "]";
 
             return source;
+        }
+
+        public static string UnQuote(this string source)
+        {
+            if (source.StartsWith("["))
+                source = source.Substring(1);
+
+            if (source.EndsWith("]"))
+                source = source.Substring(0, source.Length - 1);
+
+            return source;
 
         }
     }

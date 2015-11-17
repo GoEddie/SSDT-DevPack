@@ -14,10 +14,12 @@ namespace SSDTDevPack.Common.SolutionBrowser
 {
     public partial class SolutionBrowserForm : Form
     {
-        public SolutionBrowserForm(string objectName)
+        private static ProjectItem LastSelectedItem;
+
+        public SolutionBrowserForm(string objectName, ProjectItem defaultSelectedItem = null)
         {
             InitializeComponent();
-            wpfSolutionBrowser1.Fill(this, ProjectType.SSDT, objectName);
+            wpfSolutionBrowser1.Fill(this, ProjectType.SSDT, objectName, defaultSelectedItem ?? LastSelectedItem);
         }
 
         public string GetObjectName()
@@ -27,7 +29,12 @@ namespace SSDTDevPack.Common.SolutionBrowser
 
         public ProjectItem DestinationItem
         {
-            get { return wpfSolutionBrowser1.DestinationItem; }
+            get
+            {
+                LastSelectedItem = wpfSolutionBrowser1.GetDestinationItem();
+                
+                return LastSelectedItem;
+            }
         }
 
     }

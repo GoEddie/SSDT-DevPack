@@ -78,8 +78,12 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         private void CreatetSQLtSchema(object sender, EventArgs e)
         {
             var dte = (DTE)GetService(typeof(DTE));
-            // var projects = new ProjectEnumerator().Get(ProjectType.SSDT);
             
+            if (dte.ActiveDocument == null)
+            {
+                return;
+            }
+
             var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
             if (null == doc)
             {
