@@ -51,7 +51,7 @@
             this.Controls.Add(this.elementHost1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ConnectDialog";
-            this.Text = "ConnectDialog";
+            this.Text = "Connect to SQL Server...";
             this.ResumeLayout(false);
 
         }

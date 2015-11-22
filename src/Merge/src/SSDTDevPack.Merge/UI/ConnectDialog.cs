@@ -9,6 +9,7 @@ namespace SSDTDevPack.Merge.UI
         public ConnectDialog()
         {
             InitializeComponent();
+            
             dialog.SetNotification(ConnectionAvailable);
             
         }

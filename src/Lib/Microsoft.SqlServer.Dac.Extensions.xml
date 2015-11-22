@@ -4,6 +4,21 @@
         <name>Microsoft.SqlServer.Dac.Extensions</name>
     </assembly>
     <members>
+        <member name="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisModelValidationMode">
+            <summary>
+            Determines the validation performed on the model prior to code analysis.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisModelValidationMode.Full">
+            <summary>
+            The TSqlModel is fully validated prior to code analysis.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisModelValidationMode.None">
+            <summary>
+            No validation is performed on the TSqlModel prior to code analysis
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisResult">
             <summary>
             The results of Code Analysis against a particular model. Will include any
@@ -180,6 +195,12 @@
             the analysis success file can tell you whether the dacpac is more recent than the last analysis.
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService.ValidationMode">
+            <summary>
+            Determines the validation performed on the model prior to code analysis. This can be used to bypass
+            the requirement that a TSqlModel be valid prior to analysis by a code analysis rule.
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService.CancellationToken">
             <summary>
             The <see cref="P:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService.CancellationToken"/> used to indicate whether execution should be canceled. 
@@ -309,6 +330,12 @@
             the analysis success file can tell you whether the dacpac is more recent than the last analysis.
             
             This property directly maps to <see cref="P:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService.CodeAnalysisSucceededFile"/>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisServiceSettings.ValidationMode">
+            <summary>
+            Determines the validation performed on the model prior to code analysis. This can be used to bypass
+            the requirement that a TSqlModel be valid prior to analysis by a code analysis rule.
             </summary>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.CodeAnalysis.Internal.RuleUtils">
@@ -1929,7 +1956,7 @@
         </member>
         <member name="P:Microsoft.SqlServer.Dac.CodeAnalysis.ScaResources.CodeAnalysis_ModelIsNotScriptBacked">
             <summary>
-              Looks up a localized string similar to Static Code Analysis: Some rules may not run as expected because the model being analyzed does not contain scripts representing your schema objects. When analyzing code from a data source such as a Dacpac it is recommended that the source should be loaded as script backed model to ensure correct rule operation.
+              Looks up a localized string similar to Static Code Analysis: Some rules may not run as expected because the model being analyzed does not contain scripts representing your schema objects. When analyzing code from a data source such as a Dacpac it is recommended that the source should be loaded as script-backed model to ensure correct rule operation.
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.CodeAnalysis.ScaResources.CodeAnalysisTask_Error">
@@ -2615,6 +2642,34 @@
             This class is for read-only purpose and cannot be instantiated.
             </summary>
         </member>
+        <member name="T:Microsoft.SqlServer.Dac.Deployment.DacDropSystemVersioningStep">
+            <summary>
+            The step in deployment plan that represents drop of a temporal system-versioning clause
+            and system-time PERIOD.
+            This class is for read-only purpose and cannot be instantiated.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Deployment.DacRestoreSystemVersioningStep">
+            <summary>
+            The step in deployment plan that represents creation of a temporal system-versioning clause
+            and system-time PERIOD on the appropriate temporal columns.
+            This class is for read-only purpose and cannot be instantiated.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Deployment.SqlAddSystemVersioningStep">
+            <summary>
+            The step in deployment plan that represents creation of a temporal system-versioning clause
+            and system-time PERIOD on the appropriate temporal columns.
+            This class is for read-only purpose and cannot be instantiated.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Deployment.SqlDropSystemVersioningStep">
+            <summary>
+            The step in deployment plan that represents drop of a temporal system-versioning clause
+            and system-time PERIOD.
+            This class is for read-only purpose and cannot be instantiated.
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.Deployment.DacDisableForeignKeysStep">
             <summary>
             The step in deployment plan that represents disabling foreign keys.
@@ -2833,6 +2888,22 @@
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.Deployment.SqlTableMigrationStep.TargetTable">
+            <summary>
+            Gets the target table object
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Deployment.SqlColumnEncryptionMigrationStep">
+            <summary>
+            Represents a data motion step for column encryption in a sql deployment plan.
+            This class is for read-only purpose and cannot be instantiated.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Deployment.SqlColumnEncryptionMigrationStep.SourceTable">
+            <summary>
+            Gets the source table object
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Deployment.SqlColumnEncryptionMigrationStep.TargetTable">
             <summary>
             Gets the target table object
             </summary>
@@ -5183,6 +5254,21 @@
               Looks up a localized string similar to AST retrieval not supported for the specified object..
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DacModelResources.ConvertObject_SourceNameDifferentFromObjectSource">
+            <summary>
+              Looks up a localized string similar to Cannot convert object to script. The source name &apos;{0}&apos; does not match existing source name &apos;{1}&apos;. Changing source names is not supported..
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DacModelResources.ConvertObject_SourceNameExists">
+            <summary>
+              Looks up a localized string similar to Cannot convert object to script. The source name &apos;{0}&apos; is already in use in this model.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DacModelResources.ConvertObject_WhitespaceNotAllowed">
+            <summary>
+              Looks up a localized string similar to Source name cannot consist of whitespace.
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.DacModelResources.DacpacLoadReferenceError">
             <summary>
               Looks up a localized string similar to Cannot load package &apos;{0}&apos;. Required references are missing..
@@ -5482,6 +5568,15 @@
             user defined objects and recreating them with a script-backed representation
             </summary>
         </member>
+        <member name="M:Microsoft.SqlServer.Dac.Model.TSqlObjectService.ConvertToScriptedObject(Microsoft.SqlServer.Dac.Model.TSqlObject,System.String)">
+            <summary>
+            Converts a specific top-level object in the model into a scripted representation of itself. This is done
+            by scripting out the element, then dropping this element, and finally adding it back in and resolving the model
+            </summary>
+            <returns>New copy of the TSqlObject, which will now be script-backed</returns>
+            <exception cref="T:Microsoft.SqlServer.Dac.Model.DacModelException">If the object could not be scripted out, this class of object is never scriptable,
+            or errors were found in the model during the script process </exception>
+        </member>
         <member name="M:Microsoft.SqlServer.Dac.Model.SqlSchemaModelObjectService.#ctor(Microsoft.SqlServer.Dac.Model.TSqlModelSchema,Microsoft.Data.Tools.Schema.SchemaModel.DataSchemaModel)">
             <summary>
             Internal for testing purposes only. Use SqlSchemaModelObjectService(InternalModel.DataSchemaModel model)for
@@ -5495,7 +5590,7 @@
         </member>
         <member name="M:Microsoft.SqlServer.Dac.Model.SqlSchemaModelObjectService.SetScriptBacked(System.Boolean)">
             <summary>
-            Internal method that enables setting whether the model is script backed or not. This can be used to
+            Internal method that enables setting whether the model is script-backed or not. This can be used to
             warn about code analysis running against a non-scripted model, for instance.
             </summary>
             <param name="isScriptBacked"></param>
@@ -5572,6 +5667,21 @@
         <member name="M:Microsoft.SqlServer.Dac.Model.SqlSchemaModelObjectService.GetSourceInformationInternal(Microsoft.Data.Tools.Schema.SchemaModel.ISourceInformation)">
             <summary>
             Gets source info from an internal source by stripping any cache ID info from the source name
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.Model.SqlSchemaModelObjectService.ConvertToScriptedObject(Microsoft.SqlServer.Dac.Model.TSqlObject,System.String)">
+            <summary>
+            Converts a specific top-level object in the model into a scripted representation of itself. This is done
+            by scripting out the element, then dropping this element, and finally adding it back in and resolving the model
+            </summary>
+            <returns>New copy of the TSqlObject, which will now be script-backed</returns>
+            <exception cref="T:Microsoft.SqlServer.Dac.Model.DacModelException">If the object could not be scripted out, this class of object is never scriptable,
+            or errors were found in the model during the script process </exception>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.Model.SqlSchemaModelObjectService.ConvertToScriptedObject(Microsoft.SqlServer.Dac.Model.TSqlObject,System.String,System.String)">
+            <summary>
+            For simplicity, keeping this method private for now. Consider exposing publicly as a perf improvement in scenarios where 
+            caller clearly knows that they want to directly replace an unscripted model element (e.g. a table) with a new definition.
             </summary>
         </member>
         <member name="M:Microsoft.SqlServer.Dac.Model.SqlSchemaModelObjectService.ConvertToScriptedModel(System.Threading.CancellationToken)">
@@ -5783,7 +5893,7 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.ModelExtractOptions.ExtractUsageProperties">
             <summary>
             Usage properties include Table.RowCount, Table.IndexSize, Table.DataSize, Table.UsedPages and Table.DataPages.
-            When true, these properties are extracted from the database and accessible in the model.
+            When true, these properties are extracted from the database and are accessible in the model.
             </summary>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.ModelLoadOptions">
@@ -5793,7 +5903,7 @@
             These options can be very important depending on the scenario. For instance
             when running static code analysis using the <see cref="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService"/> it is strongly recommended that 
             the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> option be set to true, as many rules expect a fully scripted source and
-            may not operate as expected on a non-script backed model. 
+            may not operate as expected on a non script-backed model. 
             </summary>
         </member>
         <member name="M:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.#ctor">
@@ -6348,6 +6458,11 @@
             Model type class for EventSession
             </summary>
         </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.ModelSchema.DatabaseEventSession">
+            <summary>
+            Model type class for DatabaseEventSession
+            </summary>
+        </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.ModelSchema.EventSessionAction">
             <summary>
             Model type class for EventSessionAction
@@ -6536,6 +6651,16 @@
         <member name="F:Microsoft.SqlServer.Dac.Model.ModelSchema.SearchPropertyList">
             <summary>
             Model type class for SearchPropertyList
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.ModelSchema.SecurityPolicy">
+            <summary>
+            Model type class for SecurityPolicy
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.ModelSchema.SecurityPredicate">
+            <summary>
+            Model type class for SecurityPredicate
             </summary>
         </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.ModelSchema.Sequence">
@@ -7486,6 +7611,31 @@
         <member name="F:Microsoft.SqlServer.Dac.Model.PermissionType.SelectAllUserSecurables">
             <summary>
             SelectAllUserSecurables
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.PermissionType.AlterAnySecurityPolicy">
+            <summary>
+            AlterAnySecurityPolicy
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.PermissionType.AlterAnyColumnEncryptionKey">
+            <summary>
+            AlterAnyColumnEncryptionKey
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.PermissionType.AlterAnyColumnMasterKey">
+            <summary>
+            AlterAnyColumnMasterKey
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.PermissionType.Unmask">
+            <summary>
+            Unmask
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.PermissionType.AlterAnyMask">
+            <summary>
+            AlterAnyMask
             </summary>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.AuthenticationModes">
@@ -8493,6 +8643,11 @@
             DdlSchemaEvents
             </summary>
         </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.EventGroupType.DdlSecurityPolicyEvents">
+            <summary>
+            DdlSecurityPolicyEvents
+            </summary>
+        </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.EventGroupType.DdlServiceEvents">
             <summary>
             DdlServiceEvents
@@ -8913,6 +9068,11 @@
             AlterSchema
             </summary>
         </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.EventType.AlterSecurityPolicy">
+            <summary>
+            AlterSecurityPolicy
+            </summary>
+        </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.EventType.AlterService">
             <summary>
             AlterService
@@ -9031,6 +9191,11 @@
         <member name="F:Microsoft.SqlServer.Dac.Model.EventType.CreateSchema">
             <summary>
             CreateSchema
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.EventType.CreateSecurityPolicy">
+            <summary>
+            CreateSecurityPolicy
             </summary>
         </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.EventType.CreateService">
@@ -9181,6 +9346,11 @@
         <member name="F:Microsoft.SqlServer.Dac.Model.EventType.DropSchema">
             <summary>
             DropSchema
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.EventType.DropSecurityPolicy">
+            <summary>
+            DropSecurityPolicy
             </summary>
         </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.EventType.DropService">
@@ -10763,6 +10933,11 @@
             Windows user with login, Windows user without a login or Windows group
             </summary>
         </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.AuthenticationType.ExternalAuthenticationProvider">
+            <summary>
+            User supplied by an external authentication provider (e.g. Azure Active Directory).
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.XmlStyle">
             <summary>
             XML data type style
@@ -10853,6 +11028,146 @@
             Table is non-durable.
             </summary>
         </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.EventSessionScope">
+            <summary>
+            Scope of the event session
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.EventSessionScope.Server">
+            <summary>
+            Server
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.EventSessionScope.Database">
+            <summary>
+            Database
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.ColumnGeneratedAlwaysType">
+            <summary>
+            Column system-versioned generated always type
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.ColumnGeneratedAlwaysType.None">
+            <summary>
+            Column is not a generated always type of column.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.ColumnGeneratedAlwaysType.GeneratedAlwaysAsRowStart">
+            <summary>
+            Column has a type of 'generated always as row start'.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.ColumnGeneratedAlwaysType.GeneratedAlwaysAsRowEnd">
+            <summary>
+            Column has a type of 'generated always as row end'.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.UserType">
+            <summary>
+            User type (for use with Azure active directory users).
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.UserType.None">
+            <summary>
+            No specified Azure active directory user type.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.UserType.ExternalUser">
+            <summary>
+            An Azure active directory user.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.UserType.ExternalGroup">
+            <summary>
+            An Azure active directory group.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.SecurityPredicateOperation">
+            <summary>
+            The operation to which a security predicate applies
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateOperation.All">
+            <summary>
+            All
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateOperation.AfterInsert">
+            <summary>
+            AfterInsert
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateOperation.AfterUpdate">
+            <summary>
+            AfterUpdate
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateOperation.BeforeUpdate">
+            <summary>
+            BeforeUpdate
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateOperation.BeforeDelete">
+            <summary>
+            BeforeDelete
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.SecurityPredicateType">
+            <summary>
+            The type of the security predicate
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateType.Filter">
+            <summary>
+            Filter
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SecurityPredicateType.Block">
+            <summary>
+            Block
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.QueryStoreCaptureMode">
+            <summary>
+            Query Store SIZE_BASED_CLEANUP_MODE option values
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.QueryStoreCaptureMode.All">
+            <summary>
+            Query Store captures all queries. This is the default configuration value
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.QueryStoreCaptureMode.Auto">
+            <summary>
+            Query Store captures relevant queries based on execution count and resource consumption.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.QueryStoreCaptureMode.None">
+            <summary>
+            Query Store does not capture new queries.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.QueryStoreDesiredState">
+            <summary>
+            Query Store Operation Mode/Desired State option values
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.QueryStoreDesiredState.Off">
+            <summary>
+            Query Store feature is OFF.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.QueryStoreDesiredState.ReadOnly">
+            <summary>
+            Query Store does not record new data.
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.QueryStoreDesiredState.ReadWrite">
+            <summary>
+            Query store records new data.
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.Column">
             <summary>
             Model schema container class for Column
@@ -10933,6 +11248,21 @@
             XmlStyle property class of Column
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Column.EncryptionAlgorithmName">
+            <summary>
+            EncryptionAlgorithmName property class of Column
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Column.EncryptionType">
+            <summary>
+            EncryptionType property class of Column
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Column.GeneratedAlwaysType">
+            <summary>
+            GeneratedAlwaysType property class of Column
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.Column.IdentityIncrement">
             <summary>
             IdentityIncrement property class of Column
@@ -10953,6 +11283,11 @@
             IsIdentity property class of Column
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Column.MaskingFunction">
+            <summary>
+            MaskingFunction property class of Column
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.Column.ExpressionDependencies">
             <summary>
             ExpressionDependencies relationship class of Column
@@ -10966,6 +11301,11 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.Column.DataType">
             <summary>
             DataType relationship class of Column
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Column.ColumnEncryptionKey">
+            <summary>
+            ColumnEncryptionKey relationship class of Column
             </summary>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.TableValuedFunction">
@@ -11066,6 +11406,11 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.TableValuedFunction.SystemDataAccess">
             <summary>
             SystemDataAccess property class of TableValuedFunction
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TableValuedFunction.IsNativeCompiled">
+            <summary>
+            IsNativeCompiled property class of TableValuedFunction
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.TableValuedFunction.IsReplicated">
@@ -11206,6 +11551,11 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.ScalarFunction.SystemDataAccess">
             <summary>
             SystemDataAccess property class of ScalarFunction
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.ScalarFunction.IsNativeCompiled">
+            <summary>
+            IsNativeCompiled property class of ScalarFunction
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.ScalarFunction.IsReplicated">
@@ -11963,9 +12313,19 @@
             Clustered property class of ColumnStoreIndex
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.ColumnStoreIndex.FilterPredicate">
+            <summary>
+            FilterPredicate property class of ColumnStoreIndex
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.ColumnStoreIndex.Columns">
             <summary>
             Columns relationship class of ColumnStoreIndex
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.ColumnStoreIndex.BodyDependencies">
+            <summary>
+            BodyDependencies relationship class of ColumnStoreIndex
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.ColumnStoreIndex.DataCompressionOptions">
@@ -12568,6 +12928,41 @@
             ParameterizationOption property class of DatabaseOptions
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreCaptureMode">
+            <summary>
+            QueryStoreCaptureMode property class of DatabaseOptions
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreDesiredState">
+            <summary>
+            QueryStoreDesiredState property class of DatabaseOptions
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreFlushInterval">
+            <summary>
+            QueryStoreFlushInterval property class of DatabaseOptions
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreIntervalLength">
+            <summary>
+            QueryStoreIntervalLength property class of DatabaseOptions
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreMaxPlansPerQuery">
+            <summary>
+            QueryStoreMaxPlansPerQuery property class of DatabaseOptions
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreMaxStorageSize">
+            <summary>
+            QueryStoreMaxStorageSize property class of DatabaseOptions
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.QueryStoreStaleQueryThreshold">
+            <summary>
+            QueryStoreStaleQueryThreshold property class of DatabaseOptions
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseOptions.RecoveryMode">
             <summary>
             RecoveryMode property class of DatabaseOptions
@@ -12773,6 +13168,16 @@
             IsInsertTrigger property class of DmlTrigger
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DmlTrigger.IsNativeCompiled">
+            <summary>
+            IsNativeCompiled property class of DmlTrigger
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DmlTrigger.IsSchemaBound">
+            <summary>
+            IsSchemaBound property class of DmlTrigger
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.DmlTrigger.IsUpdateTrigger">
             <summary>
             IsUpdateTrigger property class of DmlTrigger
@@ -12958,6 +13363,11 @@
             MemoryPartitionMode property class of EventSession
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.EventSession.SessionScope">
+            <summary>
+            SessionScope property class of EventSession
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.EventSession.EventDefinitions">
             <summary>
             EventDefinitions relationship class of EventSession
@@ -12966,6 +13376,76 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.EventSession.EventTargets">
             <summary>
             EventTargets relationship class of EventSession
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.DatabaseEventSession">
+            <summary>
+            Model schema container class for DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.TypeClass">
+            <summary>
+            Type class for DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.StartupState">
+            <summary>
+            StartupState property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.TrackCausality">
+            <summary>
+            TrackCausality property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.MaxDispatchLatency">
+            <summary>
+            MaxDispatchLatency property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.MaxEventSizeUnit">
+            <summary>
+            MaxEventSizeUnit property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.MaxMemoryUnit">
+            <summary>
+            MaxMemoryUnit property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.EventRetentionMode">
+            <summary>
+            EventRetentionMode property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.MaxEventSize">
+            <summary>
+            MaxEventSize property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.MaxMemory">
+            <summary>
+            MaxMemory property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.MemoryPartitionMode">
+            <summary>
+            MemoryPartitionMode property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.SessionScope">
+            <summary>
+            SessionScope property class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.EventDefinitions">
+            <summary>
+            EventDefinitions relationship class of DatabaseEventSession
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.DatabaseEventSession.EventTargets">
+            <summary>
+            EventTargets relationship class of DatabaseEventSession
             </summary>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.EventSessionAction">
@@ -14543,6 +15023,71 @@
             Authorizer relationship class of SearchPropertyList
             </summary>
         </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.SecurityPolicy">
+            <summary>
+            Model schema container class for SecurityPolicy
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPolicy.TypeClass">
+            <summary>
+            Type class for SecurityPolicy
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPolicy.Enabled">
+            <summary>
+            Enabled property class of SecurityPolicy
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPolicy.NotForReplication">
+            <summary>
+            NotForReplication property class of SecurityPolicy
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPolicy.Predicates">
+            <summary>
+            Predicates relationship class of SecurityPolicy
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPolicy.Schema">
+            <summary>
+            Schema relationship class of SecurityPolicy
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.Model.SecurityPredicate">
+            <summary>
+            Model schema container class for SecurityPredicate
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPredicate.TypeClass">
+            <summary>
+            Type class for SecurityPredicate
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPredicate.BodyScript">
+            <summary>
+            BodyScript property class of SecurityPredicate
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPredicate.Operation">
+            <summary>
+            Operation property class of SecurityPredicate
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPredicate.PredicateType">
+            <summary>
+            PredicateType property class of SecurityPredicate
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPredicate.BodyDependencies">
+            <summary>
+            BodyDependencies relationship class of SecurityPredicate
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.SecurityPredicate.TargetObject">
+            <summary>
+            TargetObject relationship class of SecurityPredicate
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.Sequence">
             <summary>
             Model schema container class for Sequence
@@ -15358,6 +15903,11 @@
             XmlStyle property class of Parameter
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Parameter.IsNullable">
+            <summary>
+            IsNullable property class of Parameter
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.Parameter.IsOutput">
             <summary>
             IsOutput property class of Parameter
@@ -15626,6 +16176,11 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.Table.Schema">
             <summary>
             Schema relationship class of Table
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.Table.TemporalSystemVersioningHistoryTable">
+            <summary>
+            TemporalSystemVersioningHistoryTable relationship class of Table
             </summary>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.FileTable">
@@ -15998,6 +16553,16 @@
             Clustered property class of TableTypeUniqueConstraint
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TableTypeUniqueConstraint.Hash">
+            <summary>
+            Hash property class of TableTypeUniqueConstraint
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TableTypeUniqueConstraint.BucketCount">
+            <summary>
+            BucketCount property class of TableTypeUniqueConstraint
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.TableTypeUniqueConstraint.Columns">
             <summary>
             Columns relationship class of TableTypeUniqueConstraint
@@ -16098,6 +16663,16 @@
             WithPadIndex property class of UniqueConstraint
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.UniqueConstraint.Hash">
+            <summary>
+            Hash property class of UniqueConstraint
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.UniqueConstraint.BucketCount">
+            <summary>
+            BucketCount property class of UniqueConstraint
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.UniqueConstraint.FillFactor">
             <summary>
             FillFactor property class of UniqueConstraint
@@ -16191,6 +16766,11 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.User.Sid">
             <summary>
             Sid property class of User
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.User.UserType">
+            <summary>
+            UserType property class of User
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.User.AsymmetricKey">
@@ -16821,6 +17401,11 @@
             on-premises, version 12.0
             </summary>
         </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.SqlServerVersion.Sql130">
+            <summary>
+            on-premises, version 13.0
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.Model.TSqlModel">
             <summary>
             Represents a model of a SQL Server database schema.
@@ -16931,7 +17516,7 @@
             <param name="fileName">File path to package.</param> 
             <remarks>
             By default DacSchemaModelStorageType.Memory is used for the model storage format.
-            The dacpac model will not be script backed as the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> will be set to false.
+            The dacpac model will not be script-backed as the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> will be set to false.
             Using <see cref="M:Microsoft.SqlServer.Dac.Model.TSqlModel.LoadFromDacpac(System.String,Microsoft.SqlServer.Dac.Model.ModelLoadOptions)"/> with <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/>
             set to true is recommended if the model will be used by the <see cref="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService"/> for static code analysis.
             </remarks>
@@ -16954,7 +17539,7 @@
             Backing storage type for package instance.
             </param>
             <remarks>
-            The dacpac model will not be script backed as the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> will be set to false.
+            The dacpac model will not be script-backed as the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> will be set to false.
             Using <see cref="M:Microsoft.SqlServer.Dac.Model.TSqlModel.LoadFromDacpac(System.String,Microsoft.SqlServer.Dac.Model.ModelLoadOptions)"/> with <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/>
             set to true is recommended if the model will be used by the <see cref="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService"/> for static code analysis.
             </remarks>
@@ -16978,7 +17563,7 @@
             </param>
             <param name="cancellationToken">A token used for cancelling model loading.</param>
             <remarks>
-            The dacpac model will not be script backed as the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> will be set to false.
+            The dacpac model will not be script-backed as the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/> will be set to false.
             Using <see cref="M:Microsoft.SqlServer.Dac.Model.TSqlModel.LoadFromDacpac(System.String,Microsoft.SqlServer.Dac.Model.ModelLoadOptions)"/> with <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/>
             set to true is recommended if the model will be used by the <see cref="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService"/> for static code analysis.
             </remarks>
@@ -17231,6 +17816,26 @@
             If communication with the <see cref="T:Microsoft.SqlServer.Dac.Model.TSqlObjectService"/> fails.
             </exception>
         </member>
+        <member name="M:Microsoft.SqlServer.Dac.Model.TSqlModel.ConvertToScriptedObject(Microsoft.SqlServer.Dac.Model.TSqlObject,System.String)">
+            <summary>
+            Converts a specific top-level object in the model into a scripted representation of itself.
+            This is useful when starting from a database sourced model and the caller wishes to modify this
+            object's contents.  
+            </summary>
+            <param name="tSqlObject">Object to convert. Must not be null</param>
+            <param name="sourceName">Optional source name. If left null a default name will be generated
+            for the object. This name can be found using <see cref="M:Microsoft.SqlServer.Dac.Model.TSqlObject.GetSourceInformation"/>'s 
+            SourceName property.
+            </param>
+            <returns>New copy of the TSqlObject, which will now be script-backed.
+            Or if the object was already script-backed, will simply return this object
+            </returns>
+            <exception cref="T:Microsoft.SqlServer.Dac.Model.DacModelException">
+            Thrown if the object could not be scripted out, this class of object is never scriptable,
+            or errors were found in the model during the script process
+            </exception>
+            <exception cref="T:System.ArgumentException">If the oject is null, or if whitespace is used for the source name</exception>
+        </member>
         <member name="M:Microsoft.SqlServer.Dac.Model.TSqlModel.Validate">
             <summary>
             Validates the model and returns a list of messages with any errors/warnings.
@@ -17273,9 +17878,9 @@
             a source name and information. This is important for scenarios such as use of the 
             <see cref="T:Microsoft.SqlServer.Dac.CodeAnalysis.CodeAnalysisService"/>. 
             
-            Any empty <see cref="T:Microsoft.SqlServer.Dac.Model.TSqlModel"/> created will be script backed by default. Models loaded
+            Any empty <see cref="T:Microsoft.SqlServer.Dac.Model.TSqlModel"/> created will be script-backed by default. Models loaded
             from a Dacpac will only be scipt backed if the <see cref="P:Microsoft.SqlServer.Dac.Model.ModelLoadOptions.LoadAsScriptBackedModel"/>
-            option is enabled. Note that creating a script backed model will take longer than using a standard model
+            option is enabled. Note that creating a script-backed model will take longer than using a standard model
             loaded from a Dacpac
             
             </summary>
@@ -17505,6 +18110,41 @@
         <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.ParameterizationOption">
             <summary>
             Specifies the PARAMETERIZATION database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreCaptureMode">
+            <summary>
+            Specifies the query capture mode of QUERY_STORE database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreDesiredState">
+            <summary>
+            Specifies the operation mode of QUERY_STORE database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreFlushInterval">
+            <summary>
+            Specifies the Flush_Interval_Seconds setting of the QUERY_STORE database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreIntervalLength">
+            <summary>
+            Specifies the Interval_Length_Minutes setting of the QUERY_STORE database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreMaxStorageSize">
+            <summary>
+            Specifies the Max_Storage_Size_MB setting of the QUERY_STORE database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreMaxPlansPerQuery">
+            <summary>
+            Specifies the Max_Plans_Per_Query setting of the QUERY_STORE database option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QueryStoreStaleQueryThreshold">
+            <summary>
+            Specifies the Stale_Query_Threshold_Days setting of the QUERY_STORE database option.
             </summary>
         </member>
         <member name="P:Microsoft.SqlServer.Dac.Model.TSqlModelOptions.QuotedIdentifierOn">
@@ -18113,6 +18753,11 @@
         <member name="F:Microsoft.SqlServer.Dac.Model.TSqlPlatforms.Sql120">
             <summary>
             on-premises, version 12.0
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.Model.TSqlPlatforms.Sql130">
+            <summary>
+            on-premises, version 13.0
             </summary>
         </member>
         <member name="F:Microsoft.SqlServer.Dac.Model.TSqlPlatforms.SqlAzureV12">

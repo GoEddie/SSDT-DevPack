@@ -14,20 +14,51 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidSSDTDevPack_VSPackageCmdSet" value="{a60f097a-ca84-43f0-b08d-a45b6ccd476a}">
+      <!--
+        public const uint tSQLtGroup = 0x1011;
+        public const uint SSDTDevQueryCostGroup = 0x1012;
+        public const uint tSQLtSubMenuGroup = 0x1013;
 
-      <IDSymbol name="tSQLtGroup" value="0x1019" />
+
+        public const uint SubMenu = 0x1020;
+        public const uint SSDTDevPack = 0x99;
+        
+        public const uint SSDTDevPackQuickDeploy = 0x100;
+        
+        public const uint SSDTDevPackMergeUi = 0x101;
+        
+        public const uint SSDTDevPackNameConstraints = 0x102;
+        
+        public const uint SSDTDevPackCreatetSQLtSchema = 0x103;
+        public const uint SSDTDevPackCreatetSQLtTestStub = 0x104;
+
+        public const uint SSDTDevPackToggleQueryCosts = 0x105;
+        public const uint SSDTDevPackClearQueryCosts = 0x106;
+-->
+      <IDSymbol name="tSQLtGroup" value="0x1011" />
       <IDSymbol name="tSQLtSubMenu" value="0x1021" />
+      <IDSymbol name="SSDTDevQueryCostGroup" value="0x1012" />
+      <IDSymbol name="ConstraintsRefactorGroup" value="01014" />
+
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="SubMenu" value="0x1020" />
       <IDSymbol name="SubMenu" value="0x1100" />
       <IDSymbol name="SSDTDevPack" value="0x099" />
+
       <IDSymbol name="SSDTDevPackQuickDeploy" value="0x0100" />
+
       <IDSymbol name="SSDTDevPackMergeUi" value="0x0101" />
+
       <IDSymbol name="SSDTDevPackNameConstraints" value="0x0102" />
+
+
+
+
       <IDSymbol name="SSDTDevPackCreatetSQLtSchema" value="0x0103" />
       <IDSymbol name="SSDTDevPackCreatetSQLtTestStub" value="0x0104" />
 
-      
+      <IDSymbol name="SSDTDevPackToggleQueryCosts" value="0x0105" />
+      <IDSymbol name="SSDTDevPackClearQueryCosts" value="0x0106" />
 
     </GuidSymbol>
 
@@ -47,7 +78,7 @@
           <CommandName>SSDT Dev Pack</CommandName>
         </Strings>
       </Menu>
-     
+
     </Menus>
     <Groups>
 
@@ -59,9 +90,20 @@
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
       </Group>
 
+
+      <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="ConstraintsRefactorGroup" priority="0x0600">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
+      </Group>
+
+
       <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="tSQLtGroup" priority="0x0600">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
       </Group>
+
+      <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevQueryCostGroup" priority="0x0700">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
+      </Group>
+
 
     </Groups>
 
@@ -87,10 +129,10 @@
         </Strings>
       </Button>
 
-      
+
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackNameConstraints" priority="0x0102" parent="Button">
-        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="ConstraintsRefactorGroup" />
         <Strings>
           <ButtonText>Name Constraints</ButtonText>
         </Strings>
@@ -104,10 +146,22 @@
         </Strings>
       </Button>
 
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackToggleQueryCosts" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevQueryCostGroup" />
+        <Strings>
+          <ButtonText>Toggle Query Costs</ButtonText>
+        </Strings>
+      </Button>
 
-      
-      
-      
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackClearQueryCosts" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevQueryCostGroup" />
+        <Strings>
+          <ButtonText>Clear Query Cost Cache</ButtonText>
+        </Strings>
+      </Button>
+
+
+
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackMergeUi" priority="0x0100" parent="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
         <Icon guid="guidImages" id="bmpPic1" />

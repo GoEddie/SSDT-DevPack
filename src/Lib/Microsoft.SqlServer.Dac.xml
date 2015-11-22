@@ -1413,6 +1413,16 @@
               Looks up a localized string similar to Verification of the deployment plan failed..
             </summary>
         </member>
+        <member name="P:Microsoft.SqlServer.Dac.DacErrorResources.ExportedRowsMayBeIncomplete">
+            <summary>
+              Looks up a localized string similar to The row-level security policies of this database restrict some users&apos; ability to access data in these tables: &apos;{0}&apos;. Please verify that the credentials you&apos;re using have sufficient privileges to access all the data in these tables..
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.DacErrorResources.ExportedRowsMayContainSomeMaskedData">
+            <summary>
+              Looks up a localized string similar to The databse permissions may restrict the ability of some users&apos; to see the actual data contained in these tables: &apos;{0}&apos;. Please verify that the credentials you&apos;re using have sufficient privileges to see all data unmasked..
+            </summary>
+        </member>
         <member name="P:Microsoft.SqlServer.Dac.DacErrorResources.InvalidArgumentValue">
             <summary>
               Looks up a localized string similar to {0} is not a valid value for {1}..
@@ -1651,6 +1661,16 @@
             True if the package should be verified; otherwise false.
             Default value is false.
             </value> 
+        </member>
+        <member name="P:Microsoft.SqlServer.Dac.DacExtractOptions.ExtractUsageProperties">
+            <summary>
+            Usage properties include Table.RowCount, Table.IndexSize, Table.DataSize, Table.UsedPages and Table.DataPages.
+            When true, these properties are extracted from the database and are accessible in the model.
+            </summary>
+            <value>
+            True if usage properties will be extracted; otherwise false.
+            Default value is false.
+            </value>
         </member>
         <member name="T:Microsoft.SqlServer.Dac.DacMessageEventArgs">
             <summary>
@@ -3300,6 +3320,20 @@
             A <see cref="T:Microsoft.SqlServer.Dac.DacMessage"/> instance is supplied that contains the details for the unsupported element.
             </param>
         </member>
+        <member name="M:Microsoft.SqlServer.Dac.ModelValidation.CheckForSecurityPolicy(Microsoft.Data.Tools.Schema.SchemaModel.DataSchemaModel,System.Collections.Generic.IList{Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlTableBase},Microsoft.SqlServer.Dac.DacLoggingContext)">
+            <summary>
+            For platforms that support row-level security the exported rows set may be incomplete if the user
+            is exporting a package under a database account that doesn't have enough privileges. Issue a warning
+            so users can be aware of this situation
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.ModelValidation.CheckForUnmaskPermissionsNeeded(Microsoft.Data.Tools.Schema.SchemaModel.DataSchemaModel,System.Collections.Generic.IList{Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlTableBase},Microsoft.SqlServer.Dac.DacLoggingContext)">
+            <summary>
+            For platforms that support data masking the exported rows set may contain some masked data if the user
+            is exporting a package under a database account that doesn't have enough privileges (UNMASK permission).
+            Issue a warning so users can be aware of this situation.
+            </summary>
+        </member>
         <member name="T:Microsoft.SqlServer.Dac.ObjectType">
             <summary>
             Defines object types that exist in SQL Server.
@@ -3333,6 +3367,16 @@
         <member name="F:Microsoft.SqlServer.Dac.ObjectType.Certificates">
             <summary>
             Certificate objects
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.ObjectType.ColumnEncryptionKeys">
+            <summary>
+            Always Encrypted column encryption key objects
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.ObjectType.ColumnMasterKeys">
+            <summary>
+            Always Encrypted column master key objects
             </summary>
         </member>
         <member name="F:Microsoft.SqlServer.Dac.ObjectType.Contracts">
@@ -3428,6 +3472,11 @@
         <member name="F:Microsoft.SqlServer.Dac.ObjectType.SearchPropertyLists">
             <summary>
             Search property list objects
+            </summary>
+        </member>
+        <member name="F:Microsoft.SqlServer.Dac.ObjectType.SecurityPolicies">
+            <summary>
+            Security policy objects
             </summary>
         </member>
         <member name="F:Microsoft.SqlServer.Dac.ObjectType.Sequences">
@@ -3833,6 +3882,55 @@
             <summary>
             Decorator for <see cref="T:System.IO.Stream"/> that avoids disposal of the underlying stream.
             </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper">
+            <summary>
+            Public class to support SQL Authentication configuration for DacFx
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper.IsAuthenticationSupported">
+            <summary>
+            Checks whether "Authentication" is supported in the runtime environment
+            The keyword "Authentication" is not supported until .Net4.6. If user uses a version of .Net less than 4.6, DacFx should avoid using "Authentication"
+            </summary>
+            <returns>true if "Authentication" is present in current .Net version</returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper.SetAuthentication(System.Data.SqlClient.SqlConnectionStringBuilder,System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Set Authentication value from source builder to the target builder
+            </summary>
+            <param name="sourceBuilder">the source connection string builder</param>
+            <param name="targetBuilder">the target connection string builder</param>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper.SetAuthentication(System.Data.SqlClient.SqlConnectionStringBuilder,System.String)">
+            <summary>
+            Set Authentication using reflection
+            </summary>
+            <param name="sbConnectionString"></param>
+            <param name="authenticationType"></param>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper.GetAuthenticationString(System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Get Authentication as string from connectionStringBuilder
+            </summary>
+            <param name="connectionStringBuilder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper.IsAuthenticationSpecified(System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Determines whether a connection string builder has a value specified for the Authentication property.
+            </summary>
+            <param name="connectionStringBuilder">A connection string builder that might have authentication specified.</param>
+            <returns>True if the authentication property is supported by the connection string builder and the authentication property is specified. False otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Dac.SqlConnectionStringBuilderHelper.GetConnectionStringWithAlwaysEncryptedSetting(System.Data.SqlClient.SqlConnectionStringBuilder,System.Boolean)">
+            <summary>
+            Sets AlwaysEncrypted setting in connection string if it is available in the .NET framework and returns the updated connection string
+            No-op if there is not .NET 4.6
+            </summary>
+            <param name="connectionStringBuilder">A connection string builder that might have always encrypted setting specified.</param>
+            <param name="enableAlwaysEncrypted">True, to enable always encrypted setting, else False</param>
+            <returns>connection string with Column Encryption Setting set to Enabled or Disabled based on enableAlwaysEncrypted</returns>
         </member>
         <member name="T:AssemblyRef">
             <summary>
