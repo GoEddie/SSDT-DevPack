@@ -1,16 +1,16 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using SSDTDevPack.Common.SolutionBrowser;
+using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
+using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
+using SSDTDevPack.QueryCosts;
 using SSDTDevPack.tSQLtStubber;
 
 namespace TheAgileSQLClub.SSDTDevPack_VSPackage
@@ -31,6 +31,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             return GetService(type);
         }
+
         private void ShowMergeToolWindow(object sender, EventArgs e)
         {
             var window = FindToolWindow(typeof (MergeToolWindow), 0, true);
@@ -68,21 +69,89 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
 
                 menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                    (int)PkgCmdIDList.SSDTDevPackCreatetSQLtSchema);
+                    (int) PkgCmdIDList.SSDTDevPackCreatetSQLtSchema);
                 menuItem = new MenuCommand(CreatetSQLtSchema, menuCommandID);
                 mcs.AddCommand(menuItem);
 
                 menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                   (int)PkgCmdIDList.SSDTDevPackCreatetSQLtTestStub);
+                    (int) PkgCmdIDList.SSDTDevPackCreatetSQLtTestStub);
                 menuItem = new MenuCommand(CreatetSQLtTest, menuCommandID);
                 mcs.AddCommand(menuItem);
 
+
+                AddMenuItem(mcs, (int) PkgCmdIDList.SSDTDevPackToggleQueryCosts, ToggleQueryCosts);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackClearQueryCosts, ClearQueryCosts);
+
+
+                //
+            }
+        }
+
+        private void ClearQueryCosts(object sender, EventArgs e)
+        {
+            DocumentScriptCosters.GetInstance().ClearCache();
+        }
+
+        private void AddMenuItem(OleMenuCommandService mcs, int cmdId,EventHandler eventHandler )
+        {
+            CommandID menuCommandID;
+            MenuCommand menuItem;
+            menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
+                cmdId);
+            menuItem = new MenuCommand(eventHandler, menuCommandID);
+            mcs.AddCommand(menuItem);
+        }
+
+        private void ToggleQueryCosts(object sender, EventArgs e)
+        {
+            try
+            {
+                var dte = (DTE) GetService(typeof (DTE));
+
+                if (dte.ActiveDocument == null)
+                {
+                    return;
+                }
+
+                var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+                if (null == doc)
+                {
+                    return;
+                }
+
+                var ep = doc.StartPoint.CreateEditPoint();
+
+                ep.EndOfDocument();
+
+                var length = ep.AbsoluteCharOffset;
+                ep.StartOfDocument();
+
+                var originalText = ep.GetText(length);
+
+                DocumentScriptCosters.SetDte(dte);
+
+                var coster = DocumentScriptCosters.GetInstance().GetCoster();
+
+                if (coster.ShowCosts)
+                {
+                    coster.ShowCosts = false;
+                }
+                else
+                {
+                    coster.AddCosts(originalText, dte.ActiveDocument);
+                    coster.ShowCosts = true;
+                }
+            }
+            catch (Exception ee)
+            {
+                OutputPane.WriteMessage("ToggleQueryCosts error: {0}", ee.Message);
+                Log.WriteInfo("ToggleQueryCosts error: {0}", ee.Message);
             }
         }
 
         private void CreatetSQLtTest(object sender, EventArgs e)
         {
-            var dte = (DTE)GetService(typeof(DTE));
+            var dte = (DTE) GetService(typeof (DTE));
 
             if (dte.ActiveDocument == null)
             {
@@ -107,13 +176,12 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             var builder = new TestBuilder(originalText, dte.ActiveDocument.ProjectItem.ContainingProject);
             builder.Go();
             //  builder.CreateTests();
-
         }
 
         private void CreatetSQLtSchema(object sender, EventArgs e)
         {
-            var dte = (DTE)GetService(typeof(DTE));
-            
+            var dte = (DTE) GetService(typeof (DTE));
+
             if (dte.ActiveDocument == null)
             {
                 return;
@@ -191,6 +259,4 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
         }
     }
-
-   
 }

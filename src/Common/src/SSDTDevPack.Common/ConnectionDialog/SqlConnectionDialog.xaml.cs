@@ -19,7 +19,7 @@ namespace SSDTDevPack.Common.ConnectionDialog
         public SqlConnectionDialog()
         {
             InitializeComponent();
-            Database.Focus();
+            TestConnection.Focus();
         }
 
         public void SetNotification(Action<string> completeNotification)
@@ -92,7 +92,7 @@ namespace SSDTDevPack.Common.ConnectionDialog
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
-            _connectionString = string.Format("SERVER={0};{1};Initial Catalog={2};", SearchTextBox.Text,
+            _connectionString = string.Format("SERVER={0};{1};Initial Catalog={2};", String.IsNullOrEmpty(SearchTextBox.Text) ? "." : SearchTextBox.Text,
                 ((string.IsNullOrEmpty(TextUser.Text)
                     ? "Integrated Security=SSPI"
                     : string.Format("UID={0};PWD={1};", TextUser.Text, TextPass.Text)
