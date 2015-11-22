@@ -170,13 +170,13 @@ namespace SSDTDevPack.QueryCosts
 
                 var cacheEntry = _cache[filePath];
 
-                string checkSum = GetChecksum(filePath);
+                //string checkSum = GetChecksum(filePath);
 
-                if (checkSum != cacheEntry.FileChecksum)
-                {
+                //if (checkSum != cacheEntry.FileChecksum)
+                //{
                     cacheEntry.Statements = BuildStatements(filePath);
-                    cacheEntry.FileChecksum = checkSum;
-                }
+                 //   cacheEntry.FileChecksum = checkSum;
+                //}
 
                 
             }
