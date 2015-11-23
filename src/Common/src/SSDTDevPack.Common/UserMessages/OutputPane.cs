@@ -29,6 +29,10 @@ namespace SSDTDevPack.Common.UserMessages
             if (pane == null)
                 return;
 
+
+            if (!format.EndsWith("\r\n"))
+                format = format + "\r\n";
+
             pane.Activate();
             pane.OutputString(string.Format(format, args));
 

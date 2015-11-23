@@ -228,6 +228,10 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SSDTDevPack.QuickDeploy\SSDTDevPack.QuickDeploy.csproj">
+      <Project>{B8718439-7ACF-4828-8559-D3B036AA48CC}</Project>
+      <Name>SSDTDevPack.QuickDeploy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\tSQLtStubber\SSDTDevPack.tSQLtStubber\SSDTDevPack.tSQLtStubber.csproj">
       <Project>{570FE172-C718-4904-849D-641BB7395BD4}</Project>
       <Name>SSDTDevPack.tSQLtStubber</Name>

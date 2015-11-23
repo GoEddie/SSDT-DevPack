@@ -121,6 +121,32 @@ namespace SSDTDevPack.Common.Dac
         {
             return source.BaseIdentifier;
         }
+
+        public static string ToQuotedString(this SchemaObjectName source)
+        {
+
+            if (source.SchemaIdentifier != null)
+            {
+                return string.Format("{0}.{1}", source.SchemaIdentifier.Value.Quote(),
+                    source.BaseIdentifier.Value.Quote());
+
+            }
+
+            return source.BaseIdentifier.Value.Quote();
+        }
+
+        public static string ToUnquotedString(this SchemaObjectName source)
+        {
+
+            if (source.SchemaIdentifier != null)
+            {
+                return string.Format("{0}.{1}", source.SchemaIdentifier.Value.UnQuote(),
+                    source.BaseIdentifier.Value.UnQuote());
+
+            }
+
+            return source.BaseIdentifier.Value.UnQuote();
+        }
     }
 
     public static class TableNameComparer

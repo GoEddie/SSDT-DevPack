@@ -55,6 +55,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QueryCosts", "QueryCosts", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.QueryCosts.UnitTests", "..\..\..\Test\QueryCost\SSDTDevPack.QueryCosts.UnitTests\SSDTDevPack.QueryCosts.UnitTests.csproj", "{F26271B2-E4B3-4D01-9E46-F1BB75336CBA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuickDeploy", "QuickDeploy", "{E243C354-9615-49DC-8B5E-06A6BE9A844B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.QuickDeploy", "..\..\..\SSDTDevPack.QuickDeploy\SSDTDevPack.QuickDeploy.csproj", "{B8718439-7ACF-4828-8559-D3B036AA48CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +127,10 @@ Global
 		{F26271B2-E4B3-4D01-9E46-F1BB75336CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F26271B2-E4B3-4D01-9E46-F1BB75336CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F26271B2-E4B3-4D01-9E46-F1BB75336CBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8718439-7ACF-4828-8559-D3B036AA48CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8718439-7ACF-4828-8559-D3B036AA48CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8718439-7ACF-4828-8559-D3B036AA48CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8718439-7ACF-4828-8559-D3B036AA48CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,5 +155,6 @@ Global
 		{570FE172-C718-4904-849D-641BB7395BD4} = {AEBDFD2A-E81C-428F-8183-F867EA326302}
 		{4B9FDC90-6AF3-4CE8-90DF-4B5FB854A357} = {3B3C82D4-323A-486B-9891-9BF0611C2C4D}
 		{F26271B2-E4B3-4D01-9E46-F1BB75336CBA} = {F6DAB819-6CE1-4B68-B17A-A4C19A5BFCF3}
+		{B8718439-7ACF-4828-8559-D3B036AA48CC} = {E243C354-9615-49DC-8B5E-06A6BE9A844B}
 	EndGlobalSection
 EndGlobal
