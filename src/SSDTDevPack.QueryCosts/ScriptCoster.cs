@@ -24,6 +24,9 @@ namespace SSDTDevPack.QueryCosts
                 var dialog = new ConnectDialog();
                 dialog.ShowDialog();
                 ConnectionString = dialog.ConnectionString;
+
+                if (String.IsNullOrEmpty(ConnectionString))
+                    return;
             }
 
             Dte = dte;

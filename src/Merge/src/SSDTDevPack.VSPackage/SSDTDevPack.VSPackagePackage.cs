@@ -11,6 +11,7 @@ using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
 using SSDTDevPack.QueryCosts;
+using SSDTDevPack.QuickDeploy;
 using SSDTDevPack.tSQLtStubber;
 
 namespace TheAgileSQLClub.SSDTDevPack_VSPackage
@@ -50,11 +51,11 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             var mcs = GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
-                var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                    (int) PkgCmdIDList.SSDTDevPackQuickDeploy);
+                //var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
+                //    (int) PkgCmdIDList.SSDTDevPackQuickDeploy);
 
-                var menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
-                mcs.AddCommand(menuItem);
+                //var menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
+                //mcs.AddCommand(menuItem);
 
                 var toolwndCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
                     (int) PkgCmdIDList.SSDTDevPackMergeUi);
@@ -62,9 +63,9 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 mcs.AddCommand(menuToolWin);
 
 
-                menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
+                var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
                     (int) PkgCmdIDList.SSDTDevPackNameConstraints);
-                menuItem = new MenuCommand(NameConstraintsCalled, menuCommandID);
+                var menuItem = new MenuCommand(NameConstraintsCalled, menuCommandID);
                 mcs.AddCommand(menuItem);
 
 
@@ -82,9 +83,48 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int) PkgCmdIDList.SSDTDevPackToggleQueryCosts, ToggleQueryCosts);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackClearQueryCosts, ClearQueryCosts);
 
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeploy, QuickDeploy);
 
                 //
             }
+        }
+
+        private void QuickDeploy(object sender, EventArgs e)
+        {
+            try
+            {
+                QuickDeployer.DeployFile(GetCurrentDocumentText());
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("QuickDeploy error: {0}", ex.Message);
+                Log.WriteInfo("QuickDeploy error: {0}", ex.Message);
+            }
+            
+        }
+
+        private string GetCurrentDocumentText()
+        {
+
+            var dte = (DTE) GetService(typeof (DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return null;
+            }
+
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return null;
+            }
+
+            var ep = doc.StartPoint.CreateEditPoint();
+            ep.EndOfDocument();
+
+            var length = ep.AbsoluteCharOffset;
+            ep.StartOfDocument();
+            return ep.GetText(length);
         }
 
         private void ClearQueryCosts(object sender, EventArgs e)
