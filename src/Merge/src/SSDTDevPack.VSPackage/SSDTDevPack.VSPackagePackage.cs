@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
+using SSDTDevPack.Formatting;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
 using SSDTDevPack.QueryCosts;
@@ -85,7 +86,31 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeploy, QuickDeploy);
 
-                //
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackLowerCase, LowerCase);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
+
+            }
+        }
+        NOT ALL KEYWORDS ARE done LIKE "RETURN"  or datatypes
+        private void UpperCase(object sender, EventArgs e)
+        {
+            var text = GetCurrentDocumentText();
+            var newText = KeywordCaser.KeywordsToUpper(text);
+
+            if (text != newText)
+            {
+                SetCurrentDocumentText(newText);
+            }
+        }
+        
+        private void LowerCase(object sender, EventArgs e)
+        {
+            var text = GetCurrentDocumentText();
+            var newText = KeywordCaser.KeywordsToLower(text);
+
+            if (text != newText)
+            {
+                SetCurrentDocumentText(newText);
             }
         }
 
@@ -101,6 +126,32 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 Log.WriteInfo("QuickDeploy error: {0}", ex.Message);
             }
             
+        }
+
+        private void SetCurrentDocumentText(string newText)
+        {
+            var dte = (DTE)GetService(typeof(DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return;
+            }
+
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return;
+            }
+
+            var ep = doc.StartPoint.CreateEditPoint();
+            ep.EndOfDocument();
+            
+            var length = ep.AbsoluteCharOffset;
+
+            ep.StartOfDocument();
+            ep.Delete(length);
+         
+            ep.Insert(newText);
         }
 
         private string GetCurrentDocumentText()

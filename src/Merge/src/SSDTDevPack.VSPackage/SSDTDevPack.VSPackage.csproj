@@ -222,6 +222,10 @@
       <Project>{289C1F12-3F83-4061-B88E-04493B015102}</Project>
       <Name>SSDTDevPack.NameConstraints</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SSDTDevPack.Formatting\SSDTDevPack.Formatting.csproj">
+      <Project>{BE989570-115B-4961-8E46-1A2D0419EC80}</Project>
+      <Name>SSDTDevPack.Formatting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SSDTDevPack.QueryCosts\SSDTDevPack.QueryCosts.csproj">
       <Project>{4B9FDC90-6AF3-4CE8-90DF-4B5FB854A357}</Project>
       <Name>SSDTDevPack.QueryCosts</Name>

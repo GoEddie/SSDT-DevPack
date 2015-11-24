@@ -6,6 +6,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 {
     static class PkgCmdIDList
     {
+        public const uint CasingGroup = 0x1010;
         public const uint tSQLtGroup = 0x1011;
         public const uint SSDTDevQueryCostGroup = 0x1012;
         public const uint tSQLtSubMenuGroup = 0x1013;
@@ -25,7 +26,10 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         public const uint SSDTDevPackToggleQueryCosts = 0x105;
         public const uint SSDTDevPackClearQueryCosts = 0x106;
-        
 
+
+        public const uint SSDTDevPackLowerCase = 0x107;
+        public const uint SSDTDevPackUpperCase = 0x108;
+        
     };
 }
