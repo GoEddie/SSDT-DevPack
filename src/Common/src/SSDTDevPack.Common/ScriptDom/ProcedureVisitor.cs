@@ -65,6 +65,13 @@ namespace SSDTDevPack.Common.ScriptDom
             generator.GenerateScript(script, new StringWriter(builder));
             return builder.ToString();
         }
+
+        public static TSqlFragment GetFragment(string script)
+        {
+            var parser = new TSql130Parser(false);
+            IList<ParseError> errors;
+            return parser.Parse(new StringReader(script), out errors);
+        }
     }
 
 

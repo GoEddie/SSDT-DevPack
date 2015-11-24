@@ -14,7 +14,7 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidSSDTDevPack_VSPackageCmdSet" value="{a60f097a-ca84-43f0-b08d-a45b6ccd476a}">
-
+      <IDSymbol name="CasingGroup" value="0x1010"/>
       <IDSymbol name="tSQLtGroup" value="0x1011" />
       <IDSymbol name="tSQLtSubMenu" value="0x1021" />
       <IDSymbol name="SSDTDevQueryCostGroup" value="0x1012" />
@@ -36,6 +36,9 @@
 
       <IDSymbol name="SSDTDevPackToggleQueryCosts" value="0x0105" />
       <IDSymbol name="SSDTDevPackClearQueryCosts" value="0x0106" />
+
+      <IDSymbol name="SSDTDevPackLowerCase" value="0x0107" />
+      <IDSymbol name="SSDTDevPackUpperCase" value="0x0108" />     
 
     </GuidSymbol>
 
@@ -78,6 +81,10 @@
       </Group>
 
       <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevQueryCostGroup" priority="0x0700">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
+      </Group>
+
+      <Group guid="guidSSDTDevPack_VSPackageCmdSet" id="CasingGroup" priority="0x0600">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SubMenu" />
       </Group>
 
@@ -151,7 +158,20 @@
           <ButtonText>Quick Deploy</ButtonText>
         </Strings>
       </Button>
+      
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackLowerCase" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="CasingGroup" />
+        <Strings>
+          <ButtonText>Lower Case Keywords</ButtonText>
+        </Strings>
+      </Button>
 
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackUpperCase" priority="0x0101" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="CasingGroup" />
+        <Strings>
+          <ButtonText>Upper Case Keywords</ButtonText>
+        </Strings>
+      </Button>
 
     </Buttons>
 
