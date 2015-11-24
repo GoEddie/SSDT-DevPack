@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.ScriptDom;
 
 namespace SSDTDevPack.Formatting
@@ -19,12 +20,15 @@ namespace SSDTDevPack.Formatting
 
             foreach (var t in fragment.ScriptTokenStream)
             {
-                if (t.IsKeyword())
+
+                if (string.IsNullOrEmpty(t.Text))
+                    continue;
+
+                if (IsKeyword(t))
                     builder.Append(t.Text.ToUpper());
                 else
-                {
                     builder.Append(t.Text);
-                }
+                
             }
 
             return builder.ToString();
@@ -38,16 +42,24 @@ namespace SSDTDevPack.Formatting
 
             foreach (var t in fragment.ScriptTokenStream)
             {
-                if (t.IsKeyword())
+                if (string.IsNullOrEmpty(t.Text))
+                    continue;
+
+                if (IsKeyword(t))
                     builder.Append(t.Text.ToLower());
                 else
-                {
                     builder.Append(t.Text);
-                }
+                
             }
 
             return builder.ToString();
         }
 
+        private static readonly List<string> _additionalKeywords = new List<string>(){"RETURNS"}; 
+
+        private static bool IsKeyword(TSqlParserToken sqlParserToken)
+        {
+            return sqlParserToken.IsKeyword() || _additionalKeywords.Any(p => p == sqlParserToken.Text.ToUpper());
+        }
     }
 }

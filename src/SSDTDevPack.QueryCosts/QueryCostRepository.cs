@@ -193,9 +193,12 @@ namespace SSDTDevPack.QueryCosts
         private List<Statement> BuildStatements(string filePath)
         {
             var statements = _planParser.GetStatements(File.ReadAllText(filePath));
+
+            var f = new CreateFunctionStatement();
+            
             return statements;
         }
-
+    //TODO     COSTER only shows select outer query on inline tvf
         private string GetChecksum(string filePath)
         {
             using (var md5 = MD5.Create())

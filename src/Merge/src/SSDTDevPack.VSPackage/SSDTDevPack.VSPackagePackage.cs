@@ -91,26 +91,34 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
             }
         }
-        NOT ALL KEYWORDS ARE done LIKE "RETURN"  or datatypes
+        //NOT ALL KEYWORDS ARE done LIKE "RETURN"  or datatypes
         private void UpperCase(object sender, EventArgs e)
         {
             var text = GetCurrentDocumentText();
+            if (String.IsNullOrEmpty(text))
+                return;
+
             var newText = KeywordCaser.KeywordsToUpper(text);
 
             if (text != newText)
             {
                 SetCurrentDocumentText(newText);
+                OutputPane.WriteMessage("Changed keywords to UPPER CASE");
             }
         }
         
         private void LowerCase(object sender, EventArgs e)
         {
             var text = GetCurrentDocumentText();
+            if (String.IsNullOrEmpty(text))
+                return;
+            
             var newText = KeywordCaser.KeywordsToLower(text);
 
             if (text != newText)
             {
                 SetCurrentDocumentText(newText);
+                OutputPane.WriteMessage("Changed keywords to lower case");
             }
         }
 
