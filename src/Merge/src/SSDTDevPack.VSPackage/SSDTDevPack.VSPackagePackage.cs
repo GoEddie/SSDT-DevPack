@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
+using SSDTDevPack.Extraction;
 using SSDTDevPack.Formatting;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
@@ -89,8 +90,37 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackLowerCase, LowerCase);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
 
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
+
             }
         }
+
+        private void ExtractToTvf(object sender, EventArgs e)
+        {
+
+            var dte = (DTE)GetService(typeof(DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return;
+            }
+
+            var doc = dte.ActiveDocument;
+            
+            var text = GetCurrentText();
+            if (String.IsNullOrEmpty(text))
+                return;
+            
+            var newText = new CodeExtractor(text).ExtractIntoFunction();
+
+            if (text != newText && !String.IsNullOrEmpty(newText))
+            {
+                doc.Activate();
+                SetCurrentText(newText);
+                OutputPane.WriteMessage("Code extracted into an inline table valueed functio");
+            }
+        }
+
         //NOT ALL KEYWORDS ARE done LIKE "RETURN"  or datatypes
         private void UpperCase(object sender, EventArgs e)
         {
@@ -162,6 +192,25 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             ep.Insert(newText);
         }
 
+
+        private void SetCurrentText(string newText)
+        {
+            var dte = (DTE)GetService(typeof(DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return;
+            }
+
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return;
+            }
+
+            doc.Selection.Text = newText;
+        }
+
         private string GetCurrentDocumentText()
         {
 
@@ -184,6 +233,24 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             var length = ep.AbsoluteCharOffset;
             ep.StartOfDocument();
             return ep.GetText(length);
+        }
+
+        private string GetCurrentText()
+        {
+            var dte = (DTE)GetService(typeof(DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return null;
+            }
+
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return null;
+            }
+
+            return doc.Selection.Text;
         }
 
         private void ClearQueryCosts(object sender, EventArgs e)

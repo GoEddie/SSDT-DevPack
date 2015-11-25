@@ -28,6 +28,16 @@ namespace SSDTDevPack.Common.ScriptDom
         }
     }
 
+    public class SelectVisitor : TSqlFragmentVisitor
+    {
+        public List<SelectStatement> Statements = new List<SelectStatement>();
+
+        public override void Visit(SelectStatement node)
+        {
+            Statements.Add(node);
+        }
+    }
+
     public static class ScriptDom
     {
         public static List<CreateProcedureStatement> GetProcedures(string script)
@@ -57,6 +67,21 @@ namespace SSDTDevPack.Common.ScriptDom
 
             return visitor.Statements;
         }
+
+        public static List<SelectStatement> GetSelects(string script)
+        {
+            var parser = new TSql130Parser(false);
+
+            IList<ParseError> errors;
+            var s = parser.Parse(new StringReader(script), out errors);
+
+            var visitor = new SelectVisitor();
+
+            s.Accept(visitor);
+
+            return visitor.Statements;
+        }
+
 
         public static string GenerateTSql(TSqlFragment script)
         {

@@ -38,7 +38,10 @@
       <IDSymbol name="SSDTDevPackClearQueryCosts" value="0x0106" />
 
       <IDSymbol name="SSDTDevPackLowerCase" value="0x0107" />
-      <IDSymbol name="SSDTDevPackUpperCase" value="0x0108" />     
+      <IDSymbol name="SSDTDevPackUpperCase" value="0x0108" />
+      
+      
+      <IDSymbol name="SSDTDevPackExtractToTvf" value="0x109" />
 
     </GuidSymbol>
 
@@ -158,7 +161,15 @@
           <ButtonText>Quick Deploy</ButtonText>
         </Strings>
       </Button>
-      
+
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackExtractToTvf" priority="0x0101" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Extract into TVF</ButtonText>
+        </Strings>
+      </Button>
+
+
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackLowerCase" priority="0x0100" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="CasingGroup" />
         <Strings>
@@ -174,6 +185,9 @@
       </Button>
 
     </Buttons>
+
+
+    
 
 
     <Bitmaps>
