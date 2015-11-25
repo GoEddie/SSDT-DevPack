@@ -22,4 +22,4 @@ The first one is MergeUi which basically (as you might imagine) puts a gui aroun
 
 
 ## License
-MIT
+[MIT](/License.md)
