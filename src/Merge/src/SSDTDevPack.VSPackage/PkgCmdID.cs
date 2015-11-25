@@ -30,6 +30,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         public const uint SSDTDevPackLowerCase = 0x107;
         public const uint SSDTDevPackUpperCase = 0x108;
-        
+
+        public const uint SSDTDevPackExtractToTvf = 0x109;
+
     };
 }
