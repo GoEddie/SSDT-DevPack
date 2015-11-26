@@ -91,64 +91,105 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
+//                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackRightCaseIdentifiers, RightCase);
 
             }
         }
 
-        private void ExtractToTvf(object sender, EventArgs e)
+        private void RightCase(object sender, EventArgs e)
         {
-
-            var dte = (DTE)GetService(typeof(DTE));
+            var dte = (DTE) GetService(typeof (DTE));
 
             if (dte.ActiveDocument == null)
             {
                 return;
             }
 
-            var doc = dte.ActiveDocument;
-            
-            var text = GetCurrentText();
+            var text = GetCurrentDocumentText();
+
             if (String.IsNullOrEmpty(text))
                 return;
-            
-            var newText = new CodeExtractor(text).ExtractIntoFunction();
 
-            if (text != newText && !String.IsNullOrEmpty(newText))
+            var caser = new IdentifierCaser();
+
+            caser.CorrectCaseIdentifiers(GetCurrentDocumentText(), dte.ActiveDocument.ProjectItem.ContainingProject);
+        }
+
+        private void ExtractToTvf(object sender, EventArgs e)
+        {
+            try
             {
-                doc.Activate();
-                SetCurrentText(newText);
-                OutputPane.WriteMessage("Code extracted into an inline table valueed functio");
+                var dte = (DTE) GetService(typeof (DTE));
+
+                if (dte.ActiveDocument == null)
+                {
+                    return;
+                }
+
+                var doc = dte.ActiveDocument;
+
+                var text = GetCurrentText();
+                if (String.IsNullOrEmpty(text))
+                    return;
+
+                var newText = new CodeExtractor(text).ExtractIntoFunction();
+
+                if (text != newText && !String.IsNullOrEmpty(newText))
+                {
+                    doc.Activate();
+                    SetCurrentText(newText);
+                    OutputPane.WriteMessage("Code extracted into an inline table valued function");
+                }
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Error extracting code into a TVF: {0}", ex.Message);
             }
         }
 
         //NOT ALL KEYWORDS ARE done LIKE "RETURN"  or datatypes
         private void UpperCase(object sender, EventArgs e)
         {
-            var text = GetCurrentDocumentText();
-            if (String.IsNullOrEmpty(text))
-                return;
-
-            var newText = KeywordCaser.KeywordsToUpper(text);
-
-            if (text != newText)
+            try
             {
-                SetCurrentDocumentText(newText);
-                OutputPane.WriteMessage("Changed keywords to UPPER CASE");
+                var text = GetCurrentDocumentText();
+                if (String.IsNullOrEmpty(text))
+                    return;
+
+                var newText = KeywordCaser.KeywordsToUpper(text);
+
+                if (text != newText)
+                {
+                    SetCurrentDocumentText(newText);
+                    OutputPane.WriteMessage("Changed keywords to UPPER CASE");
+                }
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Exception changing keywords to UPPER CASE, error: {0}", ex.Message);
+                
             }
         }
         
         private void LowerCase(object sender, EventArgs e)
         {
-            var text = GetCurrentDocumentText();
-            if (String.IsNullOrEmpty(text))
-                return;
-            
-            var newText = KeywordCaser.KeywordsToLower(text);
-
-            if (text != newText)
+            try
             {
-                SetCurrentDocumentText(newText);
-                OutputPane.WriteMessage("Changed keywords to lower case");
+                var text = GetCurrentDocumentText();
+                if (String.IsNullOrEmpty(text))
+                    return;
+
+                var newText = KeywordCaser.KeywordsToLower(text);
+
+                if (text != newText)
+                {
+                    SetCurrentDocumentText(newText);
+                    OutputPane.WriteMessage("Changed keywords to lower case");
+                }
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Exception changing keywords to UPPER CASE, error: {0}", ex.Message);
             }
         }
 
@@ -317,111 +358,115 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         private void CreatetSQLtTest(object sender, EventArgs e)
         {
-            var dte = (DTE) GetService(typeof (DTE));
-
-            if (dte.ActiveDocument == null)
+            try
             {
-                return;
-            }
+                var dte = (DTE) GetService(typeof (DTE));
 
-            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
-            if (null == doc)
+                if (dte.ActiveDocument == null)
+                {
+                    return;
+                }
+
+                var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+                if (null == doc)
+                {
+                    return;
+                }
+
+                var ep = doc.StartPoint.CreateEditPoint();
+
+                ep.EndOfDocument();
+
+                var length = ep.AbsoluteCharOffset;
+                ep.StartOfDocument();
+
+                var originalText = ep.GetText(length);
+
+                var builder = new TestBuilder(originalText, dte.ActiveDocument.ProjectItem.ContainingProject);
+                builder.Go();
+                //  builder.CreateTests();
+            }
+            catch (Exception ex)
             {
-                return;
+                OutputPane.WriteMessage("Exception creating tSQLt tests, error: {0}", ex.Message);
             }
-
-            var ep = doc.StartPoint.CreateEditPoint();
-
-            ep.EndOfDocument();
-
-            var length = ep.AbsoluteCharOffset;
-            ep.StartOfDocument();
-
-            var originalText = ep.GetText(length);
-
-            var builder = new TestBuilder(originalText, dte.ActiveDocument.ProjectItem.ContainingProject);
-            builder.Go();
-            //  builder.CreateTests();
         }
 
         private void CreatetSQLtSchema(object sender, EventArgs e)
         {
-            var dte = (DTE) GetService(typeof (DTE));
-
-            if (dte.ActiveDocument == null)
+            try
             {
-                return;
-            }
 
-            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
-            if (null == doc)
+
+                var dte = (DTE) GetService(typeof (DTE));
+
+                if (dte.ActiveDocument == null)
+                {
+                    return;
+                }
+
+                var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+                if (null == doc)
+                {
+                    return;
+                }
+
+                var ep = doc.StartPoint.CreateEditPoint();
+
+                ep.EndOfDocument();
+
+                var length = ep.AbsoluteCharOffset;
+                ep.StartOfDocument();
+
+                var originalText = ep.GetText(length);
+
+                var builder = new SchemaBuilder(originalText);
+                builder.CreateSchemas();
+            }
+            catch (Exception ex)
             {
-                return;
+                OutputPane.WriteMessage("Exception creating tSQLt schema, error: {0}", ex.Message);
             }
-
-            var ep = doc.StartPoint.CreateEditPoint();
-
-            ep.EndOfDocument();
-
-            var length = ep.AbsoluteCharOffset;
-            ep.StartOfDocument();
-
-            var originalText = ep.GetText(length);
-
-            var builder = new SchemaBuilder(originalText);
-            builder.CreateSchemas();
         }
 
-        private void MenuItemCallback(object sender, EventArgs e)
-        {
-            // Show a Message Box to prove we were here
-            var uiShell = (IVsUIShell) GetService(typeof (SVsUIShell));
-            var clsid = Guid.Empty;
-            int result;
-            ErrorHandler.ThrowOnFailure(uiShell.ShowMessageBox(
-                0,
-                ref clsid,
-                "SSDTDevPack.VSPackage",
-                string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", ToString()),
-                string.Empty,
-                0,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
-                OLEMSGICON.OLEMSGICON_INFO,
-                0, // false
-                out result));
-        }
-
+        
         private void NameConstraintsCalled(object sender, EventArgs e)
         {
-            var dte = (DTE) GetService(typeof (DTE));
-            if (null == dte || dte.ActiveDocument == null)
+            try
             {
-                return;
+                var dte = (DTE) GetService(typeof (DTE));
+                if (null == dte || dte.ActiveDocument == null)
+                {
+                    return;
+                }
+
+                var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+                if (null == doc)
+                {
+                    return;
+                }
+
+                var ep = doc.StartPoint.CreateEditPoint();
+
+                ep.EndOfDocument();
+
+                var length = ep.AbsoluteCharOffset;
+                ep.StartOfDocument();
+
+                var originalText = ep.GetText(length);
+
+                var namer = new ConstraintNamer(originalText);
+                var modifiedText = namer.Go();
+
+                if (originalText != modifiedText)
+                {
+                    ep.Delete(length);
+                    ep.Insert(modifiedText);
+                }
             }
-
-            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
-            if (null == doc)
+            catch (Exception ex)
             {
-                return;
-            }
-
-            var ep = doc.StartPoint.CreateEditPoint();
-
-            ep.EndOfDocument();
-
-            var length = ep.AbsoluteCharOffset;
-            ep.StartOfDocument();
-
-            var originalText = ep.GetText(length);
-
-            var namer = new ConstraintNamer(originalText);
-            var modifiedText = namer.Go();
-
-            if (originalText != modifiedText)
-            {
-                ep.Delete(length);
-                ep.Insert(modifiedText);
+                OutputPane.WriteMessage("Exception naming constraints, error: {0}", ex.Message);
             }
         }
     }
