@@ -46,18 +46,35 @@ namespace SSDTDevPack.QuickDeploy
             foreach (var function in functions)
             {
                 OutputPane.WriteMessage("Deploying {0}", function.Name.ToQuotedString());
-                Deploy(BuildIfNotExistsStatements(function));
+                if (function.ReturnType is SelectFunctionReturnType)
+                {
+                    Deploy(BuildIfNotExistsStatementsInlineFunction(function));
+                }
+                else
+                {
+                    Deploy(BuildIfNotExistsStatements(function));
+                }
+
                 Deploy(ChangeCreateToAlter(function, newCode));
                 OutputPane.WriteMessage("Deploying {0}...Done", function.Name.ToQuotedString());
                 
             }
-
 
             foreach (var statement in deployScripts)
             {
                 Deploy(statement);
             }
             //Deploy();
+        }
+
+        private static string BuildIfNotExistsStatementsInlineFunction(CreateFunctionStatement function)
+        {
+
+            var generateIfExists =
+                string.Format("if object_id('{0}') is null\r\nbegin\r\n execute sp_executeSql N' create function {0}() \r\n RETURNS TABLE as RETURN SELECT 1 as a' \r\nEND;",
+                    function.Name.ToQuotedString());
+
+            return generateIfExists;
         }
 
         private static void Deploy(string statement)

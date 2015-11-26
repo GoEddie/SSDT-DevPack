@@ -96,25 +96,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
         }
 
-        private void RightCase(object sender, EventArgs e)
-        {
-            var dte = (DTE) GetService(typeof (DTE));
-
-            if (dte.ActiveDocument == null)
-            {
-                return;
-            }
-
-            var text = GetCurrentDocumentText();
-
-            if (String.IsNullOrEmpty(text))
-                return;
-
-            var caser = new IdentifierCaser();
-
-            caser.CorrectCaseIdentifiers(GetCurrentDocumentText(), dte.ActiveDocument.ProjectItem.ContainingProject);
-        }
-
+      
         private void ExtractToTvf(object sender, EventArgs e)
         {
             try
