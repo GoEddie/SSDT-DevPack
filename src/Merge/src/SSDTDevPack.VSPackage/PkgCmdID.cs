@@ -33,5 +33,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         public const uint SSDTDevPackExtractToTvf = 0x109;
 
+        public const uint SSDTDevPackFindDuplicateIndexes = 0x111;
+
     };
 }
