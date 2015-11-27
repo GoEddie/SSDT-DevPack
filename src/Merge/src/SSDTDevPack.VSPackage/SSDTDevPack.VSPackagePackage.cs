@@ -10,6 +10,7 @@ using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
 using SSDTDevPack.Formatting;
+using SSDTDevPack.Indexes;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
 using SSDTDevPack.QueryCosts;
@@ -92,11 +93,24 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
 //                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackRightCaseIdentifiers, RightCase);
-
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
             }
         }
 
-      
+        private void FindDuplicateIndexes(object sender, EventArgs e)
+        {
+            try
+            {
+                var finder = new DuplicateIndexFinder();
+                finder.ShowDuplicateIndexes();
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Error finding duplicat eindexes: {0}", ex.Message);
+            }
+        }
+
+
         private void ExtractToTvf(object sender, EventArgs e)
         {
             try

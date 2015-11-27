@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using Microsoft.SqlServer.Dac.Model;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Merge.MergeDescriptor;
@@ -28,6 +29,46 @@ namespace SSDTDevPack.Common.Dac
             return null;
         }
 
+        public static string GetNameFullQuoted(this ObjectIdentifier name)
+        {
+            var builder = new StringBuilder();
+            var first = true;
+
+            foreach (var part in name.Parts.Reverse())
+            {
+                builder.Append(part.Quote());
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    builder.Append(".");
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        public static string GetNameFullUnQuoted(this ObjectIdentifier name)
+        {
+            var builder = new StringBuilder();
+            var first = true;
+
+            foreach (var part in name.Parts.Reverse())
+            {
+                builder.Append(part.UnQuote());
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    builder.Append(".");
+                }
+            }
+            return builder.ToString();
+        }
         public static string GetSchemaObjectName(this ObjectIdentifier name)
         {
             return string.Format("{0}.{1}", name.GetSchema(), name.GetName());

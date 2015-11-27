@@ -38,6 +38,16 @@ namespace SSDTDevPack.Common.ScriptDom
         }
     }
 
+    public class IndexVisitor : TSqlFragmentVisitor
+    {
+        public List<CreateIndexStatement> Statements = new List<CreateIndexStatement>();
+
+        public override void Visit(CreateIndexStatement node)
+        {
+            Statements.Add(node);
+        }
+    }
+
     public static class ScriptDom
     {
         public static List<CreateProcedureStatement> GetProcedures(string script)
@@ -76,6 +86,20 @@ namespace SSDTDevPack.Common.ScriptDom
             var s = parser.Parse(new StringReader(script), out errors);
 
             var visitor = new SelectVisitor();
+
+            s.Accept(visitor);
+
+            return visitor.Statements;
+        }
+
+        public static List<CreateIndexStatement> GetCreateIndex(string script)
+        {
+            var parser = new TSql130Parser(false);
+
+            IList<ParseError> errors;
+            var s = parser.Parse(new StringReader(script), out errors);
+
+            var visitor = new IndexVisitor();
 
             s.Accept(visitor);
 

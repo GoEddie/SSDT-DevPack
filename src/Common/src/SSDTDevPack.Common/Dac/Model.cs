@@ -7,6 +7,11 @@ namespace SSDTDevPack.Common.Dac
     {
         static readonly Dictionary<string, ModelReference> Models = new Dictionary<string, ModelReference>(); 
 
+        /// <summary>
+        /// DO NOT use using on mode, instead call Model.Close! really important!!!!!!
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static TSqlTypedModel Get(string path)
         {
             lock (Models)
