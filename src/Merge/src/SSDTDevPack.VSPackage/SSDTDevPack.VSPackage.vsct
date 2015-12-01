@@ -44,6 +44,7 @@
       <IDSymbol name="SSDTDevPackExtractToTvf" value="0x109" />
 
       <IDSymbol name="SSDTDevPackFindDuplicateIndexes" value="0x111" />
+      <IDSymbol name="SSDTNonSargableRewrites" value="0x112" />
 
     </GuidSymbol>
 
@@ -171,7 +172,15 @@
         </Strings>
       </Button>
 
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTNonSargableRewrites" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Re-write Non Sargable IsNulls</ButtonText>
+        </Strings>
+      </Button>
+
       
+
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackExtractToTvf" priority="0x0101" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />

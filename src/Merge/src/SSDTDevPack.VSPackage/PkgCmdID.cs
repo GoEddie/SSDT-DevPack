@@ -35,5 +35,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         public const uint SSDTDevPackFindDuplicateIndexes = 0x111;
 
+        public const uint SSDTNonSargableRewrites = 0x112;
+
     };
 }

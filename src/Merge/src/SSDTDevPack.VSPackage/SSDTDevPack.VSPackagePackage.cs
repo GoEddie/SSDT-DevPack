@@ -94,7 +94,34 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
 //                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackRightCaseIdentifiers, RightCase);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
             }
+        }
+
+        private void RewriteNonSargableIsNull(object sender, EventArgs e)
+        {
+            try
+            {
+                var oldDoc = GetCurrentDocumentText();
+                var newDoc = oldDoc;
+
+                var rewriter = new Replacements.NonSargableRewrites(oldDoc);
+
+                foreach (var rep in rewriter.GetReplacements())
+                {
+                    newDoc = newDoc.Replace(rep.Original, rep.Replacement);
+                    OutputPane.WriteMessage("Non-Sargable IsNull re-written from \r\n\"{0}\" \r\nto\r\n\"{1}\"\r\n", rep.Original, rep.Replacement);
+                }
+
+                if(oldDoc != newDoc)
+                    SetCurrentDocumentText(newDoc);
+
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Error re-writing non sargable isnulls {0}", ex.Message);
+            }
+
         }
 
         private void FindDuplicateIndexes(object sender, EventArgs e)
@@ -106,7 +133,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
             catch (Exception ex)
             {
-                OutputPane.WriteMessage("Error finding duplicat eindexes: {0}", ex.Message);
+                OutputPane.WriteMessage("Error finding duplicatevindexes: {0}", ex.Message);
             }
         }
 
