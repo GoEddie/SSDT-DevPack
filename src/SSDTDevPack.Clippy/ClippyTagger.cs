@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
@@ -14,6 +15,7 @@ using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Indexes;
+using SSDTDevPack.QueryCosts;
 
 namespace SSDTDevPack.Clippy
 {
@@ -197,62 +199,99 @@ namespace SSDTDevPack.Clippy
                 definition.Type = GlyphDefinitonType.Normal;
                 definition.LineCount = statement.ScriptTokenStream.LastOrDefault().Line - definition.Line;
                 definition.StatementLength = statement.FragmentLength;
-                
-                var nonSargableRewriter = new NonSargableRewrites(script.Substring(statement.StartOffset, statement.FragmentLength));
-                var replacements = nonSargableRewriter.GetReplacements();
 
-                if (replacements.Count > 0)
-                {
-                    definition.Menu.Add(new MenuDefinition()
-                    {
-                        Caption = "Replace non-sargable IsNull",
-                        Action = () =>
-                        {
-                        },
-                        Type = MenuItemType.Header
-                        ,Glyph = definition
-                    });
+                definition = AddQueryCosts(definition, statement, script);
+                definition = AddIsNullReplacements(script, statement, definition);
 
-                    var offsettedReplacments = new List<Replacements>();
-                    foreach (var replacement in replacements)
-                    {
-                        var replacement1 = replacement;
-                        replacement1.OriginalOffset += statement.StartOffset;
-                        offsettedReplacments.Add(replacement1);
-                    }
-
-                    if (replacements.Count > 1)
-                    {
-                        var menu = new MenuDefinition();
-                        menu.Operation = new ClippyReplacementOperations(offsettedReplacments);
-                        menu.Action = () => PerformAction(menu.Operation, menu.Glyph);
-
-                        menu.Glyph = definition;
-                        menu.Caption = GetCaptionForAll(statement);
-                        menu.Type = MenuItemType.MenuItem;
-                        definition.Menu.Add(menu);
-                    }
-
-
-                    foreach (var replacement in offsettedReplacments)
-                    {
-                        var menu = new MenuDefinition();
-                        menu.Action = () => PerformAction(menu.Operation, menu.Glyph);
-                        menu.Glyph = definition;
-                        menu.Caption = string.Format("\t\"{0}\" into \"{1}\"", replacement.Original, replacement.Replacement);
-                        menu.Type = MenuItemType.MenuItem;
-                        menu.Operation = new ClippyReplacementOperation(replacement);
-                        definition.Menu.Add(menu);
-
-                    }
-
-                    definition.GenerateKey();
-                    definitions.Add(definition);
-                }
-                
+                definitions.Add(definition);
             }
 
             return definitions;
+        }
+
+        private GlyphDefinition AddQueryCosts(GlyphDefinition definition, TSqlStatement statement, string script)
+        {
+            
+            var documentCoster = DocumentScriptCosters.GetInstance();
+            if (documentCoster == null)
+                return definition;
+            
+            var coster = documentCoster.GetCoster();
+            if (null == coster)
+                return definition;
+
+            var statements = coster.GetCosts();
+
+            if (statements == null || statements.Count == 0)
+                return definition;
+
+            var thisStatement = script.Substring(statement.StartOffset, statement.FragmentLength);
+
+            var costedStatement = statements.FirstOrDefault(p => p.Text.IndexOf(thisStatement, StringComparison.OrdinalIgnoreCase) > 0);
+
+            if (costedStatement == null)
+                return definition;
+
+            definition.Menu.Add(new MenuDefinition()
+            {
+                Action = null, Caption = "Query Cost: " + costedStatement.Cost, Type = MenuItemType.Header
+            });
+
+            return definition;
+        }
+
+        private GlyphDefinition AddIsNullReplacements(string script, TSqlStatement statement, GlyphDefinition definition)
+        {
+            var nonSargableRewriter = new NonSargableRewrites(script.Substring(statement.StartOffset, statement.FragmentLength));
+            var replacements = nonSargableRewriter.GetReplacements();
+
+            if (replacements.Count > 0)
+            {
+                definition.Menu.Add(new MenuDefinition()
+                {
+                    Caption = "Replace non-sargable IsNull",
+                    Action = () => { },
+                    Type = MenuItemType.Header
+                    ,
+                    Glyph = definition
+                });
+
+                var offsettedReplacments = new List<Replacements>();
+                foreach (var replacement in replacements)
+                {
+                    var replacement1 = replacement;
+                    replacement1.OriginalOffset += statement.StartOffset;
+                    offsettedReplacments.Add(replacement1);
+                }
+
+                if (replacements.Count > 1)
+                {
+                    var menu = new MenuDefinition();
+                    menu.Operation = new ClippyReplacementOperations(offsettedReplacments);
+                    menu.Action = () => PerformAction(menu.Operation, menu.Glyph);
+
+                    menu.Glyph = definition;
+                    menu.Caption = GetCaptionForAll(statement);
+                    menu.Type = MenuItemType.MenuItem;
+                    definition.Menu.Add(menu);
+                }
+
+
+                foreach (var replacement in offsettedReplacments)
+                {
+                    var menu = new MenuDefinition();
+                    menu.Action = () => PerformAction(menu.Operation, menu.Glyph);
+                    menu.Glyph = definition;
+                    menu.Caption = string.Format("\t\"{0}\" into \"{1}\"", replacement.Original, replacement.Replacement);
+                    menu.Type = MenuItemType.MenuItem;
+                    menu.Operation = new ClippyReplacementOperation(replacement);
+                    definition.Menu.Add(menu);
+                }
+
+                definition.GenerateKey();
+            }
+
+            return definition;
         }
 
         private void PerformAction(ClippyOperation operation, GlyphDefinition glyph)

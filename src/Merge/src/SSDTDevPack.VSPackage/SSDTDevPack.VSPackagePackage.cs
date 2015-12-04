@@ -388,6 +388,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 DocumentScriptCosters.SetDte(dte);
 
                 var coster = DocumentScriptCosters.GetInstance().GetCoster();
+                if (coster == null)
+                    return;
 
                 if (coster.ShowCosts)
                 {

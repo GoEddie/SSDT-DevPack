@@ -242,7 +242,7 @@ namespace SSDTDevPack.QueryCosts
             
                 select new Statement()
                 {
-                    Band = GetBand(cost), Text = text.Trim()
+                    Band = GetBand(cost), Text = text.Trim(), Cost = cost
                 }).ToList();
 
             return statements;
@@ -276,6 +276,7 @@ namespace SSDTDevPack.QueryCosts
     {
         public string Text;
         public CostBand Band;
+        public string Cost;
     }
 
     public enum CostBand
