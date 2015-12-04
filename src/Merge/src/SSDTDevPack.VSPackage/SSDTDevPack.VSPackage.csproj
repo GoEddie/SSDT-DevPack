@@ -147,6 +147,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckableCommand.cs" />
     <Compile Include="MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
@@ -221,6 +222,12 @@
     <ProjectReference Include="..\..\..\NameConstraints\src\SSDTDevPack.NameConstraints\SSDTDevPack.NameConstraints.csproj">
       <Project>{289C1F12-3F83-4061-B88E-04493B015102}</Project>
       <Name>SSDTDevPack.NameConstraints</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SSDTDevPack.Clippy\SSDTDevPack.Clippy.csproj">
+      <Project>{39260B5D-306E-469B-BAE5-58C088BDD447}</Project>
+      <Name>SSDTDevPack.Clippy</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SSDTDevPack.Extraction\SSDTDevPack.Extraction.csproj">
       <Project>{9E202C62-FEAD-4622-9803-51B35423CEF4}</Project>

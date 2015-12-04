@@ -118,11 +118,11 @@ namespace SSDTDevPack.Common.ScriptDom
             return visitor.Statements;
         }
 
-        public static List<TSqlStatement> GetStatements(string script)
+        public static List<TSqlStatement> GetStatements(string script, out IList<ParseError> errors)
         {
             var parser = new TSql130Parser(false);
 
-            IList<ParseError> errors;
+            //IList<ParseError> errors;
             var s = parser.Parse(new StringReader(script), out errors);
 
             var visitor = new StatementVisitor();
@@ -149,7 +149,8 @@ namespace SSDTDevPack.Common.ScriptDom
 
         public static List<QuerySpecification> GetQuerySpecifications(string script)
         {
-            var statements = GetStatements(script);
+            IList<ParseError> errors;
+            var statements = GetStatements(script, out errors);
             var querySpecifications = new List<QuerySpecification>();
 
 

@@ -37,5 +37,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         public const uint SSDTNonSargableRewrites = 0x112;
 
+        public const uint SSDTTSqlClippy = 0x113;
+        
+
     };
 }

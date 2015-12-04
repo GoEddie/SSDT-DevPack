@@ -18,7 +18,7 @@ namespace SSDTDevPack.Common.UnitTests
         public void sargable_rewrites_isnull_not_equals_different_literal()
         {
 
-            var rewriter = new Replacements.NonSargableRewrites(@" select * from dbo.tableaaa
+            var rewriter = new NonSargableRewrites(@" select * from dbo.tableaaa
 	        where isnull(a_column, 'sss') <> 'abc'
 	   ");
 
@@ -35,7 +35,7 @@ namespace SSDTDevPack.Common.UnitTests
         public void sargable_rewrites_isnull_equals_different_literal()
         {
 
-            var rewriter = new Replacements.NonSargableRewrites(@" select * from dbo.tableaaa
+            var rewriter = new NonSargableRewrites(@" select * from dbo.tableaaa
 	        where isnull(a.a_column, 'sss') = 'abc'
 	   ");
 
@@ -53,7 +53,7 @@ namespace SSDTDevPack.Common.UnitTests
         public void sargable_rewrites_isnull_not_equals_same_literal()
         {
 
-            var rewriter = new Replacements.NonSargableRewrites(@" select * from dbo.tableaaa
+            var rewriter = new NonSargableRewrites(@" select * from dbo.tableaaa
 	        where isnull(a.a_column, 'abc') <> 'abc'
 	   ");
 
@@ -71,7 +71,7 @@ namespace SSDTDevPack.Common.UnitTests
         public void sargable_rewrites_isnull_equals_same_literal()
         {
 
-            var rewriter = new Replacements.NonSargableRewrites(@" select * from dbo.tableaaa
+            var rewriter = new NonSargableRewrites(@" select * from dbo.tableaaa
 	        where isnull(a.a_column, 'abc') = 'abc'
 	   ");
 

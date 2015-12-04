@@ -1,0 +1,9 @@
+﻿<Window x:Class="SSDTDevPack.Clippy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" SizeToContent="WidthAndHeight" AllowsTransparency="True" Background="Black">
+    
+    <StackPanel x:Name="Items">
+        
+    </StackPanel>
+</Window>

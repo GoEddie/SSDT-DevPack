@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.SqlServer.Dac.Model;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.ScriptDom;
 
@@ -7,25 +9,33 @@ namespace SSDTDevPack.Indexes
 {
     public struct Replacements
     {
+        public TSqlFragment OriginalFragment;
+
         public string Original;
         public int OriginalLength;
         public int OriginalOffset;
         public string Replacement;
+    }
 
         public class NonSargableRewrites
         {
             private readonly string _script;
             private List<Replacements> _replacementsToMake = new List<Replacements>();
+            private TSqlFragment _currentFragment;
 
             public NonSargableRewrites(string script)
             {
                 _script = script;
             }
 
+
+
             public List<Replacements> GetReplacements()
             {
                 foreach (var select in ScriptDom.GetQuerySpecifications(_script))
                 {
+                    _currentFragment = select;
+
                     if (select.WhereClause != null)
                         Search(select.WhereClause.SearchCondition);
                 }
@@ -39,6 +49,10 @@ namespace SSDTDevPack.Indexes
                 //remove duplicates
                 _replacementsToMake = distinctor.Values.ToList();
 
+                foreach (var replacementse in _replacementsToMake)
+                {
+                    Console.WriteLine(replacementse.OriginalOffset);
+                }
 
                 for (var i = 0; i < _replacementsToMake.Count; i++)
                 {
@@ -185,7 +199,8 @@ namespace SSDTDevPack.Indexes
                     Original = _script.Substring(search.StartOffset, search.FragmentLength),
                     OriginalLength = search.FragmentLength,
                     OriginalOffset = search.StartOffset,
-                    Replacement = sql
+                    Replacement = sql,
+                    OriginalFragment = _currentFragment
                 });
             }
 
@@ -217,7 +232,8 @@ namespace SSDTDevPack.Indexes
                     Original = _script.Substring(search.StartOffset, search.FragmentLength),
                     OriginalLength = search.FragmentLength,
                     OriginalOffset = search.StartOffset,
-                    Replacement = sql
+                    Replacement = sql,
+                    OriginalFragment = _currentFragment
                 });
             }
 
@@ -246,7 +262,8 @@ namespace SSDTDevPack.Indexes
                     Original = _script.Substring(search.StartOffset, search.FragmentLength),
                     OriginalLength = search.FragmentLength,
                     OriginalOffset = search.StartOffset,
-                    Replacement = sql
+                    Replacement = sql,
+                    OriginalFragment = _currentFragment
                 });
             }
 
@@ -273,9 +290,9 @@ namespace SSDTDevPack.Indexes
                     Original = _script.Substring(search.StartOffset, search.FragmentLength),
                     OriginalLength = search.FragmentLength,
                     OriginalOffset = search.StartOffset,
-                    Replacement = sql
+                    Replacement = sql,
+                    OriginalFragment = _currentFragment
                 });
             }
         }
     }
-}

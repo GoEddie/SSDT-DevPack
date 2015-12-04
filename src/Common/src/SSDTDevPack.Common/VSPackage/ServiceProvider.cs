@@ -13,6 +13,9 @@ namespace SSDTDevPack.Common.VSPackage
 
         public static object Get(Type type)
         {
+            if (_provider == null)
+                return null;
+
             return _provider.GetVsService(type);
         }
     }

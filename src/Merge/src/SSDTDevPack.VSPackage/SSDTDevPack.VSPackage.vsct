@@ -46,6 +46,8 @@
       <IDSymbol name="SSDTDevPackFindDuplicateIndexes" value="0x111" />
       <IDSymbol name="SSDTNonSargableRewrites" value="0x112" />
 
+      <IDSymbol name="SSDTTSqlClippy" value="0x113" />
+
     </GuidSymbol>
 
 
@@ -179,8 +181,14 @@
         </Strings>
       </Button>
 
-      
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTTSqlClippy" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Enable T-SQL Clippy</ButtonText>
+        </Strings>
+      </Button>
 
+      
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackExtractToTvf" priority="0x0101" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />

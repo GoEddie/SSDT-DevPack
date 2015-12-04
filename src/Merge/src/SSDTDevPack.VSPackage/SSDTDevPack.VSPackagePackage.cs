@@ -6,6 +6,7 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using SSDTDevPack.Clippy;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
@@ -95,7 +96,14 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 //                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackRightCaseIdentifiers, RightCase);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
+                AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);
+                
             }
+        }
+
+        private void EnableClippy(object sender, EventArgs e)
+        {
+            ClippySettings.Enabled = !ClippySettings.Enabled;
         }
 
         private void RewriteNonSargableIsNull(object sender, EventArgs e)
@@ -105,7 +113,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 var oldDoc = GetCurrentDocumentText();
                 var newDoc = oldDoc;
 
-                var rewriter = new Replacements.NonSargableRewrites(oldDoc);
+                var rewriter = new NonSargableRewrites(oldDoc);
 
                 foreach (var rep in rewriter.GetReplacements())
                 {
@@ -326,11 +334,30 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             CommandID menuCommandID;
             MenuCommand menuItem;
-            menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                cmdId);
+            menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet, cmdId);
             menuItem = new MenuCommand(eventHandler, menuCommandID);
             mcs.AddCommand(menuItem);
+
+            var a = new OleMenuCommand(eventHandler, menuCommandID);
+            a.Checked = false;
         }
+        private void AddCheckableMenuItem(OleMenuCommandService mcs, int cmdId, EventHandler eventHandler)
+        {
+            var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet, cmdId);
+            
+            ClippySettings.MenuItem = new OleMenuCommand(eventHandler, menuCommandID);
+
+            ClippySettings.MenuItem.Checked = false;
+            ClippySettings.MenuItem.BeforeQueryStatus += a_BeforeQueryStatus;
+            mcs.AddCommand(ClippySettings.MenuItem);
+        }
+
+        void a_BeforeQueryStatus(object sender, EventArgs e)
+        {
+            ClippySettings.MenuItem.Checked = ClippySettings.Enabled;
+        }
+
+
 
         private void ToggleQueryCosts(object sender, EventArgs e)
         {
