@@ -88,6 +88,19 @@ namespace SSDTDevPack.Common.UnitTests
 
     }
 
+    [TestFixture]
+    public class InequalityRewriterTests
+    {
+        [Test]
+        public void RewritesBangEquals()
+        {
+            var script = @"select 1, (select top 1 a from b where 1!=2) from a where a ! /*sssssss**/  =   b";
+
+            var rewriter = new InEqualityRewriter(script);
+            var replacements = rewriter.GetReplacements(ScriptDom.ScriptDom.GetQuerySpecifications(script));
+            Assert.AreEqual(2, replacements.Count);
+        }
+    }
 
     [TestFixture]
     public class OrderByOrdinalRewritesTests

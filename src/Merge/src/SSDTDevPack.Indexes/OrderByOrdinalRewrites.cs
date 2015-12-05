@@ -6,8 +6,63 @@ using SSDTDevPack.Common.Dac;
 
 namespace SSDTDevPack.Rewriter
 {
+    public class InEqualityRewriter
+    {
+        private readonly string _script;
+
+        public InEqualityRewriter(string script)
+        {
+            _script = script;
+        }
+
+        public List<Replacements> GetReplacements(List<QuerySpecification> queries)
+        {
+            var replacements = new List<Replacements>();
+
+            foreach (var spec in queries)
+            {
+                TSqlParserToken lastToken = null;
+                foreach (var token in spec.ScriptTokenStream)
+                {
+                    if (token.TokenType == TSqlTokenType.EqualsSign && lastToken != null && lastToken.TokenType == TSqlTokenType.Bang)
+                    {
+                        var replacement = new Replacements();
+                        var length = (token.Offset + token.Text.Length) - lastToken.Offset;
+                        replacement.Original = _script.Substring(lastToken.Offset, length);
+                        replacement.OriginalFragment = spec;
+                        replacement.OriginalLength = length;
+                        replacement.OriginalOffset = lastToken.Offset;
+                        replacement.Replacement = "<>";
+                        
+                        replacements.Add(replacement);
+                    }
+                        
+                    switch (token.TokenType)
+                    {
+                        case TSqlTokenType.WhiteSpace:
+                        case TSqlTokenType.MultilineComment:
+                        case TSqlTokenType.SingleLineComment:
+                            break;
+                        default:
+                            lastToken = token;
+                            break;
+                    }
+                    
+                }
+
+            }
+
+            return replacements;
+
+        }
+
+
+    }
+
     public class OrderByOrdinalRewrites
     {
+
+
         public List<Replacements> GetReplacements(List<QuerySpecification> queries)
         {
             var replacements = new List<Replacements>();
