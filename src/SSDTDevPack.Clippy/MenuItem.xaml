@@ -8,7 +8,7 @@
         <TextBlock x:Name="Title">
         <TextBlock.Style>
             <Style TargetType="TextBlock">
-                <Setter Property= "Foreground" Value="Coral"/>
+                <Setter Property= "Foreground" Value="WhiteSmoke"/>
                 <Style.Triggers>
                     <Trigger Property ="IsMouseOver" Value="True">
                         <Setter Property= "Foreground" Value="Orange"/>

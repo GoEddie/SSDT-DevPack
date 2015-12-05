@@ -86,6 +86,9 @@ namespace SSDTDevPack.Clippy
          
             foreach (var g in glyphs)
             {
+                if (g.Menu.Count == 0)
+                    continue;
+
                 var tag = new ClippyTag(g);
                 
                 SnapshotPoint line;

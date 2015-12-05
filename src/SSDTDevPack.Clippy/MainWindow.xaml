@@ -4,6 +4,6 @@
         Title="MainWindow" SizeToContent="WidthAndHeight" AllowsTransparency="True" Background="Black">
     
     <StackPanel x:Name="Items">
-        
+        <TextBlock Foreground="Coral">T-SQL Clippy</TextBlock>    
     </StackPanel>
 </Window>

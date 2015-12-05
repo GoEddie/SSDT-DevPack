@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Permissions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace SSDTDevPack.Clippy
 {
@@ -38,10 +41,12 @@ namespace SSDTDevPack.Clippy
                         this.Items.Children.Add(new MenuItem(definition.Caption, definition.Action, this));
                         break;
                     case MenuItemType.Seperator:
-                        this.Items.Children.Add(new Separator());
+
+                        this.Items.Children.Add(new TextBlock(){Height = 10, Padding = new Thickness(5,5,5,5)});
+                        
                         break;
                     case MenuItemType.Header:
-                        this.Items.Children.Add(new MenuItem(definition.Caption, null, this));
+                        this.Items.Children.Add(new TextBlock() { Text = definition.Caption, Foreground = Brushes.Coral});
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
