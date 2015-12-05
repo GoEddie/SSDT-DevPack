@@ -43,6 +43,9 @@ namespace SSDTDevPack.Clippy
 
         IEnumerable<ITagSpan<ClippyTag>> ITagger<ClippyTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
+            if (spans.FirstOrDefault().Snapshot.ContentType.TypeName != "SQL Server Tools")
+                return null;
+
 
             var items = new List<ITagSpan<ClippyTag>>();
 
