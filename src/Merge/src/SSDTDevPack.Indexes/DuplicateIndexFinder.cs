@@ -7,7 +7,7 @@ using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.UserMessages;
 
-namespace SSDTDevPack.Indexes
+namespace SSDTDevPack.Rewriter
 {
     public class DuplicateIndexFinder
     {

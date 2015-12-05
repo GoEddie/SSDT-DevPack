@@ -57,9 +57,9 @@
       <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
       <Name>SSDTDevPack.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Merge\src\SSDTDevPack.Indexes\SSDTDevPack.Indexes.csproj">
+    <ProjectReference Include="..\..\..\Merge\src\SSDTDevPack.Indexes\SSDTDevPack.Rewriter.csproj">
       <Project>{94813D75-0291-450F-A7BD-D3161FF4A2CB}</Project>
-      <Name>SSDTDevPack.Indexes</Name>
+      <Name>SSDTDevPack.Rewriter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

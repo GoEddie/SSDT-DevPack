@@ -7,8 +7,8 @@
     <ProjectGuid>{94813D75-0291-450F-A7BD-D3161FF4A2CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SSDTDevPack.Indexes</RootNamespace>
-    <AssemblyName>SSDTDevPack.Indexes</AssemblyName>
+    <RootNamespace>SSDTDevPack.Rewriter</RootNamespace>
+    <AssemblyName>SSDTDevPack.Rewriter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,7 +57,9 @@
   <ItemGroup>
     <Compile Include="DuplicateIndexFinder.cs" />
     <Compile Include="NonSargableRewrites.cs" />
+    <Compile Include="OrderByOrdinalRewrites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Replacements.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

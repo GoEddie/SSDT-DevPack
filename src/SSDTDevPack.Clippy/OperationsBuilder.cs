@@ -9,7 +9,7 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Microsoft.VisualStudio.Text;
 using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.UserMessages;
-using SSDTDevPack.Indexes;
+using SSDTDevPack.Rewriter;
 
 namespace SSDTDevPack.Clippy
 {

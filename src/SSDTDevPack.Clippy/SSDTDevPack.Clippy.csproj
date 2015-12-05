@@ -126,9 +126,9 @@
       <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
       <Name>SSDTDevPack.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Merge\src\SSDTDevPack.Indexes\SSDTDevPack.Indexes.csproj">
+    <ProjectReference Include="..\Merge\src\SSDTDevPack.Indexes\SSDTDevPack.Rewriter.csproj">
       <Project>{94813D75-0291-450F-A7BD-D3161FF4A2CB}</Project>
-      <Name>SSDTDevPack.Indexes</Name>
+      <Name>SSDTDevPack.Rewriter</Name>
     </ProjectReference>
     <ProjectReference Include="..\SSDTDevPack.QueryCosts\SSDTDevPack.QueryCosts.csproj">
       <Project>{4B9FDC90-6AF3-4CE8-90DF-4B5FB854A357}</Project>

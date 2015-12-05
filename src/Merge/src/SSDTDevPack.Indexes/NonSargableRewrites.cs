@@ -1,298 +1,279 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.SqlServer.Dac.Model;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.ScriptDom;
 
-namespace SSDTDevPack.Indexes
+namespace SSDTDevPack.Rewriter
 {
-    public struct Replacements
+    public class NonSargableRewrites
     {
-        public TSqlFragment OriginalFragment;
+        private readonly string _script;
+        private TSqlFragment _currentFragment;
+        private List<Replacements> _replacementsToMake = new List<Replacements>();
 
-        public string Original;
-        public int OriginalLength;
-        public int OriginalOffset;
-        public string Replacement;
-    }
-
-        public class NonSargableRewrites
+        public NonSargableRewrites(string script)
         {
-            private readonly string _script;
-            private List<Replacements> _replacementsToMake = new List<Replacements>();
-            private TSqlFragment _currentFragment;
+            _script = script;
+        }
 
-            public NonSargableRewrites(string script)
+        public List<Replacements> GetReplacements(List<QuerySpecification> queries)
+        {
+            foreach (var select in queries)
             {
-                _script = script;
+                _currentFragment = select;
+
+                if (select.WhereClause != null)
+                    Search(select.WhereClause.SearchCondition);
             }
 
+            var distinctor = new Dictionary<string, Replacements>();
 
-
-            public List<Replacements> GetReplacements()
+            foreach (var p in _replacementsToMake)
             {
-                foreach (var select in ScriptDom.GetQuerySpecifications(_script))
-                {
-                    _currentFragment = select;
-
-                    if (select.WhereClause != null)
-                        Search(select.WhereClause.SearchCondition);
-                }
-
-                var distinctor = new Dictionary<string, Replacements>();
-
-                foreach (var p in _replacementsToMake)
-                {
-                    distinctor[p.Original + ":" + p.OriginalLength + ":" + p.OriginalOffset] = p;
-                }
-                //remove duplicates
-                _replacementsToMake = distinctor.Values.ToList();
-
-                foreach (var replacementse in _replacementsToMake)
-                {
-                    Console.WriteLine(replacementse.OriginalOffset);
-                }
-
-                for (var i = 0; i < _replacementsToMake.Count; i++)
-                {
-                    var rep = _replacementsToMake[i];
-
-                    if (!rep.Original.Contains("\r\n") && rep.Replacement.Contains("\r\n"))
-                    {
-                        rep.Replacement = rep.Replacement.Replace("\r\n", "");
-                        _replacementsToMake[i] = rep;
-                    }
-                }
-
-                return _replacementsToMake;
+                distinctor[p.Original + ":" + p.OriginalLength + ":" + p.OriginalOffset] = p;
             }
+            //remove duplicates
+            _replacementsToMake = distinctor.Values.ToList();
 
-            private void Search(BooleanExpression search)
+            for (var i = 0; i < _replacementsToMake.Count; i++)
             {
-                if (search is BooleanBinaryExpression)
-                {
-                    var bbe = search as BooleanBinaryExpression;
-                    Search(bbe.FirstExpression);
-                    Search(bbe.SecondExpression);
-                }
+                var rep = _replacementsToMake[i];
 
-                if (search is BooleanParenthesisExpression)
+                if (!rep.Original.Contains("\r\n") && rep.Replacement.Contains("\r\n"))
                 {
-                    var bpe = search as BooleanParenthesisExpression;
-                    Search(bpe.Expression);
-                }
-
-                if (search is BooleanComparisonExpression)
-                {
-                    CheckRewriteable(search);
+                    rep.Replacement = rep.Replacement.Replace("\r\n", "");
+                    _replacementsToMake[i] = rep;
                 }
             }
 
-            private void CheckRewriteable(BooleanExpression search)
+            return _replacementsToMake;
+        }
+
+        private void Search(BooleanExpression search)
+        {
+            if (search is BooleanBinaryExpression)
             {
-                var bce = search as BooleanComparisonExpression;
-                var haveIsNull = false;
-                var haveLiteral = false;
+                var bbe = search as BooleanBinaryExpression;
+                Search(bbe.FirstExpression);
+                Search(bbe.SecondExpression);
+            }
 
-                Literal literal = new BinaryLiteral();
-                var isNull = new FunctionCall();
+            if (search is BooleanParenthesisExpression)
+            {
+                var bpe = search as BooleanParenthesisExpression;
+                Search(bpe.Expression);
+            }
 
-                if (bce.FirstExpression is FunctionCall)
+            if (search is BooleanComparisonExpression)
+            {
+                CheckRewriteable(search);
+            }
+        }
+
+        private void CheckRewriteable(BooleanExpression search)
+        {
+            var bce = search as BooleanComparisonExpression;
+            var haveIsNull = false;
+            var haveLiteral = false;
+
+            Literal literal = new BinaryLiteral();
+            var isNull = new FunctionCall();
+
+            if (bce.FirstExpression is FunctionCall)
+            {
+                var func = bce.FirstExpression as FunctionCall;
+                if (func.FunctionName.Value.ToLower() == "isnull")
                 {
-                    var func = bce.FirstExpression as FunctionCall;
-                    if (func.FunctionName.Value.ToLower() == "isnull")
-                    {
-                        haveIsNull = true;
-                        isNull = func;
-                    }
+                    haveIsNull = true;
+                    isNull = func;
+                }
+            }
+
+            if (bce.SecondExpression is FunctionCall)
+            {
+                var func = bce.FirstExpression as FunctionCall;
+                if (func.FunctionName.Value.ToLower() == "isnull")
+                {
+                    haveIsNull = true;
+                    isNull = func;
+                }
+            }
+
+            if (bce.FirstExpression is Literal)
+            {
+                haveLiteral = true;
+                literal = bce.FirstExpression as Literal;
+            }
+
+            if (bce.SecondExpression is Literal)
+            {
+                haveLiteral = true;
+                literal = bce.SecondExpression as Literal;
+            }
+
+            if (haveLiteral && haveIsNull)
+            {
+                var firstParam = isNull.Parameters.FirstOrDefault();
+                if (!(firstParam is ColumnReferenceExpression))
+                {
+                    return;
                 }
 
-                if (bce.SecondExpression is FunctionCall)
+                var secondParam = isNull.Parameters.LastOrDefault();
+                if (secondParam is Literal)
                 {
-                    var func = bce.FirstExpression as FunctionCall;
-                    if (func.FunctionName.Value.ToLower() == "isnull")
-                    {
-                        haveIsNull = true;
-                        isNull = func;
-                    }
-                }
-
-                if (bce.FirstExpression is Literal)
-                {
-                    haveLiteral = true;
-                    literal = bce.FirstExpression as Literal;
-                }
-
-                if (bce.SecondExpression is Literal)
-                {
-                    haveLiteral = true;
-                    literal = bce.SecondExpression as Literal;
-                }
-
-                if (haveLiteral && haveIsNull)
-                {
-                    var firstParam = isNull.Parameters.FirstOrDefault();
-                    if (!(firstParam is ColumnReferenceExpression))
+                    if (secondParam.GetType() != literal.GetType())
                     {
                         return;
                     }
 
-                    var secondParam = isNull.Parameters.LastOrDefault();
-                    if (secondParam is Literal)
+                    var isSameLiteral = (secondParam as Literal).Value == literal.Value;
+
+                    var isEquals = bce.ComparisonType == BooleanComparisonType.Equals;
+
+                    if (isEquals && isSameLiteral)
                     {
-                        if (secondParam.GetType() != literal.GetType())
-                        {
-                            return;
-                        }
+                        BuildEqualsSameLiteral(search, firstParam, literal);
 
-                        var isSameLiteral = (secondParam as Literal).Value == literal.Value;
+                        return;
+                    }
 
-                        var isEquals = bce.ComparisonType == BooleanComparisonType.Equals;
+                    if (!isEquals && !isSameLiteral)
+                    {
+                        BuildNotEqualsNotSameLiteral(search, firstParam, literal);
 
-                        if (isEquals && isSameLiteral)
-                        {
-                            BuildEqualsSameLiteral(search, firstParam, literal);
-
-                            return;
-                        }
-
-                        if (!isEquals && !isSameLiteral)
-                        {
-                            BuildNotEqualsNotSameLiteral(search, firstParam, literal);
-
-                            return;
-                        }
+                        return;
+                    }
 
 
-                        if (!isEquals && isSameLiteral)
-                        {
-                            BuildNotEqualsIsSameLiteral(search, firstParam, literal);
+                    if (!isEquals && isSameLiteral)
+                    {
+                        BuildNotEqualsIsSameLiteral(search, firstParam, literal);
 
-                            return;
-                        }
+                        return;
+                    }
 
-                        if (isEquals && !isSameLiteral)
-                        {
-                            BuildIsEqualsIsNotSameLiteral(search, firstParam, literal);
-                        }
+                    if (isEquals && !isSameLiteral)
+                    {
+                        BuildIsEqualsIsNotSameLiteral(search, firstParam, literal);
                     }
                 }
             }
+        }
 
-            private void BuildIsEqualsIsNotSameLiteral(BooleanExpression search, ScalarExpression firstParam,
-                Literal literal)
+        private void BuildIsEqualsIsNotSameLiteral(BooleanExpression search, ScalarExpression firstParam,
+            Literal literal)
+        {
+            var newExpression = new BooleanParenthesisExpression();
+
+            var second = new BooleanComparisonExpression();
+            second.FirstExpression = firstParam;
+            second.SecondExpression = literal;
+
+
+            newExpression.Expression = second;
+
+            var sql = ScriptDom.GenerateTSql(newExpression);
+
+            _replacementsToMake.Add(new Replacements
             {
-                var newExpression = new BooleanParenthesisExpression();
+                Original = _script.Substring(search.StartOffset, search.FragmentLength),
+                OriginalLength = search.FragmentLength,
+                OriginalOffset = search.StartOffset,
+                Replacement = sql,
+                OriginalFragment = _currentFragment
+            });
+        }
 
-                var second = new BooleanComparisonExpression();
-                second.FirstExpression = firstParam;
-                second.SecondExpression = literal;
+        private void BuildNotEqualsIsSameLiteral(BooleanExpression search, ScalarExpression firstParam,
+            Literal literal)
+        {
+            var newExpression = new BooleanParenthesisExpression();
+            var expression = new BooleanBinaryExpression();
+            newExpression.Expression = expression;
 
+            expression.BinaryExpressionType = BooleanBinaryExpressionType.And;
 
-                newExpression.Expression = second;
+            var isnull = new BooleanIsNullExpression();
+            isnull.IsNot = true;
 
-                var sql = ScriptDom.GenerateTSql(newExpression);
+            isnull.Expression = firstParam;
+            expression.FirstExpression = isnull;
 
-                _replacementsToMake.Add(new Replacements
-                {
-                    Original = _script.Substring(search.StartOffset, search.FragmentLength),
-                    OriginalLength = search.FragmentLength,
-                    OriginalOffset = search.StartOffset,
-                    Replacement = sql,
-                    OriginalFragment = _currentFragment
-                });
-            }
+            var second = new BooleanComparisonExpression();
+            second.FirstExpression = firstParam;
+            second.SecondExpression = literal;
+            second.ComparisonType = BooleanComparisonType.NotEqualToBrackets;
+            expression.SecondExpression = second;
 
-            private void BuildNotEqualsIsSameLiteral(BooleanExpression search, ScalarExpression firstParam,
-                Literal literal)
+            var sql = ScriptDom.GenerateTSql(newExpression);
+
+            _replacementsToMake.Add(new Replacements
             {
-                var newExpression = new BooleanParenthesisExpression();
-                var expression = new BooleanBinaryExpression();
-                newExpression.Expression = expression;
+                Original = _script.Substring(search.StartOffset, search.FragmentLength),
+                OriginalLength = search.FragmentLength,
+                OriginalOffset = search.StartOffset,
+                Replacement = sql,
+                OriginalFragment = _currentFragment
+            });
+        }
 
-                expression.BinaryExpressionType = BooleanBinaryExpressionType.And;
+        private void BuildNotEqualsNotSameLiteral(BooleanExpression search, ScalarExpression firstParam,
+            Literal literal)
+        {
+            var newExpression = new BooleanParenthesisExpression();
+            var expression = new BooleanBinaryExpression();
+            newExpression.Expression = expression;
 
-                var isnull = new BooleanIsNullExpression();
-                isnull.IsNot = true;
+            expression.BinaryExpressionType = BooleanBinaryExpressionType.Or;
+            var isnull = new BooleanIsNullExpression();
+            isnull.Expression = firstParam;
+            expression.FirstExpression = isnull;
 
-                isnull.Expression = firstParam;
-                expression.FirstExpression = isnull;
+            var second = new BooleanComparisonExpression();
+            second.FirstExpression = firstParam;
+            second.SecondExpression = literal;
+            second.ComparisonType = BooleanComparisonType.NotEqualToBrackets;
+            expression.SecondExpression = second;
 
-                var second = new BooleanComparisonExpression();
-                second.FirstExpression = firstParam;
-                second.SecondExpression = literal;
-                second.ComparisonType = BooleanComparisonType.NotEqualToBrackets;
-                expression.SecondExpression = second;
+            var sql = ScriptDom.GenerateTSql(newExpression);
 
-                var sql = ScriptDom.GenerateTSql(newExpression);
-
-                _replacementsToMake.Add(new Replacements
-                {
-                    Original = _script.Substring(search.StartOffset, search.FragmentLength),
-                    OriginalLength = search.FragmentLength,
-                    OriginalOffset = search.StartOffset,
-                    Replacement = sql,
-                    OriginalFragment = _currentFragment
-                });
-            }
-
-            private void BuildNotEqualsNotSameLiteral(BooleanExpression search, ScalarExpression firstParam,
-                Literal literal)
+            _replacementsToMake.Add(new Replacements
             {
-                var newExpression = new BooleanParenthesisExpression();
-                var expression = new BooleanBinaryExpression();
-                newExpression.Expression = expression;
+                Original = _script.Substring(search.StartOffset, search.FragmentLength),
+                OriginalLength = search.FragmentLength,
+                OriginalOffset = search.StartOffset,
+                Replacement = sql,
+                OriginalFragment = _currentFragment
+            });
+        }
 
-                expression.BinaryExpressionType = BooleanBinaryExpressionType.Or;
-                var isnull = new BooleanIsNullExpression();
-                isnull.Expression = firstParam;
-                expression.FirstExpression = isnull;
+        private void BuildEqualsSameLiteral(BooleanExpression search, ScalarExpression firstParam, Literal literal)
+        {
+            var newExpression = new BooleanParenthesisExpression();
+            var expression = new BooleanBinaryExpression();
+            newExpression.Expression = expression;
 
-                var second = new BooleanComparisonExpression();
-                second.FirstExpression = firstParam;
-                second.SecondExpression = literal;
-                second.ComparisonType = BooleanComparisonType.NotEqualToBrackets;
-                expression.SecondExpression = second;
+            expression.BinaryExpressionType = BooleanBinaryExpressionType.Or;
+            var isnull = new BooleanIsNullExpression();
+            isnull.Expression = firstParam;
+            expression.FirstExpression = isnull;
 
-                var sql = ScriptDom.GenerateTSql(newExpression);
+            var second = new BooleanComparisonExpression();
+            second.FirstExpression = firstParam;
+            second.SecondExpression = literal;
+            expression.SecondExpression = second;
 
-                _replacementsToMake.Add(new Replacements
-                {
-                    Original = _script.Substring(search.StartOffset, search.FragmentLength),
-                    OriginalLength = search.FragmentLength,
-                    OriginalOffset = search.StartOffset,
-                    Replacement = sql,
-                    OriginalFragment = _currentFragment
-                });
-            }
+            var sql = ScriptDom.GenerateTSql(newExpression);
 
-            private void BuildEqualsSameLiteral(BooleanExpression search, ScalarExpression firstParam, Literal literal)
+            _replacementsToMake.Add(new Replacements
             {
-                var newExpression = new BooleanParenthesisExpression();
-                var expression = new BooleanBinaryExpression();
-                newExpression.Expression = expression;
-
-                expression.BinaryExpressionType = BooleanBinaryExpressionType.Or;
-                var isnull = new BooleanIsNullExpression();
-                isnull.Expression = firstParam;
-                expression.FirstExpression = isnull;
-
-                var second = new BooleanComparisonExpression();
-                second.FirstExpression = firstParam;
-                second.SecondExpression = literal;
-                expression.SecondExpression = second;
-
-                var sql = ScriptDom.GenerateTSql(newExpression);
-
-                _replacementsToMake.Add(new Replacements
-                {
-                    Original = _script.Substring(search.StartOffset, search.FragmentLength),
-                    OriginalLength = search.FragmentLength,
-                    OriginalOffset = search.StartOffset,
-                    Replacement = sql,
-                    OriginalFragment = _currentFragment
-                });
-            }
+                Original = _script.Substring(search.StartOffset, search.FragmentLength),
+                OriginalLength = search.FragmentLength,
+                OriginalOffset = search.StartOffset,
+                Replacement = sql,
+                OriginalFragment = _currentFragment
+            });
         }
     }
+}

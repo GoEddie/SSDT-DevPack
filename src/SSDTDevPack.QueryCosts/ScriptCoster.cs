@@ -19,6 +19,12 @@ namespace SSDTDevPack.QueryCosts
         
         public ScriptCoster(DTE dte)
         {
+            
+            Dte = dte;
+        }
+
+        void BuildStore()
+        {
             if (String.IsNullOrEmpty(ConnectionString))
             {
                 var dialog = new ConnectDialog();
@@ -29,17 +35,16 @@ namespace SSDTDevPack.QueryCosts
                     return;
             }
 
-            Dte = dte;
             Store = new QueryCostStore(new PlanParser(new QueryCostDataGateway(ConnectionString)));
             ShowCosts = false; //caller flips it first time used
         }
 
         public List<Statement> GetCosts()
         {
-            if (!ShowCosts)
+            if (!ShowCosts || Store == null)
                 return null;
 
-            if (Dte.ActiveDocument == null || Dte.ActiveDocument.FullName == null)
+            if (Dte == null || Dte.ActiveDocument == null || Dte.ActiveDocument.FullName == null)
             {
                 return null;
             }
@@ -51,6 +56,15 @@ namespace SSDTDevPack.QueryCosts
 
         public void AddCosts(string script, Document doc)
         {
+            if (!ShowCosts)
+                return;
+
+            if(Store == null)
+                BuildStore();
+
+            if (Store == null)
+                return;
+
             Store.AddStatements(script, doc.FullName);
         }
 

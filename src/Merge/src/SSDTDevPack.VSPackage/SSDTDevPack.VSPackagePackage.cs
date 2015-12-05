@@ -7,11 +7,12 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Clippy;
+using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
 using SSDTDevPack.Formatting;
-using SSDTDevPack.Indexes;
+using SSDTDevPack.Rewriter;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
 using SSDTDevPack.QueryCosts;
@@ -114,8 +115,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 var newDoc = oldDoc;
 
                 var rewriter = new NonSargableRewrites(oldDoc);
-
-                foreach (var rep in rewriter.GetReplacements())
+                var queries = ScriptDom.GetQuerySpecifications(oldDoc);
+                foreach (var rep in rewriter.GetReplacements(queries))
                 {
                     newDoc = newDoc.Replace(rep.Original, rep.Replacement);
                     OutputPane.WriteMessage("Non-Sargable IsNull re-written from \r\n\"{0}\" \r\nto\r\n\"{1}\"\r\n", rep.Original, rep.Replacement);
@@ -397,8 +398,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 }
                 else
                 {
-                    coster.AddCosts(originalText, dte.ActiveDocument);
                     coster.ShowCosts = true;
+                    coster.AddCosts(originalText, dte.ActiveDocument);
                 }
             }
             catch (Exception ee)
