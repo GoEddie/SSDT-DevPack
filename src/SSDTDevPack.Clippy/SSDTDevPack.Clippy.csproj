@@ -97,6 +97,9 @@
   <ItemGroup>
     <Compile Include="ClippyGlyphFactoryProvider.cs" />
     <Compile Include="ClippyGlyphFactory.cs" />
+    <Compile Include="ClippyOperation.cs" />
+    <Compile Include="ClippyReplacementOperation.cs" />
+    <Compile Include="ClippyReplacementOperations.cs" />
     <Compile Include="ClippySettings.cs" />
     <Compile Include="ClippyTag.cs" />
     <Compile Include="ClippyTagger.cs" />
@@ -105,8 +108,15 @@
     <Compile Include="MenuItem.xaml.cs">
       <DependentUpon>MenuItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Operations\ClippyOperationBuilder.cs" />
+    <Compile Include="Operations\InequalityReWriteOperation.cs" />
+    <Compile Include="Operations\IsNullReWriteOperation.cs" />
+    <Compile Include="Operations\OrdinalOrderByReWriteOperation.cs" />
+    <Compile Include="Operations\QueryCostOperations.cs" />
+    <Compile Include="Operations\ReWriterOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OperationsBuilder.cs" />
+    <Compile Include="TagStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
