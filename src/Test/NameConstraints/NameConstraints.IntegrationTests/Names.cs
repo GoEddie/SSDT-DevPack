@@ -30,7 +30,7 @@ namespace NameConstraints.IntegrationTests
             var changedText = namer.Go();
             
             Assert.LessOrEqual(-1, changedText.IndexOf("[Id] INT NOT NULL PRIMARY KEY"), changedText);
-            Assert.Greater( changedText.IndexOf("CONSTRAINT [PK_TableOne] PRIMARY KEY ([Id])"), -1, changedText);
+            Assert.Greater( changedText.IndexOf("CONSTRAINT [PK_TableOne] PRIMARY KEY ([Id])", StringComparison.OrdinalIgnoreCase), -1, changedText);
         }
     }
 }

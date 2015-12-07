@@ -21,9 +21,11 @@ namespace SSDTDevPack.Common.IntegrationTests.Columns
         [TestFixtureSetUp]
         public void Init()
         {
-            _model =
-                Model.Get(Path.Combine(Directories.GetSampleSolution(),
-                    @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
+
+            if (File.Exists(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Debug\Nested.dacpac")))
+                _model = Model.Get(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
+            else
+                _model = Model.Get(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Release\Nested.dacpac"));
         }
 
         [Test]
@@ -47,9 +49,12 @@ namespace SSDTDevPack.Common.IntegrationTests.Columns
         [TestFixtureSetUp]
         public void Init()
         {
-            _model =
-                Model.Get(Path.Combine(Directories.GetSampleSolution(),
-                    @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
+
+            if (File.Exists(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Debug\Nested.dacpac")))
+                _model = Model.Get(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
+            else
+                _model = Model.Get(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Release\Nested.dacpac"));
+
         }
 
         [Test]

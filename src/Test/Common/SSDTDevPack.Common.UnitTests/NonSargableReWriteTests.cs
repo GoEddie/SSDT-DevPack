@@ -26,7 +26,7 @@ namespace SSDTDevPack.Common.UnitTests
             Assert.AreEqual(1, replacements.Count);
 
             Assert.AreEqual("isnull(a_column, 'sss') <> 'abc'", replacements.FirstOrDefault().Original);
-            Assert.AreEqual("(a_column is null\r\n or a_column <> 'abc')", replacements.FirstOrDefault().Replacement);
+            Assert.AreEqual("(a_column is null or a_column <> 'abc')", replacements.FirstOrDefault().Replacement);
 
 
         }
@@ -61,7 +61,7 @@ namespace SSDTDevPack.Common.UnitTests
             Assert.AreEqual(1, replacements.Count);
 
             Assert.AreEqual("isnull(a.a_column, 'abc') <> 'abc'", replacements.FirstOrDefault().Original);
-            Assert.AreEqual("(a.a_column is not null\r\n and a.a_column <> 'abc')", replacements.FirstOrDefault().Replacement);
+            Assert.AreEqual("(a.a_column is not null and a.a_column <> 'abc')", replacements.FirstOrDefault().Replacement);
 
 
         }
@@ -79,7 +79,7 @@ namespace SSDTDevPack.Common.UnitTests
             Assert.AreEqual(1, replacements.Count);
 
             Assert.AreEqual("isnull(a.a_column, 'abc') = 'abc'", replacements.FirstOrDefault().Original);
-            Assert.AreEqual("(a.a_column is null\r\n or a.a_column = 'abc')", replacements.FirstOrDefault().Replacement);
+            Assert.AreEqual("(a.a_column is null or a.a_column = 'abc')", replacements.FirstOrDefault().Replacement);
 
 
         }
