@@ -18,9 +18,12 @@ namespace SSDTDevPack.Rewriter
         public List<Replacements> GetReplacements(List<QuerySpecification> queries)
         {
             var replacements = new List<Replacements>();
+            if (queries.Count < 1)
+                return replacements;
 
-            foreach (var spec in queries)
-            {
+            //as we iterate through tokens we only need the outermost query...
+            var spec = queries.First();
+            
                 TSqlParserToken lastToken = null;
                 foreach (var token in spec.ScriptTokenStream)
                 {
@@ -49,9 +52,7 @@ namespace SSDTDevPack.Rewriter
                     }
                     
                 }
-
-            }
-
+            
             return replacements;
 
         }
