@@ -38,6 +38,8 @@ namespace SSDTDevPack.Rewriter
                         replacement.Replacement = "<>";
                         
                         replacements.Add(replacement);
+
+                        lastToken = token;
                     }
                         
                     switch (token.TokenType)

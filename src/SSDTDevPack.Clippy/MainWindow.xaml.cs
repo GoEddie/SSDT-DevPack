@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Microsoft.VisualStudio.Text;
 
 namespace SSDTDevPack.Clippy
 {
@@ -25,6 +26,7 @@ namespace SSDTDevPack.Clippy
 
         public GlyphDefinition Glyph;
         public ClippyOperation Operation;
+        
     }
 
     public partial class MainWindow : Window

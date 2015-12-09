@@ -20,18 +20,17 @@ namespace SSDTDevPack.Clippy
             _snapshot = snapshot;
         }
 
-
+        
         public override void DoOperation(GlyphDefinition glyph)
         {
             try
             {
-                var span = glyph.Tag.ParentTag.Span;
-                var offset = span.GetText().IndexOf(_replacement.Original);
+                var span = _snapshot.CreateTrackingSpan(_replacement.OriginalOffset, _replacement.OriginalLength, SpanTrackingMode.EdgeNegative).GetSpan(_snapshot);
 
-                if (span.GetText().Substring(offset, _replacement.OriginalLength) != _replacement.Original)
+                if (span.GetText() != _replacement.Original)
                     return;
 
-                var newSpan = span.Snapshot.CreateTrackingSpan(glyph.Tag.ParentTag.Span.Start+offset, _replacement.OriginalLength, SpanTrackingMode.EdgeNegative);
+                var newSpan = span.Snapshot.CreateTrackingSpan(span.Start, _replacement.OriginalLength, SpanTrackingMode.EdgeNegative);
                 
                 _snapshot.TextBuffer.Replace(newSpan.GetSpan(newSpan.TextBuffer.CurrentSnapshot), _replacement.Replacement);
             }
