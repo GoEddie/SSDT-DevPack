@@ -70,8 +70,16 @@ namespace SSDTDevPack.Rewriter
         {
             var replacements = new List<Replacements>();
 
+            var uniquifier = new Dictionary<string, object>();
+
             foreach (var spec in queries)
             {
+                var key = string.Format("{0}:{1}", spec.StartOffset, spec.FragmentLength);
+                if (uniquifier.ContainsKey(key))
+                    continue;
+
+                uniquifier.Add(key, null);
+
                 if (spec.OrderByClause == null)
                     continue;
 
