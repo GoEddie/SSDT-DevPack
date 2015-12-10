@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
+using SSDTDevPack.Common.Settings;
 using SSDTDevPack.Common.VSPackage;
 
 namespace SSDTDevPack.Clippy
@@ -19,6 +20,11 @@ namespace SSDTDevPack.Clippy
         internal ClippyTagger(IClassifier aggregator)
         {
             _aggregator = aggregator;
+            var settings = SavedSettings.Get();
+            _lastCallDelay = settings.Clippy.CallDelayMilliSeconds;
+
+            if (settings.Clippy.StartEnabled)
+                ClippySettings.Enabled = true;
         }
 
 
@@ -29,7 +35,7 @@ namespace SSDTDevPack.Clippy
 
         private DateTime _lastCallTime;
         private IEnumerable<ITagSpan<ClippyTag>> _lastSpans;
-
+        private int _lastCallDelay;
 
         IEnumerable<ITagSpan<ClippyTag>> ITagger<ClippyTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
@@ -38,7 +44,7 @@ namespace SSDTDevPack.Clippy
             
             var items = new List<ITagSpan<ClippyTag>>();
 
-            if (_lastCallTime.AddMilliseconds(1500) >= DateTime.Now)
+            if (_lastCallTime.AddMilliseconds(_lastCallDelay) >= DateTime.Now)
                 return _lastSpans;
 
             _lastCallTime = DateTime.Now;

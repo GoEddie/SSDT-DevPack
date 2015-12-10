@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Clippy;
 using SSDTDevPack.Common.ScriptDom;
+using SSDTDevPack.Common.Settings;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
@@ -26,6 +27,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof (MergeToolWindow))]
     [Guid(GuidList.guidSSDTDevPack_VSPackagePkgString)]
+    [ProvideAutoLoad("ADFC4E64-0397-11D1-9F4E-00A0C911004F")]
     public sealed class SSDTDevPack_VSPackagePackage : Package, IVsServiceProvider
     {
         public SSDTDevPack_VSPackagePackage()
@@ -98,9 +100,10 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
                 AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);
-                
+
             }
         }
+
 
         private void EnableClippy(object sender, EventArgs e)
         {
