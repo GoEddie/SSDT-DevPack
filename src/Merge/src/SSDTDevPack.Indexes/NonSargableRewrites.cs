@@ -27,15 +27,18 @@ namespace SSDTDevPack.Rewriter
                     Search(select.WhereClause.SearchCondition);
                 }
 
-                foreach (var reference in select.FromClause.TableReferences)
+                if (select.FromClause != null)
                 {
-                    if (reference is QualifiedJoin)
+                    foreach (var reference in select.FromClause.TableReferences)
                     {
-                        var join = reference as QualifiedJoin;
-                        Search(join.SearchCondition);
+                        if (reference is QualifiedJoin)
+                        {
+                            var join = reference as QualifiedJoin;
+                            Search(join.SearchCondition);
+                        }
                     }
                 }
-        
+
             }
 
             var distinctor = new Dictionary<string, Replacements>();
