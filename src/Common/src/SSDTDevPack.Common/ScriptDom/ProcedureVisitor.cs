@@ -260,6 +260,21 @@ namespace SSDTDevPack.Common.ScriptDom
                 
             }
 
+            if (fragment is SelectStatement)
+            {
+                if ((fragment as SelectStatement).QueryExpression != null)
+                {
+                    if ((fragment as SelectStatement).QueryExpression is BinaryQueryExpression)
+                    {
+                        var expression = (fragment as SelectStatement).QueryExpression as BinaryQueryExpression;
+                        
+                             children.AddRange(SearchChildren(expression.FirstQueryExpression));
+                             children.AddRange(SearchChildren(expression.SecondQueryExpression));
+                        
+                    }
+                }
+            }
+
             return children;
         }
     }
