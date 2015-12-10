@@ -58,12 +58,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             var mcs = GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
-                //var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                //    (int) PkgCmdIDList.SSDTDevPackQuickDeploy);
-
-                //var menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
-                //mcs.AddCommand(menuItem);
-
+            
                 var toolwndCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
                     (int) PkgCmdIDList.SSDTDevPackMergeUi);
                 var menuToolWin = new MenuCommand(ShowMergeToolWindow, toolwndCommandID);
@@ -96,7 +91,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
-//                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackRightCaseIdentifiers, RightCase);
+
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
                 AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);

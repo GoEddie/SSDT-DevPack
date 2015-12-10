@@ -33,7 +33,7 @@ namespace SSDTDevPack.Clippy
                         return;
 
                     var newSpan = span.Snapshot.CreateTrackingSpan(span.Start, replacement.OriginalLength, SpanTrackingMode.EdgeNegative);
-
+                    
                     _snapshot.TextBuffer.Replace(newSpan.GetSpan(newSpan.TextBuffer.CurrentSnapshot), replacement.Replacement);
                 }
                 catch (Exception e)

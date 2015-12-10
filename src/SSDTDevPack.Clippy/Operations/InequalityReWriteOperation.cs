@@ -56,7 +56,7 @@ namespace SSDTDevPack.Clippy.Operations
                     var menu = new MenuDefinition();
                     menu.Action = () => PerformAction(menu.Operation, menu.Glyph);
                     menu.Glyph = definition;
-                    menu.Caption = string.Format("\tOffset {2} \"{0}\" into \"{1}\"", replacement.Original, replacement.Replacement, replacement.OriginalOffset);
+                    menu.Caption = string.Format("\t\"{0}\" into \"{1}\"", replacement.Original, replacement.Replacement);
                     menu.Type = MenuItemType.MenuItem;
                     Debug.WriteLine("\tLine {2} \"{0}\" into \"{1}\"", replacement.Original, replacement.Replacement, replacement.OriginalFragment.StartLine);
                     menu.Operation = new ClippyReplacementOperation(replacement);
