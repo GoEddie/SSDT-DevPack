@@ -23,7 +23,19 @@ namespace SSDTDevPack.Rewriter
                 _currentFragment = select;
 
                 if (select.WhereClause != null)
+                {
                     Search(select.WhereClause.SearchCondition);
+                }
+
+                foreach (var reference in select.FromClause.TableReferences)
+                {
+                    if (reference is QualifiedJoin)
+                    {
+                        var join = reference as QualifiedJoin;
+                        Search(join.SearchCondition);
+                    }
+                }
+        
             }
 
             var distinctor = new Dictionary<string, Replacements>();

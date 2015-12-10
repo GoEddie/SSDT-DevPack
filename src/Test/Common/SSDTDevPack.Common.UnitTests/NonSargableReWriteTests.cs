@@ -54,6 +54,23 @@ namespace SSDTDevPack.Common.UnitTests
 
 
         [Test]
+        public void sargable_rewrites_isnulls_on_joins()
+        {
+            var script = @" select * from dbo.tableaaa join tableb on 
+	        isnull(a_column, 'sss') <> 'abc' 	   ";
+            var rewriter = new NonSargableRewrites(script);
+
+            var replacements = rewriter.GetReplacements(ScriptDom.ScriptDom.GetQuerySpecifications(script));
+            Assert.AreEqual(1, replacements.Count);
+
+            Assert.AreEqual("isnull(a_column, 'sss') <> 'abc'", replacements.FirstOrDefault().Original);
+            Assert.AreEqual("(a_column is null or a_column <> 'abc')", replacements.FirstOrDefault().Replacement);
+
+
+        }
+
+
+        [Test]
         public void sargable_rewrites_isnull_equals_different_literal()
         {
             var script = @" select * from dbo.tableaaa

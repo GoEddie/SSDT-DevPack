@@ -157,17 +157,6 @@ namespace SSDTDevPack.Common.ScriptDom
             foreach (var s in statements)
             {
                 querySpecifications.AddRange(FlattenTreeGetQuerySpecifications(s));
-                Console.WriteLine(s);
-                //if (s is InsertStatement)
-                //{
-                //    if((s as InsertStatement).InsertSpecification.InsertSource is SelectInsertSource)
-                //    {
-                //        querySpecifications.Add(((s as InsertStatement).InsertSpecification.InsertSource as SelectInsertSource).Select as QuerySpecification);
-                //    }
-                //}
-
-                //if(s is SelectStatement)
-                //    querySpecifications.Add((s as SelectStatement).QueryExpression as QuerySpecification);
             }
 
             return querySpecifications.Where(p => p != null).ToList();
@@ -272,6 +261,17 @@ namespace SSDTDevPack.Common.ScriptDom
                              children.AddRange(SearchChildren(expression.SecondQueryExpression));
                         
                     }
+                }
+
+                if ((fragment as SelectStatement).QueryExpression != null)
+                {
+                    if ((fragment as SelectStatement).QueryExpression is QuerySpecification)
+                    {
+                        var expression = (fragment as SelectStatement).QueryExpression as QuerySpecification;
+                        
+                        children.Add(expression);
+                    }
+                    
                 }
             }
 
