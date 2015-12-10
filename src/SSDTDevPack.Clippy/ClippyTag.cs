@@ -19,7 +19,9 @@ namespace SSDTDevPack.Clippy
 
         private readonly GlyphDefinition _definition;
 
-        public TagSpan<ClippyTag> ParentTag; 
+        public TagSpan<ClippyTag> ParentTag;
+
+        public ClippyTagger Tagger;
 
         public ClippyTag(GlyphDefinition definition)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,15 +57,22 @@ namespace SSDTDevPack.Clippy
                     if (_definitions.ContainsKey(text))
                         continue; //already done it....
 
-                    IList<ParseError> errors;
-                    var statements = ScriptDom.GetStatements(text, out errors);
-                    if (statements.Count > 0)
+                    try
                     {
-                        var glyphDefinitions = GetGlyphDefinitions(statements, text);
 
-                        _definitions[text] = glyphDefinitions;
+                        IList<ParseError> errors;
+                        var statements = ScriptDom.GetStatements(text, out errors);
+                        if (statements.Count > 0)
+                        {
+                            var glyphDefinitions = GetGlyphDefinitions(statements, text);
+
+                            _definitions[text] = glyphDefinitions;
+                        }
                     }
-
+                    catch (Exception e)
+                    {
+                        //hmmmmm
+                    }
                     var rePop = new string[5];
                     var clearPop = new string[100];
 

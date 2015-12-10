@@ -41,6 +41,8 @@ namespace SSDTDevPack.Clippy
                     OutputPane.WriteMessage("error unable to do replacement : {0}", e);
                 }
             }
+
+            glyph.Tag.Tagger.Reset();
         }
     }
 }

@@ -14,7 +14,7 @@ using SSDTDevPack.Common.VSPackage;
 
 namespace SSDTDevPack.Clippy
 {
-    internal class ClippyTagger : ITagger<ClippyTag>
+    public class ClippyTagger : ITagger<ClippyTag>
     {
         
         internal ClippyTagger(IClassifier aggregator)
@@ -36,6 +36,12 @@ namespace SSDTDevPack.Clippy
         private DateTime _lastCallTime;
         private IEnumerable<ITagSpan<ClippyTag>> _lastSpans;
         private int _lastCallDelay;
+
+        public void Reset()
+        {
+            _lastSpans = null;
+            _lastCallTime = DateTime.MinValue;
+        }
 
         IEnumerable<ITagSpan<ClippyTag>> ITagger<ClippyTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
@@ -90,7 +96,7 @@ namespace SSDTDevPack.Clippy
                 var tag = new ClippyTag(g);
                 
                 var tagSpan = new TagSpan<ClippyTag>(new SnapshotSpan(spans.FirstOrDefault().Snapshot, g.StatementOffset, g.StatementLength), tag);
-                
+                tag.Tagger = this;
                 tagSpan.Tag.ParentTag = tagSpan;
                 g.Tag = tagSpan.Tag;
                 items.Add(tagSpan);
