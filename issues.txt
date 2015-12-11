@@ -1,9 +1,0 @@
-trying to parse publish profile (didn't exist so crashed)
-
-if dacpac not built then does't work (target invocation error)
-
-- if you don't actually save anything, nothing will happen
-- doesn't sink with vs events as shouldn't be used very often - if you don't see what you expect, build the project and click refresh
-- if a merge statement cannot be parsed then it is skipped, if you expect it to be there then click refresh and then check the t-sql
-- identity inserts hmm not sure what to do about this.
-- can't delete
