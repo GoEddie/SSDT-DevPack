@@ -6,7 +6,7 @@ It is basically a collection of tools that make developing in for SQL Server in 
 
 For full details of what this is see: <https://the.agilesql.club/Projects/SSDT-Dev-Pack>
 
-For the latest release grab it from: <https://github.com/GoEddie/SSDT-DevPack/blob/master/release/SSDTDevPack.VSPackage.Latest.vsix>
+## For the latest release grab it from: <https://visualstudiogallery.msdn.microsoft.com/435e7238-0e64-4667-8980-5b8a05dc7906>
 
 For help open an issue or use the gitter room.
 
@@ -19,7 +19,8 @@ The first one is MergeUi which basically (as you might imagine) puts a gui aroun
  - Create tSQLt schemas (classes) including the extended property everyone always forgets
  - Take a stored procedure or tvf and create a tSQLt test for it including faking every take in the procedure and creating the parameters needed for the procedure and calling it
  - When developing a stored procedure (or tvf) configure a connection to a database with realistic statistics and have high costing queries hightlighted so it is easy to see queries that will cause issues (not a 100% catch all obviously)
-
+ - Re-write non sargable isnulls into sargable searches
+ - T-Sql Clippy (automatic re-writes, != into <>, name ordinals in order by etc)
 
 ## License
 [MIT](/License.md)
