@@ -30,7 +30,7 @@ namespace SSDTDevPack.Clippy
 
         private readonly IClassifier _aggregator;
 
-        private TagStore _store;
+        private readonly TagStore _store = new TagStore();
         private object _lock = new object();
 
         private DateTime _lastCallTime;
@@ -45,68 +45,80 @@ namespace SSDTDevPack.Clippy
 
         IEnumerable<ITagSpan<ClippyTag>> ITagger<ClippyTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
-            if (spans.FirstOrDefault().Snapshot.ContentType.TypeName != "SQL Server Tools")
+            try
+            {
+                if (spans == null || spans.FirstOrDefault() == null)
+                    return null;
+
+                if (spans.FirstOrDefault().Snapshot.ContentType.TypeName != "SQL Server Tools")
+                    return null;
+
+                var items = new List<ITagSpan<ClippyTag>>();
+
+                if (_lastCallTime.AddMilliseconds(_lastCallDelay) >= DateTime.Now)
+                    return _lastSpans;
+
+                _lastCallTime = DateTime.Now;
+
+                if (!Monitor.TryEnter(_lock))
+                {
+                    return _lastSpans;
+                }
+
+                var dte = VsServiceProvider.Get(typeof (DTE));
+
+
+                if (null == dte || !ClippySettings.Enabled)
+                {
+                    Monitor.Exit(_lock);
+                    return _lastSpans;
+                }
+
+                //if (_store == null)
+                //{
+                //    _store = new TagStore();
+                //    Monitor.Exit(_lock);
+                //    return _lastSpans;
+                //}
+
+                if (_store.Stopped)
+                {
+                    _store.Stopped = false;
+                    Monitor.Exit(_lock);
+                    return _lastSpans;
+                }
+
+
+                var text = spans.FirstOrDefault().Snapshot.GetText();
+
+                var glyphs = new OperationsBuilder(spans.FirstOrDefault().Snapshot, _store).GetStatementOptions(text);
+
+                foreach (var g in glyphs)
+                {
+                    if (g.Menu.Count == 0)
+                        continue;
+
+                    var tag = new ClippyTag(g);
+
+                    var tagSpan = new TagSpan<ClippyTag>(new SnapshotSpan(spans.FirstOrDefault().Snapshot, g.StatementOffset, g.StatementLength), tag);
+                    tag.Tagger = this;
+                    tagSpan.Tag.ParentTag = tagSpan;
+                    g.Tag = tagSpan.Tag;
+                    items.Add(tagSpan);
+
+                }
+
+                Monitor.Exit(_lock);
+                _lastSpans = items;
+                return items;
+
+            }
+            catch (Exception)
+            {
+                Monitor.Exit(_lock);
                 return null;
-            
-            var items = new List<ITagSpan<ClippyTag>>();
-
-            if (_lastCallTime.AddMilliseconds(_lastCallDelay) >= DateTime.Now)
-                return _lastSpans;
-
-            _lastCallTime = DateTime.Now;
-
-            if (!Monitor.TryEnter(_lock))
-            {
-                return _lastSpans;
             }
-            
-            var dte = VsServiceProvider.Get(typeof (DTE));
-
-
-            if (null == dte || !ClippySettings.Enabled)
-            {
-                Monitor.Exit(_lock);
-                return _lastSpans;
-            }
-
-            if (_store == null)
-            {
-                _store = new TagStore();
-                Monitor.Exit(_lock);
-                return _lastSpans;
-            }
-
-            if (_store.Stopped)
-            {
-                _store.Stopped = false;
-                Monitor.Exit(_lock);
-                return _lastSpans;
-            }
-
-
-            var text = spans.FirstOrDefault().Snapshot.GetText();
-
-            var glyphs  = new OperationsBuilder(spans.FirstOrDefault().Snapshot, _store).GetStatementOptions(text);
-         
-            foreach (var g in glyphs)
-            {
-                if (g.Menu.Count == 0)
-                    continue;
-
-                var tag = new ClippyTag(g);
-                
-                var tagSpan = new TagSpan<ClippyTag>(new SnapshotSpan(spans.FirstOrDefault().Snapshot, g.StatementOffset, g.StatementLength), tag);
-                tag.Tagger = this;
-                tagSpan.Tag.ParentTag = tagSpan;
-                g.Tag = tagSpan.Tag;
-                items.Add(tagSpan);
-                    
-            }
-
-            Monitor.Exit(_lock);
-            _lastSpans = items;
-            return items;
-    }
+        }
 
 
 #pragma warning disable 67
