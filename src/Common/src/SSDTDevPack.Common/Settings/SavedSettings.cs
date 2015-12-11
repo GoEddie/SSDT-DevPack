@@ -12,17 +12,25 @@ namespace SSDTDevPack.Common.Settings
         {
             GeneratorOptions = new SqlScriptGeneratorOptions();
             Costs = new CostThreshold {High = 1m, Medium = 0.2m};
+            Clippy = new Clippy(){CallDelayMilliSeconds = 1500, StartEnabled = false};
         }
 
         public SqlScriptGeneratorOptions GeneratorOptions { get; set; }
         public string PrimaryKeyName { get; set; }
         public CostThreshold Costs { get; set; }
+        public Clippy Clippy { get; set; }
     }
 
     public class CostThreshold
     {
         public decimal High;
         public decimal Medium;
+    }
+
+    public class Clippy
+    {
+        public bool StartEnabled;
+        public int CallDelayMilliSeconds;
     }
 
     public class SavedSettings
@@ -34,8 +42,7 @@ namespace SSDTDevPack.Common.Settings
             var serializer = new XmlSerializer(typeof (Settings));
 
             var settings = GetSettings(serializer);
-
-
+            
             if (string.IsNullOrEmpty(settings.PrimaryKeyName))
                 settings.PrimaryKeyName = primaryKeyNameTemplate;
 

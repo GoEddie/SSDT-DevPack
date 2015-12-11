@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <FileUpgradeFlags>
@@ -9,6 +9,21 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>12.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -42,6 +57,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
+    <CopyVsixExtensionLocation>
+    </CopyVsixExtensionLocation>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -147,6 +165,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckableCommand.cs" />
     <Compile Include="MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
@@ -222,6 +241,12 @@
       <Project>{289C1F12-3F83-4061-B88E-04493B015102}</Project>
       <Name>SSDTDevPack.NameConstraints</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SSDTDevPack.Clippy\SSDTDevPack.Clippy.csproj">
+      <Project>{39260B5D-306E-469B-BAE5-58C088BDD447}</Project>
+      <Name>SSDTDevPack.Clippy</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SSDTDevPack.Extraction\SSDTDevPack.Extraction.csproj">
       <Project>{9E202C62-FEAD-4622-9803-51B35423CEF4}</Project>
       <Name>SSDTDevPack.Extraction</Name>
@@ -244,14 +269,26 @@
       <Project>{570FE172-C718-4904-849D-641BB7395BD4}</Project>
       <Name>SSDTDevPack.tSQLtStubber</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SSDTDevPack.Indexes\SSDTDevPack.Indexes.csproj">
+    <ProjectReference Include="..\SSDTDevPack.Indexes\SSDTDevPack.Rewriter.csproj">
       <Project>{94813D75-0291-450F-A7BD-D3161FF4A2CB}</Project>
-      <Name>SSDTDevPack.Indexes</Name>
+      <Name>SSDTDevPack.Rewriter</Name>
     </ProjectReference>
     <ProjectReference Include="..\SSDTDevPack.Merge\SSDTDevPack.Merge.csproj">
       <Project>{EF0F4A6D-68A4-4745-A3D5-2118A1608721}</Project>
       <Name>SSDTDevPack.Merge</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

@@ -6,11 +6,14 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using SSDTDevPack.Clippy;
+using SSDTDevPack.Common.ScriptDom;
+using SSDTDevPack.Common.Settings;
 using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
 using SSDTDevPack.Formatting;
-using SSDTDevPack.Indexes;
+using SSDTDevPack.Rewriter;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
 using SSDTDevPack.QueryCosts;
@@ -24,6 +27,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof (MergeToolWindow))]
     [Guid(GuidList.guidSSDTDevPack_VSPackagePkgString)]
+    [ProvideAutoLoad("ADFC4E64-0397-11D1-9F4E-00A0C911004F")]
     public sealed class SSDTDevPack_VSPackagePackage : Package, IVsServiceProvider
     {
         public SSDTDevPack_VSPackagePackage()
@@ -54,12 +58,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             var mcs = GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
-                //var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                //    (int) PkgCmdIDList.SSDTDevPackQuickDeploy);
-
-                //var menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
-                //mcs.AddCommand(menuItem);
-
+            
                 var toolwndCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
                     (int) PkgCmdIDList.SSDTDevPackMergeUi);
                 var menuToolWin = new MenuCommand(ShowMergeToolWindow, toolwndCommandID);
@@ -92,9 +91,44 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
-//                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackRightCaseIdentifiers, RightCase);
+
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
+                AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);
+
             }
+        }
+
+
+        private void EnableClippy(object sender, EventArgs e)
+        {
+            ClippySettings.Enabled = !ClippySettings.Enabled;
+        }
+
+        private void RewriteNonSargableIsNull(object sender, EventArgs e)
+        {
+            try
+            {
+                var oldDoc = GetCurrentDocumentText();
+                var newDoc = oldDoc;
+
+                var rewriter = new NonSargableRewrites(oldDoc);
+                var queries = ScriptDom.GetQuerySpecifications(oldDoc);
+                foreach (var rep in rewriter.GetReplacements(queries))
+                {
+                    newDoc = newDoc.Replace(rep.Original, rep.Replacement);
+                    OutputPane.WriteMessage("Non-Sargable IsNull re-written from \r\n\"{0}\" \r\nto\r\n\"{1}\"\r\n", rep.Original, rep.Replacement);
+                }
+
+                if(oldDoc != newDoc)
+                    SetCurrentDocumentText(newDoc);
+
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Error re-writing non sargable isnulls {0}", ex.Message);
+            }
+
         }
 
         private void FindDuplicateIndexes(object sender, EventArgs e)
@@ -106,7 +140,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
             catch (Exception ex)
             {
-                OutputPane.WriteMessage("Error finding duplicat eindexes: {0}", ex.Message);
+                OutputPane.WriteMessage("Error finding duplicatevindexes: {0}", ex.Message);
             }
         }
 
@@ -299,11 +333,30 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             CommandID menuCommandID;
             MenuCommand menuItem;
-            menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                cmdId);
+            menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet, cmdId);
             menuItem = new MenuCommand(eventHandler, menuCommandID);
             mcs.AddCommand(menuItem);
+
+            var a = new OleMenuCommand(eventHandler, menuCommandID);
+            a.Checked = false;
         }
+        private void AddCheckableMenuItem(OleMenuCommandService mcs, int cmdId, EventHandler eventHandler)
+        {
+            var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet, cmdId);
+            
+            ClippySettings.MenuItem = new OleMenuCommand(eventHandler, menuCommandID);
+
+            ClippySettings.MenuItem.Checked = false;
+            ClippySettings.MenuItem.BeforeQueryStatus += a_BeforeQueryStatus;
+            mcs.AddCommand(ClippySettings.MenuItem);
+        }
+
+        void a_BeforeQueryStatus(object sender, EventArgs e)
+        {
+            ClippySettings.MenuItem.Checked = ClippySettings.Enabled;
+        }
+
+
 
         private void ToggleQueryCosts(object sender, EventArgs e)
         {
@@ -334,6 +387,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 DocumentScriptCosters.SetDte(dte);
 
                 var coster = DocumentScriptCosters.GetInstance().GetCoster();
+                if (coster == null)
+                    return;
 
                 if (coster.ShowCosts)
                 {
@@ -341,8 +396,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 }
                 else
                 {
-                    coster.AddCosts(originalText, dte.ActiveDocument);
                     coster.ShowCosts = true;
+                    coster.AddCosts(originalText, dte.ActiveDocument);
                 }
             }
             catch (Exception ee)

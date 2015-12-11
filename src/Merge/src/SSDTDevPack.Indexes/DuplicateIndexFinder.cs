@@ -7,7 +7,7 @@ using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.UserMessages;
 
-namespace SSDTDevPack.Indexes
+namespace SSDTDevPack.Rewriter
 {
     public class DuplicateIndexFinder
     {
@@ -30,8 +30,7 @@ namespace SSDTDevPack.Indexes
                     indexes[key] = new List<CodeStatement<CreateIndexStatement>> {statement};
                 }
             }
-
-
+            
             var dups = indexes.Where(p => p.Value.Count > 1);
             foreach (var d in dups)
             {

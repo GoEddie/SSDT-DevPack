@@ -151,6 +151,30 @@ namespace SSDTDevPack.Common.Dac
         }
     }
 
+    public static class MultiPartIdentifierExtensions
+    {
+        public static string ToNameString(this MultiPartIdentifier name)
+        {
+            var builder = new StringBuilder();
+            var first = true;
+
+            foreach (var part in name.Identifiers.Reverse())
+            {
+                builder.Append(part.Value.UnQuote());
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    builder.Append(".");
+                }
+            }
+            return builder.ToString();
+        
+        }
+    }
+
     public static class SchemaObjectNameExtensions
     {
         public static ObjectIdentifier ToObjectIdentifier(this SchemaObjectName source)

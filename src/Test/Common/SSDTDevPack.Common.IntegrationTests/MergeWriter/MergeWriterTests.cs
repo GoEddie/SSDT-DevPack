@@ -15,6 +15,7 @@ namespace SSDTDevPack.Common.IntegrationTests.MergeWriter
     public class MergeWriterTests
     {
         [Test]
+        [Ignore]
         public void test()
         {
             var tableRepository = new TableRepository(Path.Combine(Directories.GetSampleSolution(), @"NestedProjects\Nested\bin\Debug\Nested.dacpac"));
