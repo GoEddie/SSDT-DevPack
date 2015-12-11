@@ -40,14 +40,33 @@ namespace SSDTDevPack.Clippy
         //}
 
         Grid _grid;
+        public void ShowMenu()
+        {           
+            var definition = GetDefinition();
 
+            var window = new MainWindow(definition.Menu);
+            window.WindowStyle = WindowStyle.None;
+
+            var location = GetMousePosition();
+            window.Left = location.X;
+            window.Top = location.Y;
+
+            window.Height = 150;
+            window.Width = 300;
+            window.ResizeMode = ResizeMode.NoResize;
+
+            window.ShowInTaskbar = false;
+            window.ShowActivated = true;
+
+            window.Show();
+        }
         public UIElement GetEllipses()
         {
             var ellipse = new Ellipse();
 
             _grid = new Grid();
-            _grid.ContextMenuOpening += ellipse_ContextMenuOpening;
-
+            //_grid.ContextMenuOpening += ellipse_ContextMenuOpening;
+            
             switch (_definition.Type)
             {
                 case GlyphDefinitonType.Normal:
@@ -81,7 +100,7 @@ namespace SSDTDevPack.Clippy
             return _grid;
         }
 
-
+       
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetCursorPos(ref Win32Point pt);
@@ -129,6 +148,8 @@ namespace SSDTDevPack.Clippy
 
             window.Show();
         }
+
+
 
         public void ClearEllipses()
         {
