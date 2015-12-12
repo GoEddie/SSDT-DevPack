@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChunkDeletesRewriter.cs" />
     <Compile Include="DuplicateIndexFinder.cs" />
     <Compile Include="NonSargableRewrites.cs" />
     <Compile Include="OrderByOrdinalRewrites.cs" />

@@ -4,21 +4,23 @@ using SSDTDevPack.Rewriter;
 
 namespace SSDTDevPack.Clippy.Operations
 {
-    class OrdinalOrderByReWriteOperation : ReWriterOperation
+    internal class DeleteChunkerOperation : ReWriterOperation
     {
         public override GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<QuerySpecification> queries)
         {
-            var rewriter = new OrderByOrdinalRewrites();
-            var replacements = rewriter.GetReplacements(queries);
+            return definition;
+        }
 
-            if (replacements == null)
-                return definition;
+        public override GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<DeleteSpecification> queries)
+        {
+            var nonSargableRewriter = new ChunkDeletesRewriter(fragment);
+            var replacements = nonSargableRewriter.GetReplacements(queries);
 
             if (replacements.Count > 0)
             {
                 definition.Menu.Add(new MenuDefinition()
                 {
-                    Caption = "Replace Ordinals in Order By",
+                    Caption = "Run Delete Statement in Batches",
                     Action = () => { },
                     Type = MenuItemType.Header
                     ,
@@ -51,7 +53,7 @@ namespace SSDTDevPack.Clippy.Operations
                     var menu = new MenuDefinition();
                     menu.Action = () => PerformAction(menu.Operation, menu.Glyph);
                     menu.Glyph = definition;
-                    menu.Caption = string.Format("\t\"{0}\" into \"{1}\"", replacement.Original, replacement.Replacement);
+                    menu.Caption = string.Format("\t\"{0}\" into Chunked Delete", replacement.Original);
                     menu.Type = MenuItemType.MenuItem;
                     menu.Operation = new ClippyReplacementOperation(replacement);
                     definition.Menu.Add(menu);
@@ -59,12 +61,9 @@ namespace SSDTDevPack.Clippy.Operations
 
                 definition.GenerateKey();
             }
-            return definition;
-        }
 
-        public override GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<DeleteSpecification> queries)
-        {
             return definition;
+
         }
     }
 }

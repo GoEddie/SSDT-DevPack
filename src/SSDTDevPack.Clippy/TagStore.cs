@@ -27,7 +27,7 @@ namespace SSDTDevPack.Clippy
             _operations.Add(new InequalityReWriteOperation());
             _operations.Add(new IsNullReWriteOperation());
             _operations.Add(new OrdinalOrderByReWriteOperation());
-
+            _operations.Add(new DeleteChunkerOperation());
             Start();
         }
 
@@ -110,12 +110,14 @@ namespace SSDTDevPack.Clippy
 
                 var fragment = script.Substring(statement.StartOffset, statement.FragmentLength);
                 var queriesInStatement = ScriptDom.GetQuerySpecifications(fragment);
-
+                var deletes = ScriptDom.GetDeleteStatements(fragment);
+                
                 foreach (var operation in _operations)
                 {
                     definition = operation.GetDefintions(fragment, statement, definition, queriesInStatement);
+                    definition = operation.GetDefintions(fragment, statement, definition, deletes);
                 }
-
+                
 
                 definitions.Add(definition);
             }

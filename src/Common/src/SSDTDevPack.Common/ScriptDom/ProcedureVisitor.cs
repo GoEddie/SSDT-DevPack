@@ -277,5 +277,23 @@ namespace SSDTDevPack.Common.ScriptDom
 
             return children;
         }
+
+        public static List<DeleteSpecification> GetDeleteStatements(string script)
+        {
+            var deletes = new List<DeleteSpecification>();
+
+            IList<ParseError> errors;
+            var fragment = GetStatements(script, out errors);
+            foreach (var statement in fragment)
+            {
+                if (statement is DeleteStatement)
+                {
+                    var delete = statement as DeleteStatement;
+                    deletes.Add(delete.DeleteSpecification);
+                }
+            }
+
+            return deletes;
+        }
     }
 }
