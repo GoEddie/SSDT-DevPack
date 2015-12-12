@@ -109,6 +109,7 @@
       <DependentUpon>MenuItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Operations\ClippyOperationBuilder.cs" />
+    <Compile Include="Operations\DeleteChunkerOperation.cs" />
     <Compile Include="Operations\InequalityReWriteOperation.cs" />
     <Compile Include="Operations\IsNullReWriteOperation.cs" />
     <Compile Include="Operations\OrdinalOrderByReWriteOperation.cs" />

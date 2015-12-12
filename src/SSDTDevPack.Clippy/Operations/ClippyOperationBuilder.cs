@@ -6,7 +6,7 @@ namespace SSDTDevPack.Clippy.Operations
     public abstract class ClippyOperationBuilder
     {
         public abstract GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<QuerySpecification> queries);
-
+        public abstract GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<DeleteSpecification> queries);
         protected string GetCaptionForAll(TSqlStatement statement)
         {
             if (statement is SelectStatement)

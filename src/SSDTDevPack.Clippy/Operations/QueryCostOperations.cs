@@ -40,5 +40,10 @@ namespace SSDTDevPack.Clippy.Operations
 
             return definition;
         }
+
+        public override GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<DeleteSpecification> queries)
+        {
+            return definition;
+        }
     }
 }
