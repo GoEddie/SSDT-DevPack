@@ -107,6 +107,10 @@ namespace SSDTDevPack.Clippy.Operations
                             rebuildCache = true;
                         }
                     }
+                    else
+                    {
+                        rebuildCache = true;
+                    }
                     
                 }
                 catch (Exception)
