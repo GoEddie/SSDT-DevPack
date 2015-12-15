@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Settings;
@@ -57,6 +58,20 @@ namespace SSDTDevPack.Common.ScriptDom
         public override void Visit(TSqlStatement node)
         {
             Statements.Add(node);
+        }
+    }
+
+    public class EnumeratorVisitor : TSqlFragmentVisitor
+    {
+        public List<TSqlStatement> Nodes = new List<TSqlStatement>();
+
+        public override void Visit(TSqlStatement node)
+        {
+            base.Visit(node);
+
+            if (!Nodes.Any(p => p.StartOffset <= node.StartOffset && p.StartOffset + p.FragmentLength >= node.StartOffset + node.FragmentLength))
+                Nodes.Add(node);
+
         }
     }
 
@@ -294,6 +309,82 @@ namespace SSDTDevPack.Common.ScriptDom
             }
 
             return deletes;
+        }
+
+        private static Assembly ScriptDomCode = Assembly.Load("Microsoft.SqlServer.TransactSql.ScriptDom");
+        public static List<TableReference> GetTableList(TSqlStatement script)
+        {
+            var tables = new List<TableReference>();
+            
+            var parser = new TSql130Parser(false);
+            
+            var visitor = new EnumeratorVisitor();
+            script.Accept(visitor);
+
+            foreach (var statement in visitor.Nodes)
+            {
+                tables.AddRange(FindTableReferences(statement));
+            }
+
+            return tables;
+        }
+
+        private static List<TableReference> FindTableReferences(TSqlFragment statement)
+        {
+            var nodeType = statement.ToString().Split(' ')[0];
+            var t = ScriptDomCode.GetType(nodeType, false, true);
+
+            var tables = new List<TableReference>();
+
+            foreach (var p in t.GetProperties())
+            {
+                var value = TryGetValue(p, statement);
+                if(value == null)
+                    continue;
+                
+                if (value is List<TableReference>)
+                {
+                    tables.AddRange(value as List<TableReference>);
+                    continue;
+                }
+
+                if (value is TableReference)
+                {
+                    tables.Add(value as TableReference);
+                    continue;
+                }
+                
+                //don't move this before is List<TableReference> as they are also TSqlFragments which causes hilarity
+                if (value is IEnumerable<TSqlFragment>)
+                {
+                    foreach (var fragment in value as IEnumerable<TSqlFragment>)
+                    {
+                        tables.AddRange(FindTableReferences(fragment));
+                    }
+
+                    continue;
+                }
+
+                if (value is TSqlFragment)
+                {
+                    tables.AddRange(FindTableReferences(value as TSqlFragment));
+                    continue;
+                }
+            }
+
+            return tables;
+        }
+
+        private static object TryGetValue(PropertyInfo propertyInfo, object node)
+        {
+            try
+            {
+                return propertyInfo.GetValue(node);
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
     }
 }

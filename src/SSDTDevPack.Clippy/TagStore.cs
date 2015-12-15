@@ -28,6 +28,7 @@ namespace SSDTDevPack.Clippy
             _operations.Add(new IsNullReWriteOperation());
             _operations.Add(new OrdinalOrderByReWriteOperation());
             _operations.Add(new DeleteChunkerOperation());
+            _operations.Add(new TableNameCorrectCaser());
             Start();
         }
 
@@ -116,6 +117,9 @@ namespace SSDTDevPack.Clippy
                 {
                     definition = operation.GetDefintions(fragment, statement, definition, queriesInStatement);
                     definition = operation.GetDefintions(fragment, statement, definition, deletes);
+
+                    definition = operation.GetDefinitions(fragment, statement, definition, new List<TSqlStatement>() {statement});
+                    
                 }
                 
 

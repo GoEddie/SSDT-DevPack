@@ -61,6 +61,7 @@
     <Compile Include="OrderByOrdinalRewrites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Replacements.cs" />
+    <Compile Include="TableReferenceRewriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

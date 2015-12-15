@@ -55,19 +55,13 @@ namespace SSDTDevPack.Common.Dac
             var builder = new StringBuilder();
             var first = true;
 
-            foreach (var part in name.Parts.Reverse())
+            foreach (var part in name.Parts) //.Reverse())
             {
-                builder.Append(part.UnQuote());
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    builder.Append(".");
-                }
+                builder.AppendFormat("{0}.", part.UnQuote());
             }
-            return builder.ToString();
+
+            var fullName = builder.ToString();
+            return fullName.Substring(0, fullName.Length - 1);
         }
         public static string GetSchemaObjectName(this ObjectIdentifier name)
         {
@@ -211,6 +205,60 @@ namespace SSDTDevPack.Common.Dac
             }
 
             return source.BaseIdentifier.Value.UnQuote();
+        }
+
+        public static bool EqualsObjectIdentifierInsensitive(this ObjectIdentifier destination, SchemaObjectName source)
+        {
+            if (destination.Parts.Count == 1)
+            {
+                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
+            }
+
+            if (destination.Parts.Count == 2)
+            {
+                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
+            }
+
+            if (destination.Parts.Count == 3)
+            {
+                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.DatabaseIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant()
+                       && destination.Parts[2].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
+            }
+
+            if (destination.Parts.Count == 4)
+            {
+                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.ServerIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.DatabaseIdentifier.Value.UnQuote().ToLowerInvariant()
+                       && destination.Parts[2].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[3].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
+            }
+
+            return false;
+        }
+
+        public static bool EqualsObjectIdentifier(this ObjectIdentifier destination, SchemaObjectName source)
+        {
+            if (destination.Parts.Count == 1)
+            {
+                return destination.Parts[0].UnQuote() == source.BaseIdentifier.Value.UnQuote();
+            }
+
+            if (destination.Parts.Count == 2)
+            {
+                return destination.Parts[0].UnQuote() == source.SchemaIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.BaseIdentifier.Value.UnQuote();
+            }
+
+            if (destination.Parts.Count == 3)
+            {
+                return destination.Parts[0].UnQuote() == source.DatabaseIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.SchemaIdentifier.Value.UnQuote()
+                       && destination.Parts[2].UnQuote() == source.BaseIdentifier.Value.UnQuote();
+            }
+
+            if (destination.Parts.Count == 4)
+            {
+                return destination.Parts[0].UnQuote() == source.ServerIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.DatabaseIdentifier.Value.UnQuote()
+                       && destination.Parts[2].UnQuote() == source.SchemaIdentifier.Value.UnQuote() && destination.Parts[3].UnQuote() == source.BaseIdentifier.Value.UnQuote();
+            }
+
+            return false;
         }
     }
 

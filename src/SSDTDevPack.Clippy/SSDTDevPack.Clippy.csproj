@@ -115,6 +115,7 @@
     <Compile Include="Operations\OrdinalOrderByReWriteOperation.cs" />
     <Compile Include="Operations\QueryCostOperations.cs" />
     <Compile Include="Operations\ReWriterOperation.cs" />
+    <Compile Include="Operations\TableNameCorrectCaser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OperationsBuilder.cs" />
     <Compile Include="TagStore.cs" />
