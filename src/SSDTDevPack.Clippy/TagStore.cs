@@ -12,6 +12,8 @@ namespace SSDTDevPack.Clippy
 {
     public class TagStore
     {
+        public static TagStore This = new TagStore();
+
         private readonly ConcurrentDictionary<string, List<GlyphDefinition>> _definitions = new ConcurrentDictionary<string, List<GlyphDefinition>>();
         private readonly AutoResetEvent _event = new AutoResetEvent(false);
         private readonly List<ClippyOperationBuilder> _operations = new List<ClippyOperationBuilder>();
@@ -19,7 +21,7 @@ namespace SSDTDevPack.Clippy
         private Thread _processor;
         private bool _stop;
 
-        public TagStore()
+        private TagStore()
         {
             ClippySettings.ClippyDisabled = Stop;
 
@@ -115,11 +117,17 @@ namespace SSDTDevPack.Clippy
                 
                 foreach (var operation in _operations)
                 {
-                    definition = operation.GetDefintions(fragment, statement, definition, queriesInStatement);
-                    definition = operation.GetDefintions(fragment, statement, definition, deletes);
+                    try
+                    {
+                        definition = operation.GetDefintions(fragment, statement, definition, queriesInStatement);
+                        definition = operation.GetDefintions(fragment, statement, definition, deletes);
 
-                    definition = operation.GetDefinitions(fragment, statement, definition, new List<TSqlStatement>() {statement});
-                    
+                        definition = operation.GetDefinitions(fragment, statement, definition, new List<TSqlStatement>() {statement});
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
                 }
                 
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
@@ -81,22 +82,57 @@ namespace SSDTDevPack.Clippy.Operations
             return definition;
         }
 
+
+        private static List<TableDescriptor> _tableCache;
+        private static Dictionary<string, DateTime> _buildTimes = new Dictionary<string, DateTime>(); 
         private static List<TableDescriptor> GetDacTables()
         {
-            var dacTables = new List<TableDescriptor>();
+            bool rebuildCache = false;
 
             foreach (var project in new ProjectEnumerator().Get(ProjectType.SSDT))
             {
                 try
                 {
-                    dacTables.AddRange(new TableRepository(DacpacPath.Get(project)).Get());
+                    var path = DacpacPath.Get(project);
+
+
+
+                    if (_buildTimes.ContainsKey(path))
+                    {
+                        var lastTime = _buildTimes[path];
+                        var lastWriteTime = File.GetLastWriteTimeUtc(path);
+
+                        if (lastTime > lastWriteTime)
+                        {
+                            rebuildCache = true;
+                        }
+                    }
+                    
                 }
                 catch (Exception)
                 {
                 }
             }
 
-            return dacTables;
+            if (!rebuildCache)
+                return _tableCache;
+
+            foreach (var project in new ProjectEnumerator().Get(ProjectType.SSDT))
+            {
+                try
+                {
+                    var path = DacpacPath.Get(project);
+                    var lastWriteTime = File.GetLastWriteTimeUtc(path);
+                    _tableCache.Clear();
+                    _tableCache.AddRange(new TableRepository(path).Get());
+                    _buildTimes[path] = lastWriteTime;
+                }
+                catch (Exception)
+                {
+                }
+            }
+            
+            return _tableCache;
         }
     }
 }
