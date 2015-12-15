@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 using NUnit.Framework;
 using SSDTDevPack.Rewriter;
 
@@ -54,12 +56,37 @@ namespace SSDTDevPack.Common.UnitTests
         public void DoesNotRewriteColumnReferences()
         {
             var script = @" select abc, def, abc from dbo.tableaaa
-	        order by abc, def, /*jkjkjj*/
+	        order by abc, def /*jkjkjj*/
 	   ";
             var rewriter = new OrderByOrdinalRewrites();
 
             var replacements = rewriter.GetReplacements(ScriptDom.ScriptDom.GetQuerySpecifications(script));
             Assert.AreEqual(0, replacements.Count);
         }
+    }
+
+    [TestFixture]
+    public class TableReferenceRewriterTests
+    {
+        [Test]
+        public void blah()
+        {
+
+            var script = @"with c as (select 1 as a from sys.sysprocesses assd) select abc, def, abc from dbo.tableaaa a
+	        where 1 = (select count(*) from tableaaa)
+                    union all select 1, 2, 3 from c
+
+	   ";
+
+            IList<ParseError> errors;
+            //var rewriter = new TableReferenceRewriter(script);
+
+            //var statements = ScriptDom.ScriptDom.GetStatements(script, out errors);
+
+            //var replacements = rewriter.GetReplacements(statements.First());
+
+        }
+
+
     }
 }

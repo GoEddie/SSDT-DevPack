@@ -30,7 +30,7 @@ namespace SSDTDevPack.Clippy
 
         private readonly IClassifier _aggregator;
 
-        private readonly TagStore _store = new TagStore();
+        private readonly TagStore _store = TagStore.This;
         private object _lock = new object();
 
         private DateTime _lastCallTime;

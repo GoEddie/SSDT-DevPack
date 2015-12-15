@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.ScriptDom;

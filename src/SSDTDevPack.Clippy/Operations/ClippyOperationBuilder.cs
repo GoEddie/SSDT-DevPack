@@ -7,6 +7,9 @@ namespace SSDTDevPack.Clippy.Operations
     {
         public abstract GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<QuerySpecification> queries);
         public abstract GlyphDefinition GetDefintions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<DeleteSpecification> queries);
+
+        public abstract GlyphDefinition GetDefinitions(string fragment, TSqlStatement statement, GlyphDefinition definition, List<TSqlStatement> queries);
+        
         protected string GetCaptionForAll(TSqlStatement statement)
         {
             if (statement is SelectStatement)
