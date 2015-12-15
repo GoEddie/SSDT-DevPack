@@ -19,6 +19,8 @@ namespace SSDTDevPack.Common.Enumerators
         public int Length;
         public int Line;
         public T Statement;
+
+        public string Script;
     }
 
     public class StatementEnumerator
@@ -78,6 +80,78 @@ namespace SSDTDevPack.Common.Enumerators
                         codeStatament.StartLocation = index.StartOffset;
                         codeStatament.Length = index.FragmentLength;
                         codeStatament.Line = index.StartLine;
+                        statements.Add(codeStatament);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Log.WriteInfo("Error getting indexes from script in: {0}, error: {1}", item.Name, ex.Message);
+                }
+            }
+
+            return statements;
+        }
+
+
+
+        public List<CodeStatement<TSqlStatement>> GetStatements(Project project = null)
+        {
+            if (project != null)
+            {
+                return GetCodeTSqlStatements(project);
+            }
+
+            var statements = new List<CodeStatement<TSqlStatement>>();
+            var enumerator = new ProjectEnumerator();
+
+            foreach (var p in enumerator.Get(ProjectType.SSDT))
+            {
+                statements.AddRange(GetCodeTSqlStatements(p));
+            }
+
+            return statements;
+        }
+
+        private List<CodeStatement<TSqlStatement>> GetCodeTSqlStatements(Project p)
+        {
+            var enumerator = new ProjectItemEnumerator();
+            var items = enumerator.Get(p);
+
+            var statements = new List<CodeStatement<TSqlStatement>>();
+
+            foreach (var item in items)
+            {
+                if (item.Kind.ToUpper() != "{6BB5F8EE-4483-11D3-8BCF-00C04F8EC28C}")
+                {
+                    continue;
+                }
+
+                var filename = item.Properties.Item("FullPath").Value;
+
+                var script = item.Document.GetText();
+                if (String.IsNullOrEmpty(script))
+                {
+                    script = File.ReadAllText(filename);
+                }
+
+
+
+                if (String.IsNullOrEmpty(script))
+                    continue;
+
+                try
+                {
+                    IList<ParseError> errors;
+                    var indexes = ScriptDom.ScriptDom.GetStatements(script, out errors);
+                    foreach (var index in indexes)
+                    {
+                        var codeStatament = new CodeStatement<TSqlStatement>();
+                        codeStatament.Statement = index;
+                        codeStatament.FileName = filename;
+                        codeStatament.StartLocation = index.StartOffset;
+                        codeStatament.Length = index.FragmentLength;
+                        codeStatament.Line = index.StartLine;
+                        
                         statements.Add(codeStatament);
                     }
                 }

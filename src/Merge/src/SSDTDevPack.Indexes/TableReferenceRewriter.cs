@@ -49,7 +49,10 @@ namespace SSDTDevPack.Rewriter
                     replacement.OriginalOffset = table.StartOffset;
                     replacement.OriginalFragment = table;
                     replacement.OriginalLength = table.FragmentLength;
-                    replacement.Replacement = addedDbo ? dacTable.Name.GetName() : dacTable.Name.GetNameFullUnQuoted();
+
+                    replacement.Replacement = addedDbo ? dacTable.Name.GetName().CorrectQuote(tableName.BaseIdentifier.QuoteType) : 
+                           string.Format("{0}.{1}", dacTable.Name.GetSchema().CorrectQuote(tableName.SchemaIdentifier.QuoteType), dacTable.Name.GetName().CorrectQuote(tableName.BaseIdentifier.QuoteType));
+                    
                     replacements.Add(replacement);
                 }
 

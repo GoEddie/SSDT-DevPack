@@ -95,7 +95,20 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
                 AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackCorrectCase, CorrectCaseTableNames);
+            }
+        }
 
+        private void CorrectCaseTableNames(object sender, EventArgs e)
+        {
+            try
+            {
+                var finder = new CorrectCaseTableFinder();
+                finder.CorrectCaseAllTableNames();
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("Error correcting table name case: {0}", ex.Message);
             }
         }
 
@@ -140,7 +153,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
             catch (Exception ex)
             {
-                OutputPane.WriteMessage("Error finding duplicatevindexes: {0}", ex.Message);
+                OutputPane.WriteMessage("Error finding duplicate indexes: {0}", ex.Message);
             }
         }
 

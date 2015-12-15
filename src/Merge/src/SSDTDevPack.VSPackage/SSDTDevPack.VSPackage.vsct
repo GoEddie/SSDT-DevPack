@@ -48,6 +48,8 @@
 
       <IDSymbol name="SSDTTSqlClippy" value="0x113" />
 
+      <IDSymbol name="SSDTDevPackCorrectCase" value="0x114" />      
+
     </GuidSymbol>
 
 
@@ -209,6 +211,13 @@
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="CasingGroup" />
         <Strings>
           <ButtonText>Upper Case Keywords</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackCorrectCase" priority="0x0101" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="CasingGroup" />
+        <Strings>
+          <ButtonText>Correct Case Table Names</ButtonText>
         </Strings>
       </Button>
 

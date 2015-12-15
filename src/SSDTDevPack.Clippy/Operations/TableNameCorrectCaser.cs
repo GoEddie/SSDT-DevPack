@@ -48,8 +48,7 @@ namespace SSDTDevPack.Clippy.Operations
                     var replacement1 = replacement;
                     
                     replacement1.Original = fragment.Substring(replacement1.OriginalOffset-statement.StartOffset, replacement1.OriginalLength);
-                    replacement1.Replacement = replacement1.Original.StartsWith("[") ? replacement1.Replacement.Quote() : replacement1.Replacement;
-                    
+                  
                     offsettedReplacments.Add(replacement1);
                 }
 

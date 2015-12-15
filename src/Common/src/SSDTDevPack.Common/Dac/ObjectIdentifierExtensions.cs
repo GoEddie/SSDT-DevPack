@@ -113,6 +113,36 @@ namespace SSDTDevPack.Common.Dac
             };
         }
 
+        public static bool IsQuoted(this string source)
+        {
+            return source.StartsWith("[");
+        }
+
+        public static string CorrectQuote(this string source, QuoteType type)
+        {
+            switch(type)
+            {
+                case QuoteType.NotQuoted:
+                    return source.UnQuote();
+                case QuoteType.SquareBracket:
+                    return source.Quote();
+                case QuoteType.DoubleQuote:
+                    return source.SpeechQuote();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+        public static string SpeechQuote(this string source)
+        {
+            if (!source.StartsWith("\""))
+                source = "\"" + source;
+
+            if (!source.EndsWith("\""))
+                source = source + "\"";
+
+            return source;
+        }
+
         public static string Quote(this string source)
         {
             if (!source.StartsWith("["))
@@ -165,7 +195,6 @@ namespace SSDTDevPack.Common.Dac
                 }
             }
             return builder.ToString();
-        
         }
     }
 
@@ -183,12 +212,9 @@ namespace SSDTDevPack.Common.Dac
 
         public static string ToQuotedString(this SchemaObjectName source)
         {
-
             if (source.SchemaIdentifier != null)
             {
-                return string.Format("{0}.{1}", source.SchemaIdentifier.Value.Quote(),
-                    source.BaseIdentifier.Value.Quote());
-
+                return string.Format("{0}.{1}", source.SchemaIdentifier.Value.Quote(), source.BaseIdentifier.Value.Quote());
             }
 
             return source.BaseIdentifier.Value.Quote();
@@ -196,12 +222,9 @@ namespace SSDTDevPack.Common.Dac
 
         public static string ToUnquotedString(this SchemaObjectName source)
         {
-
             if (source.SchemaIdentifier != null)
             {
-                return string.Format("{0}.{1}", source.SchemaIdentifier.Value.UnQuote(),
-                    source.BaseIdentifier.Value.UnQuote());
-
+                return string.Format("{0}.{1}", source.SchemaIdentifier.Value.UnQuote(), source.BaseIdentifier.Value.UnQuote());
             }
 
             return source.BaseIdentifier.Value.UnQuote();
@@ -221,14 +244,12 @@ namespace SSDTDevPack.Common.Dac
 
             if (destination.Parts.Count == 3)
             {
-                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.DatabaseIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant()
-                       && destination.Parts[2].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
+                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.DatabaseIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[2].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
             }
 
             if (destination.Parts.Count == 4)
             {
-                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.ServerIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.DatabaseIdentifier.Value.UnQuote().ToLowerInvariant()
-                       && destination.Parts[2].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[3].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
+                return destination.Parts[0].UnQuote().ToLowerInvariant() == source.ServerIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[1].UnQuote().ToLowerInvariant() == source.DatabaseIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[2].UnQuote().ToLowerInvariant() == source.SchemaIdentifier.Value.UnQuote().ToLowerInvariant() && destination.Parts[3].UnQuote().ToLowerInvariant() == source.BaseIdentifier.Value.UnQuote().ToLowerInvariant();
             }
 
             return false;
@@ -248,14 +269,12 @@ namespace SSDTDevPack.Common.Dac
 
             if (destination.Parts.Count == 3)
             {
-                return destination.Parts[0].UnQuote() == source.DatabaseIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.SchemaIdentifier.Value.UnQuote()
-                       && destination.Parts[2].UnQuote() == source.BaseIdentifier.Value.UnQuote();
+                return destination.Parts[0].UnQuote() == source.DatabaseIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.SchemaIdentifier.Value.UnQuote() && destination.Parts[2].UnQuote() == source.BaseIdentifier.Value.UnQuote();
             }
 
             if (destination.Parts.Count == 4)
             {
-                return destination.Parts[0].UnQuote() == source.ServerIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.DatabaseIdentifier.Value.UnQuote()
-                       && destination.Parts[2].UnQuote() == source.SchemaIdentifier.Value.UnQuote() && destination.Parts[3].UnQuote() == source.BaseIdentifier.Value.UnQuote();
+                return destination.Parts[0].UnQuote() == source.ServerIdentifier.Value.UnQuote() && destination.Parts[1].UnQuote() == source.DatabaseIdentifier.Value.UnQuote() && destination.Parts[2].UnQuote() == source.SchemaIdentifier.Value.UnQuote() && destination.Parts[3].UnQuote() == source.BaseIdentifier.Value.UnQuote();
             }
 
             return false;
@@ -269,12 +288,10 @@ namespace SSDTDevPack.Common.Dac
             switch (id.Parts.Count)
             {
                 case 4:
-                    return id.Parts[0] == son.ServerIdentifier.Value && id.Parts[1] == son.DatabaseIdentifier.Value
-                           && id.Parts[2] == son.SchemaIdentifier.Value && id.Parts[3] == son.BaseIdentifier.Value;
+                    return id.Parts[0] == son.ServerIdentifier.Value && id.Parts[1] == son.DatabaseIdentifier.Value && id.Parts[2] == son.SchemaIdentifier.Value && id.Parts[3] == son.BaseIdentifier.Value;
 
                 case 3:
-                    return id.Parts[0] == son.DatabaseIdentifier.Value
-                           && id.Parts[1] == son.SchemaIdentifier.Value && id.Parts[2] == son.BaseIdentifier.Value;
+                    return id.Parts[0] == son.DatabaseIdentifier.Value && id.Parts[1] == son.SchemaIdentifier.Value && id.Parts[2] == son.BaseIdentifier.Value;
 
                 case 2:
                     return id.Parts[0] == son.SchemaIdentifier.Value && id.Parts[1] == son.BaseIdentifier.Value;
@@ -301,7 +318,6 @@ namespace SSDTDevPack.Common.Dac
             name.Identifiers.Add(src.ToIdentifier());
             return name;
         }
-
     }
 
     public class NameConversionException : Exception
