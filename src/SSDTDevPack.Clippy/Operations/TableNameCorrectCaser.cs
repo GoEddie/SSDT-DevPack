@@ -83,8 +83,8 @@ namespace SSDTDevPack.Clippy.Operations
         }
 
 
-        private static List<TableDescriptor> _tableCache;
-        private static Dictionary<string, DateTime> _buildTimes = new Dictionary<string, DateTime>(); 
+        private static readonly List<TableDescriptor> _tableCache = new List<TableDescriptor>();
+        private static readonly Dictionary<string, DateTime> _buildTimes = new Dictionary<string, DateTime>(); 
         private static List<TableDescriptor> GetDacTables()
         {
             bool rebuildCache = false;
@@ -94,15 +94,13 @@ namespace SSDTDevPack.Clippy.Operations
                 try
                 {
                     var path = DacpacPath.Get(project);
-
-
-
+                    
                     if (_buildTimes.ContainsKey(path))
                     {
                         var lastTime = _buildTimes[path];
                         var lastWriteTime = File.GetLastWriteTimeUtc(path);
 
-                        if (lastTime > lastWriteTime)
+                        if (lastTime < lastWriteTime)
                         {
                             rebuildCache = true;
                         }
@@ -121,13 +119,15 @@ namespace SSDTDevPack.Clippy.Operations
             if (!rebuildCache)
                 return _tableCache;
 
+            _tableCache.Clear();
+
             foreach (var project in new ProjectEnumerator().Get(ProjectType.SSDT))
             {
                 try
                 {
                     var path = DacpacPath.Get(project);
                     var lastWriteTime = File.GetLastWriteTimeUtc(path);
-                    _tableCache.Clear();
+                    
                     _tableCache.AddRange(new TableRepository(path).Get());
                     _buildTimes[path] = lastWriteTime;
                 }

@@ -57,7 +57,7 @@ namespace SSDTDevPack.Rewriter
                     tableName.Identifiers.RemoveAt(0);
             }
 
-            return replacements;
+             return replacements;
         }
 
 
