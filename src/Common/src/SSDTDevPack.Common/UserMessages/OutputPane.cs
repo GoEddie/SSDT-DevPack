@@ -13,6 +13,32 @@ namespace SSDTDevPack.Common.UserMessages
     public static class OutputPane
     {
 
+        public static void WriteMessageAndActivatePane(string format, params object[] args)
+        {
+
+            IVsOutputWindow outputWindow = VsServiceProvider.Get(typeof(SVsOutputWindow)) as IVsOutputWindow;
+
+            Guid guidGeneral = VSConstants.OutputWindowPaneGuid.GeneralPane_guid;
+            if (outputWindow == null)
+                return;
+
+            IVsOutputWindowPane pane;
+            int hr = outputWindow.CreatePane(guidGeneral, "General", 1, 0);
+            hr = outputWindow.GetPane(guidGeneral, out pane);
+
+            if (pane == null)
+                return;
+
+
+            if (!format.EndsWith("\r\n"))
+                format = format + "\r\n";
+
+            pane.Activate();
+            pane.OutputString(string.Format(format, args));
+            pane.Activate();
+        }
+
+
         public static void WriteMessage(string format, params object[] args)
         {
 

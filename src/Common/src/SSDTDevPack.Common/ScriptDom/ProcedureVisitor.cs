@@ -378,13 +378,17 @@ namespace SSDTDevPack.Common.ScriptDom
         private static object TryGetValue(PropertyInfo propertyInfo, object node)
         {
             try
-            {
+            {   
+                if(propertyInfo.GetIndexParameters().Length == 0)             
                 return propertyInfo.GetValue(node);
             }
             catch (Exception)
             {
+                
                 return "";
             }
+
+            return null;
         }
     }
 }

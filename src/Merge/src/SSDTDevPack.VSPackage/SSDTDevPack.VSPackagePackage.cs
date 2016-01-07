@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -10,6 +11,7 @@ using SSDTDevPack.Clippy;
 using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.Settings;
 using SSDTDevPack.Common.UserMessages;
+
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
 using SSDTDevPack.Formatting;
@@ -103,8 +105,17 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
-                var finder = new CorrectCaseTableFinder();
-                finder.CorrectCaseAllTableNames();
+                
+                var task = new System.Threading.Tasks.Task(() =>
+                {
+                    OutputPane.WriteMessageAndActivatePane("Correcting the case of table names...");
+                    var finder = new CorrectCaseTableFinder();
+                    finder.CorrectCaseAllTableNames();
+                    OutputPane.WriteMessageAndActivatePane("Correcting the case of table names...done");
+                });
+                
+                task.Start();
+                
             }
             catch (Exception ex)
             {
