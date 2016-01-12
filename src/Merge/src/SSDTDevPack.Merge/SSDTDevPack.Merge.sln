@@ -83,7 +83,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeCoverage", "CodeCoverag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.CodeCoverage", "..\..\..\SSDTDevPack.CodeCoverage\SSDTDevPack.CodeCoverage.csproj", "{6BCAF9C4-F47C-4B0D-BE37-063EEC1A11D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPacl.CodeCoverage.Lib", "SSDTDevPacl.CodeCoverage.Lib\SSDTDevPacl.CodeCoverage.Lib.csproj", "{F9577A2E-2D01-4419-979E-0A85A425C404}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPacl.CCover", "..\..\..\SSDTDevPack.CCover\SSDTDevPack.CCover.csproj", "{F9577A2E-2D01-4419-979E-0A85A425C404}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

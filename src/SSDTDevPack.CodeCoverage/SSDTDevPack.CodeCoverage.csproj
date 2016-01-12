@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Merge\src\SSDTDevPack.Merge\SSDTDevPacl.CodeCoverage.Lib\SSDTDevPacl.CodeCoverage.Lib.csproj">
+    <ProjectReference Include="..\SSDTDevPack.CCover\SSDTDevPack.CCover.csproj">
       <Project>{F9577A2E-2D01-4419-979E-0A85A425C404}</Project>
-      <Name>SSDTDevPacl.CodeCoverage.Lib</Name>
+      <Name>SSDTDevPacl.CCover</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
