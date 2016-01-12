@@ -269,7 +269,7 @@ namespace SSDTDevPack.QueryCosts.Highlighter
                         if (string.IsNullOrEmpty(name))
                             continue;
 
-                        var statements = store.GetCoveredStatements(name);
+                        var statements = store.GetCoveredStatements(name, path);
 
                         if (statements == null)
                             continue;
@@ -303,7 +303,7 @@ namespace SSDTDevPack.QueryCosts.Highlighter
                         if (string.IsNullOrEmpty(name))
                             continue;
 
-                        var statements = store.GetCoveredStatements(name);
+                        var statements = store.GetCoveredStatements(name, path);
 
                         if (statements == null)
                             continue;
