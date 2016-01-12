@@ -23,6 +23,7 @@
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="SubMenu" value="0x1020" />
       <IDSymbol name="SubMenu" value="0x1100" />
+      <IDSymbol name="SSDTDevPackCodeCoverage" value="0x98"/>
       <IDSymbol name="SSDTDevPack" value="0x099" />
 
       <IDSymbol name="SSDTDevPackQuickDeploy" value="0x0100" />
@@ -48,7 +49,8 @@
 
       <IDSymbol name="SSDTTSqlClippy" value="0x113" />
 
-      <IDSymbol name="SSDTDevPackCorrectCase" value="0x114" />      
+      <IDSymbol name="SSDTDevPackCorrectCase" value="0x114" />
+      <IDSymbol name="SSDTDevPackToggleCodeCoverageDisplay" value="0x115" />
 
     </GuidSymbol>
 
@@ -123,6 +125,20 @@
         </Strings>
       </Button>
 
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackCodeCoverage" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="tSQLtGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Code Coverage</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackToggleCodeCoverageDisplay" priority="0x0100" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="tSQLtGroup" />
+        <Strings>
+          <ButtonText>Display Code Coverage in Documents</ButtonText>
+        </Strings>
+      </Button>
 
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackNameConstraints" priority="0x0102" parent="Button">
@@ -161,6 +177,7 @@
           <ButtonText>MergeUi</ButtonText>
         </Strings>
       </Button>
+
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackQuickDeploy" priority="0x0100" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />

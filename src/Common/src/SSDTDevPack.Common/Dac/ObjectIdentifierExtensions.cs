@@ -182,19 +182,18 @@ namespace SSDTDevPack.Common.Dac
             var builder = new StringBuilder();
             var first = true;
 
-            foreach (var part in name.Identifiers.Reverse())
+            foreach (var part in name.Identifiers)
             {
-                builder.Append(part.Value.UnQuote());
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    builder.Append(".");
-                }
+                builder.AppendFormat(".{0}",part.Value.UnQuote());
+               
             }
-            return builder.ToString();
+            if (builder.Length > 0)
+            {
+                var ret = builder.ToString();
+                return ret.Substring(1);
+            }
+
+            return String.Empty;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,7 +87,10 @@ namespace SSDTDevPack.Common.IntegrationTests
                 Init(dteVersion);
                 
                 var projects = new Enumerators.ProjectEnumerator().Get("{00d1a9c2-b5f0-4af3-8072-f6c62b433612}");
-                
+
+                var projectNode = projects.First().Object;
+                var metghods =projectNode.GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
+
                 try
                 {
                     _dte.Quit();

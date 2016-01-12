@@ -29,7 +29,7 @@ namespace SSDTDevPack.Clippy
             _operations.Add(new InequalityReWriteOperation());
             _operations.Add(new IsNullReWriteOperation());
             _operations.Add(new OrdinalOrderByReWriteOperation());
-            _operations.Add(new DeleteChunkerOperation());
+            //_operations.Add(new DeleteChunkerOperation());    //disabling delete chunker for now until i can find a way to disable it if people don't want it
             _operations.Add(new TableNameCorrectCaser());
             Start();
         }
