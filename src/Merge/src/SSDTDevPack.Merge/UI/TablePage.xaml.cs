@@ -42,16 +42,24 @@ namespace SSDTDevPack.Merge.UI
                     {
                         God.MergesToSave.Add(God.Merge);
                     }
-                    
-                    Grid.ItemsSource = God.CurrentMergeData.DefaultView;
-                    
-                    _inUpdate = true;
-                    DoUpdate.IsChecked = God.Merge.Option.HasUpdate;
-                    DoDelete.IsChecked = God.Merge.Option.HasDelete;
-                    DoInsert.IsChecked = God.Merge.Option.HasInsert;
+                    if (God.Merge.Data.Rows.Count > 1000)
+                    {
+                        MessageBox.Show("Too many rows to display :(");
+                    }
+                    else
+                    {
 
-                    if (!God.Merge.Option.HasSearchKeys)
-                        NoKeysWarning.Visibility = Visibility.Visible;
+
+                        Grid.ItemsSource = God.CurrentMergeData.DefaultView;
+
+                        _inUpdate = true;
+                        DoUpdate.IsChecked = God.Merge.Option.HasUpdate;
+                        DoDelete.IsChecked = God.Merge.Option.HasDelete;
+                        DoInsert.IsChecked = God.Merge.Option.HasInsert;
+
+                        if (!God.Merge.Option.HasSearchKeys)
+                            NoKeysWarning.Visibility = Visibility.Visible;
+                    }
 
                     _inUpdate = false;
                 }

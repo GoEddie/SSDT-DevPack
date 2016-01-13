@@ -6,13 +6,16 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Forms;
 using EnvDTE;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
 using SSDTDevPack.Merge.MergeDescriptor;
 using SSDTDevPack.Merge.Parsing;
+using ContextMenu = System.Windows.Controls.ContextMenu;
+using Cursors = System.Windows.Input.Cursors;
+using MessageBox = System.Windows.MessageBox;
 
 //  when generatingt merge statements, if unicode column, the N isn't added
 //  if no key columns - should put a warning on the datagrid
@@ -363,7 +366,9 @@ namespace SSDTDevPack.Merge.UI
                 }
 
                 var dialog = new ImportSingleTableDialog(tableList);
-                dialog.ShowDialog();
+                var result = dialog.ShowDialog();
+                if (String.IsNullOrEmpty(dialog.GetSelectedTable()))
+                    return;
 
                 var mergeTable = GetMergeTable(dialog, tables);
 
