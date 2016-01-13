@@ -27,6 +27,8 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
         public CodeCoverageWindow()
         {
             InitializeComponent();
+            
+
         }
 
         private void Start(object sender, RoutedEventArgs e)
@@ -197,6 +199,7 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
         {
             var store = CodeCoverageStore.Get;
             store.ClearStatements();
+            ShowCodeMap(sender, e);
         }
 
         private void ClearConnection(object sender, RoutedEventArgs e)

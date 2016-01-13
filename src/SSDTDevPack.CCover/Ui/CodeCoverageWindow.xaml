@@ -23,7 +23,18 @@
             
         </WrapPanel>
         
-        <TreeView x:Name="CodeMap" Grid.Row="1"></TreeView>
+        <TreeView x:Name="CodeMap" Grid.Row="1">
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                      Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                      Color="Brown" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                      Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                      Color="Brown" />
+            </TreeView.Resources>
+        </TreeView>
         
         <TextBlock Grid.Row="2" x:Name="Status" Foreground="Blue"></TextBlock>
         
