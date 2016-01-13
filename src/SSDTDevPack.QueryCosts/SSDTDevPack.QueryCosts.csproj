@@ -44,6 +44,9 @@
       <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\130\SDK\Assemblies\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Text.Data, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Text.UI, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -80,6 +83,14 @@
     <ProjectReference Include="..\Merge\src\SSDTDevPack.Merge\SSDTDevPack.Merge.csproj">
       <Project>{EF0F4A6D-68A4-4745-A3D5-2118A1608721}</Project>
       <Name>SSDTDevPack.Merge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SSDTDevPack.CCover\SSDTDevPack.CCover.csproj">
+      <Project>{F9577A2E-2D01-4419-979E-0A85A425C404}</Project>
+      <Name>SSDTDevPacl.CCover</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SSDTDevPack.CodeCoverage\SSDTDevPack.CodeCoverage.csproj">
+      <Project>{6bcaf9c4-f47c-4b0d-be37-063eec1a11d2}</Project>
+      <Name>SSDTDevPack.CodeCoverage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         public const string guidSSDTDevPack_VSPackagePkgString = "354e4235-c369-4a8f-a855-0318891c0903";
         public const string guidSSDTDevPack_VSPackageCmdSetString = "a60f097a-ca84-43f0-b08d-a45b6ccd476a";
         public const string guidToolWindowPersistanceString = "978c49d6-2808-4a7a-bf32-274bec085942";
-
+        public const string guidCodeCoverageWindowPersistanceString = "978c49d6-2808-4a7a-bf32-274bec0EDD1E";
         public static readonly Guid guidSSDTDevPack_VSPackageCmdSet = new Guid(guidSSDTDevPack_VSPackageCmdSetString);
     };
 }

@@ -53,7 +53,7 @@ namespace SSDTDevPack.Common.ScriptDom
 
     public class StatementVisitor : TSqlFragmentVisitor
     {
-        public List<TSqlStatement> Statements = new List<TSqlStatement>();
+        public readonly List<TSqlStatement> Statements = new List<TSqlStatement>();
 
         public override void Visit(TSqlStatement node)
         {
@@ -74,7 +74,7 @@ namespace SSDTDevPack.Common.ScriptDom
 
         }
     }
-
+    
     public static class ScriptDom
     {
         public static List<CreateProcedureStatement> GetProcedures(string script)

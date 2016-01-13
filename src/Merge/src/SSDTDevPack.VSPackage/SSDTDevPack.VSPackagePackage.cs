@@ -19,6 +19,7 @@ using SSDTDevPack.Rewriter;
 using SSDTDevPack.Logging;
 using SSDTDevPack.NameConstraints;
 using SSDTDevPack.QueryCosts;
+using SSDTDevPack.QueryCosts.Highlighter;
 using SSDTDevPack.QuickDeploy;
 using SSDTDevPack.tSQLtStubber;
 
@@ -28,6 +29,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof (MergeToolWindow))]
+    [ProvideToolWindow(typeof(CodeCoverageToolWindow))]
     [Guid(GuidList.guidSSDTDevPack_VSPackagePkgString)]
     [ProvideAutoLoad("ADFC4E64-0397-11D1-9F4E-00A0C911004F")]
     public sealed class SSDTDevPack_VSPackagePackage : Package, IVsServiceProvider
@@ -40,6 +42,17 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         public object GetVsService(Type type)
         {
             return GetService(type);
+        }
+
+        private void ShowCodeCoverageToolWindow(object sender, EventArgs e)
+        {
+            var window = FindToolWindow(typeof(CodeCoverageToolWindow), 0, true);
+            if ((null == window) || (null == window.Frame))
+            {
+                throw new NotSupportedException(Resources.CanNotCreateWindow);
+            }
+            var windowFrame = (IVsWindowFrame)window.Frame;
+            ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
 
         private void ShowMergeToolWindow(object sender, EventArgs e)
@@ -64,6 +77,10 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 var toolwndCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
                     (int) PkgCmdIDList.SSDTDevPackMergeUi);
                 var menuToolWin = new MenuCommand(ShowMergeToolWindow, toolwndCommandID);
+                mcs.AddCommand(menuToolWin);
+
+                toolwndCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet, (int)PkgCmdIDList.SSDTDevPackCodeCoverage);
+                menuToolWin = new MenuCommand(ShowCodeCoverageToolWindow, toolwndCommandID);
                 mcs.AddCommand(menuToolWin);
 
 
@@ -98,14 +115,16 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
                 AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackCorrectCase, CorrectCaseTableNames);
+                AddCheckableMenuItemCodeCoverage(mcs, (int)PkgCmdIDList.SSDTDevPackToggleCodeCoverageDisplay, EnableCodeCoverage);
+
             }
         }
 
+        
         private void CorrectCaseTableNames(object sender, EventArgs e)
         {
             try
             {
-                
                 var task = new System.Threading.Tasks.Task(() =>
                 {
                     OutputPane.WriteMessageAndActivatePane("Correcting the case of table names...");
@@ -116,6 +135,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 
                 task.Start();
                 
+                if (task.Exception != null)
+                    throw task.Exception;
             }
             catch (Exception ex)
             {
@@ -123,6 +144,10 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
         }
 
+        private void EnableCodeCoverage(object sender, EventArgs e)
+        {
+            CodeCoverageTaggerSettings.Enabled = !CodeCoverageTaggerSettings.Enabled;
+        }
 
         private void EnableClippy(object sender, EventArgs e)
         {
@@ -159,8 +184,18 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
-                var finder = new DuplicateIndexFinder();
-                finder.ShowDuplicateIndexes();
+                var task = new System.Threading.Tasks.Task(() =>
+                {
+                    OutputPane.WriteMessageAndActivatePane("Finding Duplicate Indexes...");
+                    var finder = new DuplicateIndexFinder();
+                    finder.ShowDuplicateIndexes();
+                    OutputPane.WriteMessageAndActivatePane("Finding Duplicate Indexes...done");
+                });
+
+                task.Start();
+
+                if (task.Exception != null)
+                    throw task.Exception;
             }
             catch (Exception ex)
             {
@@ -378,6 +413,23 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         void a_BeforeQueryStatus(object sender, EventArgs e)
         {
             ClippySettings.MenuItem.Checked = ClippySettings.Enabled;
+        }
+
+
+        private void AddCheckableMenuItemCodeCoverage(OleMenuCommandService mcs, int cmdId, EventHandler eventHandler)
+        {
+            var menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet, cmdId);
+
+            CodeCoverageTaggerSettings.MenuItem = new OleMenuCommand(eventHandler, menuCommandID);
+
+            CodeCoverageTaggerSettings.MenuItem.Checked = false;
+            CodeCoverageTaggerSettings.MenuItem.BeforeQueryStatus += a_BeforeQueryStatusCodeCoverage;
+            mcs.AddCommand(CodeCoverageTaggerSettings.MenuItem);
+        }
+
+        void a_BeforeQueryStatusCodeCoverage(object sender, EventArgs e)
+        {
+            CodeCoverageTaggerSettings.MenuItem.Checked = CodeCoverageTaggerSettings.Enabled;
         }
 
 

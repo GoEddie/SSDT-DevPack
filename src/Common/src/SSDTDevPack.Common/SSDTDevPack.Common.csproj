@@ -142,6 +142,9 @@
     <Compile Include="SolutionBrowser\wpfSolutionBrowser.xaml.cs">
       <DependentUpon>wpfSolutionBrowser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\LabelWithProgressIndicator.xaml.cs">
+      <DependentUpon>LabelWithProgressIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserMessages\OutputPane.cs" />
     <Compile Include="VSPackage\DocumentExtensions.cs" />
     <Compile Include="VSPackage\ServiceProvider.cs" />
@@ -166,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SolutionBrowser\wpfSolutionBrowser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\LabelWithProgressIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

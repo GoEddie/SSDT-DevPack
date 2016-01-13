@@ -4,6 +4,9 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Logging;
+using System.Linq;
+using System.Reflection;
+using static System.Reflection.BindingFlags;
 
 namespace SSDTDevPack.Common.Enumerators
 {
@@ -55,8 +58,7 @@ namespace SSDTDevPack.Common.Enumerators
                 Log.WriteInfo("ProjectEnumerator: Adding Project: {0}", project.FullName);
                 projects.Add(project);
             }
-
-
+            
             return projects;
         }
     }

@@ -126,7 +126,9 @@ namespace SSDTDevPack.Clippy.Operations
                 {
                     var path = DacpacPath.Get(project);
                     var lastWriteTime = File.GetLastWriteTimeUtc(path);
+
                     
+
                     _tableCache.AddRange(new TableRepository(path).Get());
                     _buildTimes[path] = lastWriteTime;
                 }
