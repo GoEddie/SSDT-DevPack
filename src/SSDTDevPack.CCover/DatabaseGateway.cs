@@ -31,23 +31,24 @@ namespace SSDTDevPacl.CodeCoverage.Lib
 
         private SqlServerVersion GetVersion()
         {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                con.Open();
+            return SqlServerVersion.Sql100;
+            //using (var con = new SqlConnection(_connectionString))
+            //{
+            //    con.Open();
 
                 
-                using (var cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = "select @@version";
-                    var versionString = cmd.ExecuteScalar().ToString();
+            //    using (var cmd = con.CreateCommand())
+            //    {
+            //        cmd.CommandText = "select @@version";
+            //        var versionString = cmd.ExecuteScalar().ToString();
 
-                    if(versionString.StartsWith("Microsoft SQL Server 2008"))
-                            return SqlServerVersion.Sql100;
+            //        if(versionString.StartsWith("Microsoft SQL Server 2008"))
+            //                return SqlServerVersion.Sql100;
                     
-                }
-            }
+            //    }
+            //}
 
-            return SqlServerVersion.Sql110;
+            //return SqlServerVersion.Sql110;
         }
 
         public ExtendedEventGateway Get()
@@ -257,21 +258,40 @@ FROM sys.fn_xe_file_target_read_file(N'{0}*.xel', N'{0}*.xem', null, null)", log
 
                                     //tsql_stack
                                     var stack = (from node in doc.Element("event").Elements("action")
-                                                       where (string)node.Attribute("name") == "tsql_stack"
-                                                 select node.Value).FirstOrDefault();
+                                        where (string) node.Attribute("name") == "tsql_stack"
+                                        select node.Value).FirstOrDefault();
 
-                                    var stackDoc = XDocument.Parse(string.Format("<tsql>{0}</tsql>", stack));
+                                    int offset;
+                                    int offsetEnd;
+                                   
+                                    if (String.IsNullOrEmpty(stack))
+                                    {
+                                        offset = (from node in doc.Element("event").Elements("data")
+                                                     where (string)node.Attribute("name") == "offset"
+                                                     select Int32.Parse(node.Value)).FirstOrDefault() / 2 ;
 
-                                    var tsqlNode = stackDoc.Element("tsql").Elements("frame").FirstOrDefault();
+                                        offsetEnd = (from node in doc.Element("event").Elements("data")
+                                                  where (string)node.Attribute("name") == "offset_end"
+                                                  select Int32.Parse(node.Value)).FirstOrDefault();
 
-                                    var offset = Int32.Parse(tsqlNode.Attribute("offsetStart").Value)/2;
-                                    var offsetEnd = Int32.Parse(tsqlNode.Attribute("offsetEnd").Value);
+                                    }
+                                    else
+                                    {
+                                    
+                                        var stackDoc = XDocument.Parse(string.Format("<tsql>{0}</tsql>", stack));
+
+                                        var tsqlNode = stackDoc.Element("tsql").Elements("frame").FirstOrDefault();
+
+                                        offset = Int32.Parse(tsqlNode.Attribute("offsetStart").Value)/2;
+                                        offsetEnd = Int32.Parse(tsqlNode.Attribute("offsetEnd").Value);
+
+                                    }
 
                                     object_id = (from node in doc.Element("event").Elements("data")
-                                                     where (string)node.Attribute("name") == "object_id"
-                                                     select Int32.Parse(node.Value)).FirstOrDefault();
+                                            where (string) node.Attribute("name") == "object_id"
+                                            select Int32.Parse(node.Value)).FirstOrDefault();
 
-
+                                    
 
                                     var length = offsetEnd;
                                     if (length > -1)

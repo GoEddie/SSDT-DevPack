@@ -8,7 +8,8 @@ namespace SSDTDevPacl.CodeCoverage.Lib
     public class CodeCoverageStore
     {
         private readonly ConcurrentDictionary<string, List<CoveredStatement>> _statements = new ConcurrentDictionary<string, List<CoveredStatement>>();
-
+        private readonly  ConcurrentDictionary<string, List<string>> _fileMap = new ConcurrentDictionary<string, List<string>>();
+         
         static CodeCoverageStore()
         {
             Get = new CodeCoverageStore();
@@ -20,6 +21,14 @@ namespace SSDTDevPacl.CodeCoverage.Lib
         }
 
         public static CodeCoverageStore Get;
+
+        public List<string> ObjectsInFile(string file)
+        {
+            if (_fileMap.ContainsKey(file))
+                return _fileMap[file];
+
+            return null;
+        } 
 
         public List<CoveredStatement> GetCoveredStatements(string objectName, string fileName)
         {
@@ -45,9 +54,12 @@ namespace SSDTDevPacl.CodeCoverage.Lib
                 {
                     List<CoveredStatement> list;
                     _statements.TryRemove(objectName, out list);
+                    List<string> map;
+                    _fileMap.TryRemove(fileName, out map);
+
                     return null;
                 }
-
+                
                 return _statements[objectName];
             }
 
@@ -83,7 +95,6 @@ namespace SSDTDevPacl.CodeCoverage.Lib
                         statments.Remove(statments.First(p => p.Offset == statement.Offset));
                         statments.Add(statement);
                     }
-                    
                 }
 
             }
@@ -92,6 +103,18 @@ namespace SSDTDevPacl.CodeCoverage.Lib
         public void ClearStatements()
         {
             _statements.Clear();
+        }
+
+        public void AddStatementFileMap(string name, string fileName)
+        {
+            if (!_fileMap.ContainsKey(fileName))
+            {
+                _fileMap[fileName] = new List<string>();
+            }
+
+            if (!_fileMap.ContainsKey(name))
+                _fileMap[fileName].Add(name);
+
         }
     }
 }

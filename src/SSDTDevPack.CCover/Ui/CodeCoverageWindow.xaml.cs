@@ -96,6 +96,7 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
                     {
                         var name = (sqlModule.Statement as CreateProcedureStatement)?.ProcedureReference.Name.ToNameString();
                         parentStatements = AddChildItems(name, sqlModule, store, parentStatements, file, child, ref parentCoveredStatements, ref childStatements, ref childCoveredStatements);
+                        store.AddStatementFileMap(name, sqlModule.FileName);
                     }
 
 
@@ -103,6 +104,7 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
                     {
                         var name = (sqlModule.Statement as CreateFunctionStatement)?.Name.ToNameString();
                         parentStatements = AddChildItems(name, sqlModule, store, parentStatements, file, child, ref parentCoveredStatements, ref childStatements, ref childCoveredStatements);
+                        store.AddStatementFileMap(name, sqlModule.FileName);
                     }
                     
 

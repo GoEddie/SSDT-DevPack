@@ -160,8 +160,7 @@ namespace SSDTDevPack.QueryCosts.Highlighter
                 var tempEvent = TagsChanged;
                 if (tempEvent != null)
                     tempEvent(this,
-                        new SnapshotSpanEventArgs(new SnapshotSpan(SourceBuffer.CurrentSnapshot, 0,
-                            SourceBuffer.CurrentSnapshot.Length)));
+                        new SnapshotSpanEventArgs(new SnapshotSpan(SourceBuffer.CurrentSnapshot, 0, SourceBuffer.CurrentSnapshot.Length)));
             }
         }
     }
@@ -241,27 +240,39 @@ namespace SSDTDevPack.QueryCosts.Highlighter
 
         protected override void UpdateWordAdornments()
         {
+
+            var dte = (DTE)VsServiceProvider.Get(typeof(DTE));
+
+            if (dte.ActiveDocument == null)
+            {
+                return;
+            }
             
+            if (RequestedPoint.Snapshot.ContentType.TypeName != "SQL Server Tools" || !RequestedPoint.Snapshot.ContentType.BaseTypes.Any(p=>p.IsOfType("code")))
+            {
+                return;
+            }
+            
+
+
             try
             {
                 var store = CodeCoverageStore.Get;
+
+                var path = dte.ActiveDocument.FullName;
+
+                if (store.ObjectsInFile(path) == null)
+                    return;
+
                 var yellowWordSpans = new List<SnapshotSpan>();
                 var redWordSpans = new List<SnapshotSpan>();
 
                 if (null != store && CodeCoverageTaggerSettings.Enabled)
                 {
-                    var dte = (DTE) VsServiceProvider.Get(typeof (DTE));
-
-                    if (dte.ActiveDocument == null)
-                    {
-                        return;
-                    }
-
                     var documentKey = string.Format("{0}:{1}", RequestedPoint.Snapshot.Length, RequestedPoint.Snapshot.Version.VersionNumber);
+                    
+                    var script = GetCurrentDocumentText(dte);
 
-                    var path = dte.ActiveDocument.FullName;
-
-                    var script = File.ReadAllText(path);
                     foreach (var proc in ScriptDom.GetProcedures(script))
                     {
                         var name = proc?.ProcedureReference.Name.ToNameString();
@@ -349,5 +360,30 @@ namespace SSDTDevPack.QueryCosts.Highlighter
                // MessageBox.Show("2 - e : " + e.Message + " \r\n " + e.StackTrace);
             }
         }
+        
+        private string GetCurrentDocumentText(DTE dte)
+        {
+
+            
+
+            if (dte.ActiveDocument == null)
+            {
+                return null;
+            }
+
+            var doc = dte.ActiveDocument.Object("TextDocument") as TextDocument;
+            if (null == doc)
+            {
+                return null;
+            }
+
+            var ep = doc.StartPoint.CreateEditPoint();
+            ep.EndOfDocument();
+
+            var length = ep.AbsoluteCharOffset;
+            ep.StartOfDocument();
+            return ep.GetText(length);
+        }
+    
     }
 }
