@@ -23,7 +23,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         public const uint SSDTTSqlClippy = 0x113;
         public const uint SSDTDevPackCorrectCase = 0x114;
         public const uint SSDTDevPackToggleCodeCoverageDisplay = 0x115;
-
+        public const uint SSDTDevPackQuickDeployToClipboard = 0x116;
+        public const uint SSDTDevPackQuickDeployAppendToClipboard = 0x117;
 
         public const uint CasingGroup = 0x1010;
         public const uint tSQLtGroup = 0x1011;

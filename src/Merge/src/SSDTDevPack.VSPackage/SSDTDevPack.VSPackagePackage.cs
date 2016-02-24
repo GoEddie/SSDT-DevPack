@@ -105,6 +105,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackClearQueryCosts, ClearQueryCosts);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeploy, QuickDeploy);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeployToClipboard, QuickDeployToClipboard);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeployAppendToClipboard, QuickDeployAppendToClipboard);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackLowerCase, LowerCase);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
@@ -120,7 +122,39 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             }
         }
 
-        
+        private void QuickDeployAppendToClipboard(object sender, EventArgs e)
+        {
+            try
+            {
+                var script = QuickDeployer.GetDeployScript(GetCurrentDocumentText());
+                var original = Clipboard.GetText();
+
+                Clipboard.SetText(original + "\r\n" + script, TextDataFormat.UnicodeText);
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("QuickDeployToClipboard error: {0}", ex.Message);
+                Log.WriteInfo("QuickDeployToClipboard error: {0}", ex.Message);
+            }
+
+        }
+
+        private void QuickDeployToClipboard(object sender, EventArgs e)
+        {
+            try
+            {
+                var script = QuickDeployer.GetDeployScript(GetCurrentDocumentText());
+                Clipboard.SetText(script, TextDataFormat.UnicodeText);
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("QuickDeployToClipboard error: {0}", ex.Message);
+                Log.WriteInfo("QuickDeployToClipboard error: {0}", ex.Message);
+            }
+
+        }
+
+
         private void CorrectCaseTableNames(object sender, EventArgs e)
         {
             try

@@ -19,6 +19,46 @@ namespace SSDTDevPack.QuickDeploy
     {
         private static string ConnectionString;
 
+        public static string GetDeployScript(string newCode)
+        {
+            var procedures = ScriptDom.GetProcedures(newCode);
+            var deployScripts = new List<string>();
+
+            foreach (var procedure in procedures)
+            {
+                OutputPane.WriteMessage("Generating Deploy Script for {0}", procedure.ProcedureReference.Name.ToQuotedString());
+                deployScripts.Add(BuildIfNotExistsStatements(procedure));
+                deployScripts.Add(ChangeCreateToAlter(procedure, newCode));
+              
+            }
+
+            var functions = ScriptDom.GetFunctions(newCode);
+            foreach (var function in functions)
+            {
+                OutputPane.WriteMessage("Generating script for {0}", function.Name.ToQuotedString());
+                if (function.ReturnType is SelectFunctionReturnType)
+                {
+                    deployScripts.Add(BuildIfNotExistsStatementsInlineFunction(function));
+                }
+                else
+                {
+                    deployScripts.Add(BuildIfNotExistsStatements(function));
+                }
+
+                deployScripts.Add(ChangeCreateToAlter(function, newCode));
+            }
+
+            StringBuilder script = new StringBuilder();
+
+            foreach (var statement in deployScripts)
+            {
+                script.AppendFormat("{0}\r\nGO\r\n", statement);
+            }
+
+            return script.ToString();
+
+        }
+
         public static void DeployFile(string newCode)
         {
             if (String.IsNullOrEmpty(ConnectionString))
