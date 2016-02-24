@@ -12,6 +12,7 @@ using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.Ui;
+using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Merge.UI;
 
 namespace SSDTDevPacl.CodeCoverage.Lib.Ui
@@ -33,101 +34,121 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
 
         private void Start(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(_connectionString))
+            try
             {
-                var dialog = new ConnectDialog();
-                dialog.ShowDialog();
-                _connectionString = dialog.ConnectionString;
-
                 if (String.IsNullOrEmpty(_connectionString))
-                    return;
+                {
+                    var dialog = new ConnectDialog();
+                    dialog.ShowDialog();
+                    _connectionString = dialog.ConnectionString;
+
+                    if (String.IsNullOrEmpty(_connectionString))
+                        return;
+                }
+
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        _reader = new ExtendedEventDataDataReader(_connectionString);
+                        _reader.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        OutputPane.WriteMessageAndActivatePane("SSDTDevPack: CodeCoverage: Exception calling Start (Worker Thread): {0}", ex);
+                    }
+                });
+
+
+                StartButton.IsEnabled = false;
+                StopButton.IsEnabled = true;
             }
-
-            Task.Run(() =>
+            catch (Exception ex)
             {
-                _reader = new ExtendedEventDataDataReader(_connectionString);
-                _reader.Start();
-            });
-
-
-            StartButton.IsEnabled = false;
-            StopButton.IsEnabled = true;
-
+                OutputPane.WriteMessageAndActivatePane("SSDTDevPack: CodeCoverage: Exception calling Start (UI Thread): {0}", ex);
+            }
         }
 
         private void ShowCodeMap(object sender, RoutedEventArgs e)
         {
-            CodeMap.Items.Clear();
-
-            var store = CodeCoverageStore.Get;
-
-            var projects = new ProjectEnumerator().Get(ProjectType.SSDT);
-            foreach (var p in projects)
+            try
             {
-                var newItem = new TreeViewItem();
-                //newItem.Header = p.Name;
+                CodeMap.Items.Clear();
 
-                var statements = new StatementEnumerator().GetStatements(p);
-                var fileMap = new Dictionary<string, List<CodeStatement<TSqlStatement>>>();
+                var store = CodeCoverageStore.Get;
 
-
-                foreach (var statement in statements)
+                var projects = new ProjectEnumerator().Get(ProjectType.SSDT);
+                foreach (var p in projects)
                 {
-                    if (!fileMap.ContainsKey(statement.FileName))
+                    var newItem = new TreeViewItem();
+                    //newItem.Header = p.Name;
+
+                    var statements = new StatementEnumerator().GetStatements(p);
+                    var fileMap = new Dictionary<string, List<CodeStatement<TSqlStatement>>>();
+
+
+                    foreach (var statement in statements)
                     {
-                        fileMap[statement.FileName] = new List<CodeStatement<TSqlStatement>>();
+                        if (!fileMap.ContainsKey(statement.FileName))
+                        {
+                            fileMap[statement.FileName] = new List<CodeStatement<TSqlStatement>>();
+                        }
+
+                        fileMap[statement.FileName].Add(statement);
                     }
 
-                    fileMap[statement.FileName].Add(statement);
+                    double parentStatements = 0;
+                    double parentCoveredStatements = 0;
+
+                    foreach (var file in fileMap.Keys.OrderBy(pp => pp))
+                    {
+                        var map = fileMap[file];
+
+                        var child = new TreeViewItem();
+                        double childStatements = 0;
+                        double childCoveredStatements = 0;
+
+
+
+                        foreach (var sqlModule in map.Where(o => o.Statement.GetType() == typeof (CreateProcedureStatement)))
+                        {
+                            var name = (sqlModule.Statement as CreateProcedureStatement)?.ProcedureReference.Name.ToNameString();
+                            parentStatements = AddChildItems(name, sqlModule, store, parentStatements, file, child, ref parentCoveredStatements, ref childStatements, ref childCoveredStatements);
+                            store.AddStatementFileMap(name, sqlModule.FileName);
+                        }
+
+
+                        foreach (var sqlModule in map.Where(o => o.Statement.GetType() == typeof (CreateFunctionStatement)))
+                        {
+                            var name = (sqlModule.Statement as CreateFunctionStatement)?.Name.ToNameString();
+                            parentStatements = AddChildItems(name, sqlModule, store, parentStatements, file, child, ref parentCoveredStatements, ref childStatements, ref childCoveredStatements);
+                            store.AddStatementFileMap(name, sqlModule.FileName);
+                        }
+
+
+                        var childCoveragePercent = ((double) childCoveredStatements/(double) childStatements)*100;
+                        var childLabel = new LabelWithProgressIndicator(string.Format("{0} - {1}% ({2} / {3})", new FileInfo(file).Name, childCoveragePercent, childCoveredStatements, childStatements), childCoveragePercent, file);
+                        childLabel.Configure();
+                        child.Header = childLabel;
+
+
+                        if (child.Items.Count > 0)
+                        {
+                            newItem.Items.Add(child);
+                        }
+
+                    }
+
+                    var parentLabel = new LabelWithProgressIndicator(string.Format("{0} - ({1} / {2})", p.Name, parentCoveredStatements, parentStatements), (parentCoveredStatements/parentStatements)*100.0);
+                    parentLabel.Configure();
+                    newItem.Header = parentLabel;
+
+                    CodeMap.Items.Add(newItem);
                 }
-
-                double parentStatements = 0;
-                double parentCoveredStatements = 0;
-
-                foreach (var file in fileMap.Keys.OrderBy(pp => pp))
-                {
-                    var map = fileMap[file];                   
-
-                    var child = new TreeViewItem();
-                    double childStatements = 0;
-                    double childCoveredStatements = 0;
-
-                   
-
-                    foreach (var sqlModule in map.Where(o => o.Statement.GetType() == typeof (CreateProcedureStatement)))
-                    {
-                        var name = (sqlModule.Statement as CreateProcedureStatement)?.ProcedureReference.Name.ToNameString();
-                        parentStatements = AddChildItems(name, sqlModule, store, parentStatements, file, child, ref parentCoveredStatements, ref childStatements, ref childCoveredStatements);
-                        store.AddStatementFileMap(name, sqlModule.FileName);
-                    }
-
-
-                    foreach (var sqlModule in map.Where(o => o.Statement.GetType() == typeof(CreateFunctionStatement)))
-                    {
-                        var name = (sqlModule.Statement as CreateFunctionStatement)?.Name.ToNameString();
-                        parentStatements = AddChildItems(name, sqlModule, store, parentStatements, file, child, ref parentCoveredStatements, ref childStatements, ref childCoveredStatements);
-                        store.AddStatementFileMap(name, sqlModule.FileName);
-                    }
-                    
-
-                    var childCoveragePercent = ((double)childCoveredStatements / (double)childStatements) * 100;
-                    var childLabel = new LabelWithProgressIndicator(string.Format("{0} - {1}% ({2} / {3})", new FileInfo(file).Name, childCoveragePercent, childCoveredStatements, childStatements), childCoveragePercent, file);
-                    childLabel.Configure();
-                    child.Header = childLabel;
-                   
-
-                    if (child.Items.Count > 0)
-                    {
-                        newItem.Items.Add(child);
-                    }
-                    
-                }
-
-                var parentLabel = new LabelWithProgressIndicator(string.Format("{0} - ({1} / {2})", p.Name, parentCoveredStatements, parentStatements), (parentCoveredStatements / parentStatements) * 100.0);
-                parentLabel.Configure();
-                newItem.Header = parentLabel;
-
-                CodeMap.Items.Add(newItem);
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessageAndActivatePane("SSDTDevPack: Exception calling ShowCodeMap: {0}", ex);
             }
         }
 
@@ -183,28 +204,49 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
 
         private void Stop(object sender, RoutedEventArgs e)
         {
-            _reader.Stop();
-            var count = _reader.CoveredStatements.Count;
+            try
+            {
+                _reader.Stop();
+                var count = _reader.CoveredStatements.Count;
 
-            CodeCoverageStore.Get.AddStatements(_reader.CoveredStatements, _reader.ObjectNameCache);
+                CodeCoverageStore.Get.AddStatements(_reader.CoveredStatements, _reader.ObjectNameCache);
 
-            StartButton.IsEnabled = true;
-            StopButton.IsEnabled = false;
-            Status.Text = "Added " + count + " statements to code coverage";
+                StartButton.IsEnabled = true;
+                StopButton.IsEnabled = false;
+                Status.Text = "Added " + count + " statements to code coverage";
 
-            ShowCodeMap(sender, e);
+                ShowCodeMap(sender, e);
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessageAndActivatePane("SSDTDevPack: CodeCoverage: Exception calling Stop: {0}", ex);
+            }
         }
 
         private void DiscardResults(object sender, RoutedEventArgs e)
         {
-            var store = CodeCoverageStore.Get;
-            store.ClearStatements();
-            ShowCodeMap(sender, e);
+            try
+            {
+                var store = CodeCoverageStore.Get;
+                store.ClearStatements();
+                ShowCodeMap(sender, e);
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessageAndActivatePane("SSDTDevPack: CodeCoverage: Exception calling Discard: {0}", ex);
+            }
         }
 
         private void ClearConnection(object sender, RoutedEventArgs e)
         {
-            _connectionString = String.Empty;
+            try
+            {
+                _connectionString = String.Empty;
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessageAndActivatePane("SSDTDevPack: CodeCoverage: Exception calling ClearConnection: {0}", ex);
+            }
         }
     }
 }

@@ -109,7 +109,7 @@ namespace SSDTDevPack.QueryCosts.Highlighter
             }
             catch (Exception ec)
             {
-                MessageBox.Show("1 - e : " + ec.Message + " \r\n " + ec.StackTrace);
+                //MessageBox.Show("1 - e : " + ec.Message + " \r\n " + ec.StackTrace);
             }
         }
 
@@ -301,7 +301,7 @@ namespace SSDTDevPack.QueryCosts.Highlighter
                             }
                             else
                             {
-                                var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (proc.FragmentLength - offset)+1);
+                                var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (proc.FragmentLength - offset));
                                 yellowWordSpans.Add(span);
                             }
                         }

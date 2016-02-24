@@ -28,6 +28,9 @@
 
       <IDSymbol name="SSDTDevPackQuickDeploy" value="0x0100" />
 
+      <IDSymbol name="SSDTDevPackQuickDeployToClipboard" value="0x116" />
+      <IDSymbol name="SSDTDevPackQuickDeployAppendToClipboard" value="0x117" />
+
       <IDSymbol name="SSDTDevPackMergeUi" value="0x0101" />
 
       <IDSymbol name="SSDTDevPackNameConstraints" value="0x0102" />
@@ -179,12 +182,25 @@
       </Button>
 
 
-      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackQuickDeploy" priority="0x0100" parent="Button">
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackQuickDeploy" priority="0x0200" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
         <Strings>
           <ButtonText>Quick Deploy</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackQuickDeployToClipboard" priority="0x0201" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Quick Deploy To Clipboard</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackQuickDeployAppendToClipboard" priority="0x0202" parent="Button">
+        <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
+        <Strings>
+          <ButtonText>Quick Deploy Append To Clipboard</ButtonText>
+        </Strings>
+      </Button>
+
 
       <Button guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPackFindDuplicateIndexes" priority="0x0100" parent="Button">
         <Parent guid="guidSSDTDevPack_VSPackageCmdSet" id="SSDTDevPack" />
