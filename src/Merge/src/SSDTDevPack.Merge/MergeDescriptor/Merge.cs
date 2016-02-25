@@ -444,7 +444,8 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                     continue;
 
                 var rowValue = new RowValue();
-                
+
+                var colIndex = 0;
                 foreach (var col in _merge.Table.Columns)
                 {
                     var value = row[col.Name.GetName()];
@@ -454,12 +455,31 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                     }
                     else
                     {
-                        rowValue.ColumnValues.Add(GetColumnValue(value.ToString(), col.DataType, col.IsNText));
+                        var actualColumn = _merge.Data.Columns[col.Name.GetName()];
+
+                        rowValue.ColumnValues.Add(GetColumnValue(GetStringRepresentation(value, actualColumn), col.DataType, col.IsNText));
                     }
+
+                    colIndex++;
                 }
 
                 table.RowValues.Add(rowValue);
             }
+        }
+
+        private static string GetStringRepresentation(object value, DataColumn actualColumn)
+        {
+            if (IsBitTypeMasqueradingAsBool(actualColumn))
+            {
+                return ((bool)value) ? "1" : "0";
+            }
+
+            return value.ToString();
+        }
+
+        private static bool IsBitTypeMasqueradingAsBool(DataColumn actualColumn)
+        {
+            return actualColumn.DataType == typeof (bool);
         }
 
         private static ScalarExpression GetColumnValue(string value, LiteralType type, bool isUnicode)
@@ -475,9 +495,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                 case LiteralType.Binary:
                     return new BinaryLiteral { Value = value };
                 case LiteralType.String:
-               
                     return  new StringLiteral { Value = value , IsNational = isUnicode};
-                   
                 case LiteralType.Null:
                     return new NullLiteral { Value = value };
                 case LiteralType.Default:
@@ -488,10 +506,8 @@ namespace SSDTDevPack.Merge.MergeDescriptor
                     return new OdbcLiteral { Value = value };
                 case LiteralType.Identifier:
                     return new IdentifierLiteral { Value = value };
-                    ;
                 case LiteralType.Numeric:
                     return new NumericLiteral { Value = value };
-                    ;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
