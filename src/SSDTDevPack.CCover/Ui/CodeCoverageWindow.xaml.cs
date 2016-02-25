@@ -175,8 +175,12 @@ namespace SSDTDevPacl.CodeCoverage.Lib.Ui
             }
             
             var coveredStatements = store.GetCoveredStatements(name, sqlModule.FileName);
+
+            var beginEndBlocks = statementNodes.Count(p => p.GetType() == typeof (BeginEndBlockStatement));
+
+            var statementCount = statementNodes.Count - 1 - beginEndBlocks;
+
             
-            var statementCount = statementNodes.Count - 1;
 
             parentStatements += statementCount;
             parentCoveredStatements += coveredStatements?.Count ?? 0;
