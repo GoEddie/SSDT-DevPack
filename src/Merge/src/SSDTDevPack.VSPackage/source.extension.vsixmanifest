@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="354e4235-c369-4a8f-a855-0318891c0903" Version="0.1.9.55" Language="en-US" Publisher="EdElliott" />
+    <Identity Id="354e4235-c369-4a8f-a855-0318891c0903" Version="0.1.10.1" Language="en-US" Publisher="EdElliott" />
     <DisplayName>SSDTDevPack</DisplayName>
     <Description xml:space="preserve">The Agile SQL Club devpack, tools to help SSDT database projects + dacpacs. Includes MergUi
     </Description>

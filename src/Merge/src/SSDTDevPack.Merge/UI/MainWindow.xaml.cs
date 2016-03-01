@@ -11,6 +11,7 @@ using EnvDTE;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.Enumerators;
 using SSDTDevPack.Common.ProjectItems;
+using SSDTDevPack.Common.UserMessages;
 using SSDTDevPack.Merge.MergeDescriptor;
 using SSDTDevPack.Merge.Parsing;
 using ContextMenu = System.Windows.Controls.ContextMenu;
@@ -93,6 +94,7 @@ namespace SSDTDevPack.Merge.UI
             catch (Exception e)
             {
                 MessageBox.Show("Error populating tree view: " + e.Message);
+                OutputPane.WriteMessage("MergeUi: Error populating tree view: {0}:\r\n{1}", e.Message, e.StackTrace);
             }
         }
 
