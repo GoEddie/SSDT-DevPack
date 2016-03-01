@@ -139,35 +139,43 @@ namespace SSDTDevPack.Merge.UI
         {
             var node = new TreeViewItem();
             node.Header = item.Name;
-
-            //parse the merge statements...
-            var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
-            repoitory.Populate();
-
-            foreach (var merge in repoitory.Get())
+            try
             {
-                merge.Data.ExtendedProperties["Changed"] = false;
-                var mergeNode = new TreeViewItem();
-                mergeNode.Header = merge.Name.Value;
-                mergeNode.Tag = merge;
-                mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
-                node.Items.Add(mergeNode);
+                //parse the merge statements...
+                var repoitory = new MergeStatementRepository(tables, item.FileNames[0]);
+                repoitory.Populate();
+
+                foreach (var merge in repoitory.Get())
+                {
+                    merge.Data.ExtendedProperties["Changed"] = false;
+                    var mergeNode = new TreeViewItem();
+                    mergeNode.Header = merge.Name.Value;
+                    mergeNode.Tag = merge;
+                    mergeNode.ContextMenu = ProjectItems.Resources["TableContext"] as ContextMenu;
+                    node.Items.Add(mergeNode);
+                }
+
+                node.ContextMenu = ProjectItems.Resources["FileContext"] as ContextMenu;
+
+                if (item.Properties.Item("FullPath") == null)
+                {
+                    MessageBox.Show("Error unable to get propert FullPath on script file, unable to build tree");
+                    return null;
+                }
+
+
+                node.Tag = new ScriptNodeTag
+                {
+                    ScriptPath = item.Properties.Item("FullPath").Value.ToString(),
+                    Tables = tables
+                };
+
+                
             }
-
-            node.ContextMenu = ProjectItems.Resources["FileContext"] as ContextMenu;
-
-            if (item.Properties.Item("FullPath") == null)
+            catch (Exception e)
             {
-                MessageBox.Show("Error unable to get propert FullPath on script file, unable to build tree");
-                return null;
+                OutputPane.WriteMessage("Error Populating TreeView for File: {0} - error: {1}\r\n{2}", item.FileNames[0], e.Message, e.StackTrace);
             }
-
-
-            node.Tag = new ScriptNodeTag
-            {
-                ScriptPath = item.Properties.Item("FullPath").Value.ToString(),
-                Tables = tables
-            };
 
             return node;
         }

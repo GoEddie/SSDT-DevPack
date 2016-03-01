@@ -20,7 +20,18 @@ namespace SSDTDevPack.Merge.MergeDescriptor
 
             using (var reader = new StreamReader(filePath))
             {
-                OriginalText = reader.ReadToEnd().Substring(scriptOffset, scriptLength);
+                var original = reader.ReadToEnd();
+                if (scriptOffset > original.Length)
+                {
+                    throw new InvalidOperationException(string.Format("InScriptDescriptor - The offset into the script is longer than the script, filePath = {0}, offset = {1}", filePath, scriptOffset));
+                }
+
+                if (scriptOffset + scriptLength > original.Length)
+                {
+                    throw new InvalidOperationException(string.Format("InScriptDescriptor - The offset + scriptLength into the script is longer than the script, filePath = {0}, offset = {1}, length = {2}", filePath, scriptOffset, scriptLength));
+                }
+
+                OriginalText = original.Substring(scriptOffset, scriptLength);
             }
 
         }
