@@ -85,6 +85,16 @@ namespace SSDTDevPack.Merge.Parsing
 
                 bool hasSearchKeys = false;
                 var searchCondition = mergeStatement.MergeSpecification.SearchCondition as BooleanComparisonExpression;
+                if (searchCondition == null && mergeStatement.MergeSpecification.SearchCondition is BooleanParenthesisExpression)
+                {   //sp_generate_merge wraps the columns in the ON clause in parenthesis...
+                    var parent = (BooleanParenthesisExpression) mergeStatement.MergeSpecification.SearchCondition;
+                    var condition = parent.Expression as BooleanComparisonExpression;
+                    if (condition != null)
+                    {
+                        searchCondition = condition;
+                    }
+                }
+
                 if (null != searchCondition)
                 {
                     var col = searchCondition.FirstExpression as ColumnReferenceExpression;
@@ -141,7 +151,7 @@ namespace SSDTDevPack.Merge.Parsing
                     }
                     else
                     {
-                        var value = col as Literal;
+                        var value = GetValue(col);
 
                         if (value == null)
                         {
@@ -178,6 +188,32 @@ namespace SSDTDevPack.Merge.Parsing
             };
 
             return dataTable;
+        }
+
+        private Literal GetValue(ScalarExpression col)
+        {
+            var value = col as Literal;
+
+            if (IsNegativeNumeric(col, value))  //-1, etc
+            {
+                var unaryExpression = (UnaryExpression)col;
+
+                value = new StringLiteral();
+
+                if (unaryExpression.Expression is Literal)
+                {
+                    value.Value = string.Format("-{0}", ((Literal)unaryExpression.Expression).Value);
+                }
+
+            }
+
+            return value;
+
+        }
+
+        private static bool IsNegativeNumeric(ScalarExpression col, Literal value)
+        {
+            return value == null && col is UnaryExpression;
         }
     }
 }
