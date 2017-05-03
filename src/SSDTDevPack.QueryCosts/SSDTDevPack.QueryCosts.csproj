@@ -77,8 +77,16 @@
       <HintPath>..\Merge\src\SSDTDevPack.Merge\packages\Microsoft.VisualStudio.CoreUtility.15.0.26201\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\Merge\src\SSDTDevPack.Merge\packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\Merge\src\SSDTDevPack.Merge\packages\Microsoft.VisualStudio.Shell.Framework.15.0.26201\lib\net45\Microsoft.VisualStudio.Shell.Framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -93,6 +101,10 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\Merge\src\SSDTDevPack.Merge\packages\Microsoft.VisualStudio.Utilities.15.0.26201\lib\net45\Microsoft.VisualStudio.Utilities.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="sqlpackage, Version=13.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -110,25 +122,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentScriptCosters.cs" />
-    <Compile Include="Highlighter\LowlightWordFormatDefinition.cs" />
-    <Compile Include="Highlighter\HighlightWordFormatDefinition.cs" />
-    <Compile Include="Highlighter\HighlightWordTag.cs" />
-    <Compile Include="Highlighter\HighlightWordTagger.cs" />
-    <Compile Include="Highlighter\HighlightWordTaggerProvider.cs" />
-    <Compile Include="Highlighter\LowlightWordTag.cs" />
-    <Compile Include="QueryCostRepository.cs" />
-    <Compile Include="ScriptCoster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">
       <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
       <Name>SSDTDevPack.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Merge\src\SSDTDevPack.Merge\SSDTDevPack.Merge.csproj">
-      <Project>{EF0F4A6D-68A4-4745-A3D5-2118A1608721}</Project>
-      <Name>SSDTDevPack.Merge</Name>
     </ProjectReference>
     <ProjectReference Include="..\SSDTDevPack.CCover\SSDTDevPack.CCover.csproj">
       <Project>{F9577A2E-2D01-4419-979E-0A85A425C404}</Project>

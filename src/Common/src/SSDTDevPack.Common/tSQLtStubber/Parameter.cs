@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.SqlServer.Dac.Model;
+﻿using Microsoft.SqlServer.Dac.Model;
 
 namespace SSDTDevPack.tSQLtStubber
 {

@@ -59,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NameConstraints\src\SSDTDevPack.NameConstraints\SSDTDevPack.NameConstraints.csproj">
-      <Project>{289C1F12-3F83-4061-B88E-04493B015102}</Project>
-      <Name>SSDTDevPack.NameConstraints</Name>
+    <ProjectReference Include="..\..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">
+      <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
+      <Name>SSDTDevPack.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
