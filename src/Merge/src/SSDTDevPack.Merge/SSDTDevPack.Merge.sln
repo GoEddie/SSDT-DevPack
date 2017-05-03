@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Merge", "Merge", "{267A52F1-0C75-4EEE-8452-C8A6DC3FAC6C}"
 EndProject
@@ -36,6 +36,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clippy", "Clippy", "{F689D4EA-0D04-4338-8912-6A310F1E1036}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{B807E65A-A87C-47AF-8BAA-CC4519383DD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeCoverage", "CodeCoverage", "{60440AF9-3F82-49BB-9325-61270403ABED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.Merge", "SSDTDevPack.Merge.csproj", "{EF0F4A6D-68A4-4745-A3D5-2118A1608721}"
 EndProject
@@ -79,11 +81,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.Clippy", "..\..
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Nested", "..\..\..\Test\Common\SampleSolutions\NestedProjects\Nested\Nested.sqlproj", "{5A32B58D-1E86-409A-8258-AEA0F0A07123}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeCoverage", "CodeCoverage", "{60440AF9-3F82-49BB-9325-61270403ABED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.CodeCoverage", "..\..\..\SSDTDevPack.CodeCoverage\SSDTDevPack.CodeCoverage.csproj", "{6BCAF9C4-F47C-4B0D-BE37-063EEC1A11D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPacl.CCover", "..\..\..\SSDTDevPack.CCover\SSDTDevPack.CCover.csproj", "{F9577A2E-2D01-4419-979E-0A85A425C404}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDTDevPack.CCover", "..\..\..\SSDTDevPack.CCover\SSDTDevPack.CCover.csproj", "{F9577A2E-2D01-4419-979E-0A85A425C404}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
