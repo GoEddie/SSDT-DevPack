@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="354e4235-c369-4a8f-a855-0318891c0903" Version="0.2.0.2" Language="en-US" Publisher="EdElliott" />
+    <Identity Id="354e4235-c369-4a8f-a855-0318891c0903" Version="0.2.0.4" Language="en-US" Publisher="EdElliott" />
     <DisplayName>SSDTDevPack</DisplayName>
     <Description xml:space="preserve">The Agile SQL Club devpack, tools to help SSDT database projects + dacpacs. Includes MergUi
     </Description>
@@ -17,7 +17,7 @@
     <Dependency Id="Microsoft.VisualStudio.MPF.12.0" DisplayName="Visual Studio MPF 12.0" d:Source="Installed" Version="[12.0,14.0]" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup;|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" Path="|SSDTDevPack.Common|" d:ProjectName="SSDTDevPack.Common" />
   </Assets>
   <Prerequisites>
