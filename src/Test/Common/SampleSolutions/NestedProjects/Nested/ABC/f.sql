@@ -1,5 +1,16 @@
-﻿CREATE FUNCTION [dbo].[f]()
-	RETURNS table
-as
-	return  select Id, Name from dbo.TheTable where Id != Id
-		and Name != Name;
+CREATE FUNCTION [dbo].[f]()
+	RETURNS TABLE
+AS
+	RETURN  SELECT Id, Name FROM dbo.TheTable WHERE Id != Id
+		AND Name != Name;
+
+GO
+
+
+CREATE INDEX ix_a ON dbo.thetable (id)
+go
+CREATE INDEX ix_a2 ON dbo.thetable (id)
+go
+CREATE INDEX ix_a3 ON dbo.thetable (id)
+go
+

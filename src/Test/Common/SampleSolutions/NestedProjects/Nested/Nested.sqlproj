@@ -59,6 +59,8 @@
     <Folder Include="Properties" />
     <Folder Include="ABC" />
     <Folder Include="ABC\DEF" />
+    <Folder Include="ABC\f\" />
+    <Folder Include="ABC\DEF\f\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ABC\DEF\Script.NotIncluded.sql" />
@@ -69,6 +71,8 @@
     <Build Include="TheTable.sql" />
     <Build Include="ABC\DEF\aaaa.sql" />
     <Build Include="ABC\f.sql" />
+    <Build Include="ABC\DEF\f\f.sql" />
+    <Build Include="ABC\DEF\f\test f does something.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="ABC\DEF\Script.PostDeploy.sql" />

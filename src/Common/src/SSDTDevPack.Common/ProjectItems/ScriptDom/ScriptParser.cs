@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
+using SSDTDevPack.Common.ProjectVersion;
 using SSDTDevPack.Logging;
 
 namespace SSDTDevPack.Common.ScriptDom
@@ -21,7 +22,7 @@ namespace SSDTDevPack.Common.ScriptDom
         {
             using (var reader = GetScriptReader())
             {
-                var parser = new TSql120Parser(true);
+                var parser = VersionDetector.ParserFactory(false);
 
                 IList<ParseError> errors;
                 var sqlFragment = parser.Parse(reader, out errors);

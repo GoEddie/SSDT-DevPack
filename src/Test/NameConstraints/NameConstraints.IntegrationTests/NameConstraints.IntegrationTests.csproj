@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NameConstraints.IntegrationTests</RootNamespace>
     <AssemblyName>NameConstraints.IntegrationTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,13 +54,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NameConstraints\src\SSDTDevPack.NameConstraints\SSDTDevPack.NameConstraints.csproj">
-      <Project>{289C1F12-3F83-4061-B88E-04493B015102}</Project>
-      <Name>SSDTDevPack.NameConstraints</Name>
+    <ProjectReference Include="..\..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">
+      <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
+      <Name>SSDTDevPack.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

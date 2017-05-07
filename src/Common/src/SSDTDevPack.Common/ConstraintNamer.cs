@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
+using SSDTDevPack.Common.ProjectVersion;
 using SSDTDevPack.Common.Settings;
 
 namespace SSDTDevPack.NameConstraints
@@ -56,7 +57,7 @@ namespace SSDTDevPack.NameConstraints
 
             var comments = GetComments(oldScriptBlock);
 
-            var generator = new Sql120ScriptGenerator(SavedSettings.Get().GeneratorOptions);
+            var generator = VersionDetector.ScriptGeneratorFactory(SavedSettings.Get().GeneratorOptions);
             
             string newScriptBlock;
             generator.GenerateScript(statement, out newScriptBlock);
@@ -73,7 +74,7 @@ namespace SSDTDevPack.NameConstraints
         {
 
             var comments = new StringBuilder();
-            var parser = new TSql120Parser(false);
+            var parser = VersionDetector.ParserFactory(false);
             IList<ParseError> errors;
             var tokens = parser.GetTokenStream(new StringReader(oldScriptBlock), out errors);
             foreach (var token in tokens)
@@ -143,7 +144,7 @@ namespace SSDTDevPack.NameConstraints
         {
             using (var script = new StringReader(_script))
             {
-                var parser = new TSql120Parser(false);
+                var parser = VersionDetector.ParserFactory(false);
 
                 IList<ParseError> errors;
 

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SSDTDevPack.QueryCosts.UnitTests</RootNamespace>
     <AssemblyName>SSDTDevPack.QueryCosts.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,12 +52,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SSDTDevPack.QueryCosts\SSDTDevPack.QueryCosts.csproj">
-      <Project>{4B9FDC90-6AF3-4CE8-90DF-4B5FB854A357}</Project>
-      <Name>SSDTDevPack.QueryCosts</Name>
+    <ProjectReference Include="..\..\..\Common\src\SSDTDevPack.Common\SSDTDevPack.Common.csproj">
+      <Project>{D6638892-5597-40C3-916A-E020871F7077}</Project>
+      <Name>SSDTDevPack.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

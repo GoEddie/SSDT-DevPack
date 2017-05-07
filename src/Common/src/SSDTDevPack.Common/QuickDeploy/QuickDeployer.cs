@@ -59,6 +59,11 @@ namespace SSDTDevPack.QuickDeploy
 
         }
 
+        public static void ClearConnectionString()
+        {
+            ConnectionString = null;
+        }
+
         public static void DeployFile(string newCode)
         {
             if (String.IsNullOrEmpty(ConnectionString))

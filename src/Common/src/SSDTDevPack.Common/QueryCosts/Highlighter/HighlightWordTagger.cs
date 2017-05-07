@@ -240,124 +240,131 @@ namespace SSDTDevPack.QueryCosts.Highlighter
 
         protected override void UpdateWordAdornments()
         {
-
-            var dte = (DTE)VsServiceProvider.Get(typeof(DTE));
-
-            if (dte.ActiveDocument == null)
-            {
-                return;
-            }
-            
-            if (RequestedPoint.Snapshot.ContentType.TypeName != "SQL Server Tools" || !RequestedPoint.Snapshot.ContentType.BaseTypes.Any(p=>p.IsOfType("code")))
-            {
-                return;
-            }
-            
-
-
             try
             {
-                var store = CodeCoverageStore.Get;
 
-                var path = dte.ActiveDocument.FullName;
+                var dte = (DTE) VsServiceProvider.Get(typeof(DTE));
 
-                if (store.ObjectsInFile(path) == null)
-                    return;
-
-                var yellowWordSpans = new List<SnapshotSpan>();
-                var redWordSpans = new List<SnapshotSpan>();
-
-                if (null != store && CodeCoverageTaggerSettings.Enabled)
+                if (dte.ActiveDocument == null)
                 {
-                    var documentKey = string.Format("{0}:{1}", RequestedPoint.Snapshot.Length, RequestedPoint.Snapshot.Version.VersionNumber);
-                    
-                    var script = GetCurrentDocumentText(dte);
-
-                    foreach (var proc in ScriptDom.GetProcedures(script))
-                    {
-                        var name = proc?.ProcedureReference.Name.ToNameString();
-
-                        if (string.IsNullOrEmpty(name))
-                            continue;
-
-                        var statements = store.GetCoveredStatements(name, path);
-
-                        if (statements == null)
-                            continue;
-
-                        if (statements.Any(p => p.TimeStamp < File.GetLastWriteTimeUtc(path)))
-                            continue;
-
-                        foreach (var statement in statements)
-                        {
-                            var offset = proc.StartOffset + (int) statement.Offset;
-                            if (offset + statement.Length > script.Length)
-                                continue; //bad things!
-
-                            if (statement.Length > -1)
-                            {
-                                var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (int) statement.Length+1);
-                                yellowWordSpans.Add(span);
-                            }
-                            else
-                            {
-                                var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (proc.FragmentLength - offset));
-                                yellowWordSpans.Add(span);
-                            }
-                        }
-                    }
-
-                    foreach (var proc in ScriptDom.GetFunctions(script))
-                    {
-                        var name = proc?.Name.ToNameString();
-
-                        if (string.IsNullOrEmpty(name))
-                            continue;
-
-                        var statements = store.GetCoveredStatements(name, path);
-
-                        if (statements == null)
-                            continue;
-
-                        foreach (var statement in statements)
-                        {
-                            var offset = proc.StartOffset + (int)statement.Offset;
-                            if (offset + statement.Length > script.Length)
-                                continue; //bad things!
-
-                            if (statement.Length > -1)
-                            {
-                                var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (int)statement.Length + 1);
-                                yellowWordSpans.Add(span);
-                            }
-                            else
-                            {
-                                var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (proc.FragmentLength - offset) + 1);
-                                yellowWordSpans.Add(span);
-                            }
-                        }
-                    }
-
-                    if (documentKey != string.Format("{0}:{1}", RequestedPoint.Snapshot.Length, RequestedPoint.Snapshot.Version.VersionNumber))
-                        return;
+                    return;
                 }
 
-               
-
-                var currentRequest = RequestedPoint;
-                var word = TextStructureNavigator.GetExtentOfWord(currentRequest);
-                var currentWord = word.Span;
-
-                //If another change hasn't happened, do a real update 
-                if (currentRequest == RequestedPoint)
+                if (RequestedPoint.Snapshot.ContentType.TypeName != "SQL Server Tools" || !RequestedPoint.Snapshot.ContentType.BaseTypes.Any(p => p.IsOfType("code")))
                 {
-                    SynchronousUpdate(currentRequest, new NormalizedSnapshotSpanCollection(yellowWordSpans), new NormalizedSnapshotSpanCollection(redWordSpans), currentWord);
+                    return;
+                }
+
+
+
+                try
+                {
+                    var store = CodeCoverageStore.Get;
+
+                    var path = dte.ActiveDocument.FullName;
+
+                    if (store.ObjectsInFile(path) == null)
+                        return;
+
+                    var yellowWordSpans = new List<SnapshotSpan>();
+                    var redWordSpans = new List<SnapshotSpan>();
+
+                    if (null != store && CodeCoverageTaggerSettings.Enabled)
+                    {
+                        var documentKey = string.Format("{0}:{1}", RequestedPoint.Snapshot.Length, RequestedPoint.Snapshot.Version.VersionNumber);
+
+                        var script = GetCurrentDocumentText(dte);
+
+                        foreach (var proc in ScriptDom.GetProcedures(script))
+                        {
+                            var name = proc?.ProcedureReference.Name.ToNameString();
+
+                            if (string.IsNullOrEmpty(name))
+                                continue;
+
+                            var statements = store.GetCoveredStatements(name, path);
+
+                            if (statements == null)
+                                continue;
+
+                            if (statements.Any(p => p.TimeStamp < File.GetLastWriteTimeUtc(path)))
+                                continue;
+
+                            foreach (var statement in statements)
+                            {
+                                var offset = proc.StartOffset + (int) statement.Offset;
+                                if (offset + statement.Length > script.Length)
+                                    continue; //bad things!
+
+                                if (statement.Length > -1)
+                                {
+                                    var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (int) statement.Length + 1);
+                                    yellowWordSpans.Add(span);
+                                }
+                                else
+                                {
+                                    var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (proc.FragmentLength - offset));
+                                    yellowWordSpans.Add(span);
+                                }
+                            }
+                        }
+
+                        foreach (var proc in ScriptDom.GetFunctions(script))
+                        {
+                            var name = proc?.Name.ToNameString();
+
+                            if (string.IsNullOrEmpty(name))
+                                continue;
+
+                            var statements = store.GetCoveredStatements(name, path);
+
+                            if (statements == null)
+                                continue;
+
+                            foreach (var statement in statements)
+                            {
+                                var offset = proc.StartOffset + (int) statement.Offset;
+                                if (offset + statement.Length > script.Length)
+                                    continue; //bad things!
+
+                                if (statement.Length > -1)
+                                {
+                                    var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (int) statement.Length + 1);
+                                    yellowWordSpans.Add(span);
+                                }
+                                else
+                                {
+                                    var span = new SnapshotSpan(new SnapshotPoint(RequestedPoint.Snapshot, offset), (proc.FragmentLength - offset) + 1);
+                                    yellowWordSpans.Add(span);
+                                }
+                            }
+                        }
+
+                        if (documentKey != string.Format("{0}:{1}", RequestedPoint.Snapshot.Length, RequestedPoint.Snapshot.Version.VersionNumber))
+                            return;
+                    }
+
+
+
+                    var currentRequest = RequestedPoint;
+                    var word = TextStructureNavigator.GetExtentOfWord(currentRequest);
+                    var currentWord = word.Span;
+
+                    //If another change hasn't happened, do a real update 
+                    if (currentRequest == RequestedPoint)
+                    {
+                        SynchronousUpdate(currentRequest, new NormalizedSnapshotSpanCollection(yellowWordSpans), new NormalizedSnapshotSpanCollection(redWordSpans), currentWord);
+                    }
+                }
+
+                catch (Exception)
+                {
+                    // MessageBox.Show("2 - e : " + e.Message + " \r\n " + e.StackTrace);
                 }
             }
-
-            catch (Exception e)
+            catch (Exception)
             {
-               // MessageBox.Show("2 - e : " + e.Message + " \r\n " + e.StackTrace);
+                // MessageBox.Show("2 - e : " + e.Message + " \r\n " + e.StackTrace);
             }
         }
         

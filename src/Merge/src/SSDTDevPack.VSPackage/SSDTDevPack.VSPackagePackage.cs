@@ -8,10 +8,10 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SSDTDevPack.Clippy;
+using SSDTDevPack.Common.ProjectVersion;
 using SSDTDevPack.Common.ScriptDom;
 using SSDTDevPack.Common.Settings;
 using SSDTDevPack.Common.UserMessages;
-
 using SSDTDevPack.Common.VSPackage;
 using SSDTDevPack.Extraction;
 using SSDTDevPack.Formatting;
@@ -95,8 +95,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 menuItem = new MenuCommand(CreatetSQLtSchema, menuCommandID);
                 mcs.AddCommand(menuItem);
 
-                menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,
-                    (int) PkgCmdIDList.SSDTDevPackCreatetSQLtTestStub);
+                menuCommandID = new CommandID(GuidList.guidSSDTDevPack_VSPackageCmdSet,(int) PkgCmdIDList.SSDTDevPackCreatetSQLtTestStub);
                 menuItem = new MenuCommand(CreatetSQLtTest, menuCommandID);
                 mcs.AddCommand(menuItem);
 
@@ -107,12 +106,13 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeploy, QuickDeploy);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeployToClipboard, QuickDeployToClipboard);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeployAppendToClipboard, QuickDeployAppendToClipboard);
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackQuickDeployClearConnection, QuickDeployClearConnection);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackLowerCase, LowerCase);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackUpperCase, UpperCase);
 
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackExtractToTvf, ExtractToTvf);
-
+                AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackDeprecatedWarning, DeprecatedWarning);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTDevPackFindDuplicateIndexes, FindDuplicateIndexes);
                 AddMenuItem(mcs, (int)PkgCmdIDList.SSDTNonSargableRewrites, RewriteNonSargableIsNull);
                 AddCheckableMenuItem(mcs, (int)PkgCmdIDList.SSDTTSqlClippy, EnableClippy);
@@ -120,6 +120,26 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 AddCheckableMenuItemCodeCoverage(mcs, (int)PkgCmdIDList.SSDTDevPackToggleCodeCoverageDisplay, EnableCodeCoverage);
 
             }
+        }
+
+        private void DeprecatedWarning(object sender, EventArgs e)
+        {
+            MessageBox.Show("Yes it is true, mainly because I don't beleive anyone uses these - if you want it to stay in then email ed@agilesql.co.uk and tell me what it is you want to keep on using :)");
+        }
+
+        private void QuickDeployClearConnection(object sender, EventArgs e)
+        {
+            try
+            {
+                QuickDeployer.ClearConnectionString();
+                OutputPane.WriteMessageAndActivatePane("Quick Deploy Connection String has been cleared.");
+            }
+            catch (Exception ex)
+            {
+                OutputPane.WriteMessage("QuickDeployClearConnection error: {0}", ex.Message);
+                Log.WriteInfo("QuickDeployClearConnection error: {0}", ex.Message);
+            }
+
         }
 
         private void QuickDeployAppendToClipboard(object sender, EventArgs e)
@@ -185,6 +205,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         private void EnableClippy(object sender, EventArgs e)
         {
+            CallWrapper();
             ClippySettings.Enabled = !ClippySettings.Enabled;
         }
 
@@ -192,6 +213,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var oldDoc = GetCurrentDocumentText();
                 var newDoc = oldDoc;
 
@@ -218,6 +240,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var task = new System.Threading.Tasks.Task(() =>
                 {
                     OutputPane.WriteMessageAndActivatePane("Finding Duplicate Indexes...");
@@ -242,6 +265,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var dte = (DTE) GetService(typeof (DTE));
 
                 if (dte.ActiveDocument == null)
@@ -275,6 +299,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var text = GetCurrentDocumentText();
                 if (String.IsNullOrEmpty(text))
                     return;
@@ -293,11 +318,51 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
                 
             }
         }
-        
+
+        private void CallWrapper()
+        {
+            var dte = (DTE)GetService(typeof(DTE));
+            var project = dte.ActiveDocument.ProjectItem.ContainingProject;
+
+            //project.GetType().GetProperty("Globals").GetValue(project).GetType().GetProperty("Parent").GetValue(project.GetType().GetProperty("Globals").GetValue(project)).GetType().GetProperty("DatabaseSchemaProvider").GetValue(project.GetType().GetProperty("Globals").GetValue(project).GetType().GetProperty("Parent").GetValue(project.GetType().GetProperty("Globals").GetValue(project))).GetType().GetProperty("Platform").GetValue(project.GetType().GetProperty("Globals").GetValue(project).GetType().GetProperty("Parent").GetValue(project.GetType().GetProperty("Globals").GetValue(project)).GetType().GetProperty("DatabaseSchemaProvider").GetValue(project.GetType().GetProperty("Globals").GetValue(project).GetType().GetProperty("Parent").GetValue(project.GetType().GetProperty("Globals").GetValue(project))))
+            var projectType = project.GetType();
+            var globalsProperty = projectType.GetProperty("Globals");
+            if (globalsProperty == null)
+                return;
+
+            var globals = globalsProperty.GetValue(project);
+            var globalsType = globals.GetType();
+
+            var parentProperty = globalsType.GetProperty("Parent");
+            if (parentProperty == null)
+                return;
+
+            var parent = parentProperty.GetValue(globals);
+
+            var schemaProviderProperty = parent.GetType().GetProperty("DatabaseSchemaProvider");
+            if (schemaProviderProperty == null)
+                return;
+
+            var databaseSchemaProvider = schemaProviderProperty.GetValue(parent);
+
+            var platformProperty = databaseSchemaProvider.GetType().GetProperty("Platform");
+            if (platformProperty == null)
+                return;
+
+            var version = platformProperty.GetValue(databaseSchemaProvider);
+
+            
+            VersionDetector.SetVersion(version as string);
+        }
+
         private void LowerCase(object sender, EventArgs e)
         {
+
             try
             {
+
+                CallWrapper();
+                
                 var text = GetCurrentDocumentText();
                 if (String.IsNullOrEmpty(text))
                     return;
@@ -320,6 +385,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 QuickDeployer.DeployFile(GetCurrentDocumentText());
             }
             catch (Exception ex)
@@ -422,6 +488,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             DocumentScriptCosters.GetInstance().ClearCache();
         }
 
+
+
         private void AddMenuItem(OleMenuCommandService mcs, int cmdId,EventHandler eventHandler )
         {
             CommandID menuCommandID;
@@ -521,6 +589,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
+
                 var dte = (DTE) GetService(typeof (DTE));
 
                 if (dte.ActiveDocument == null)
@@ -557,7 +627,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
-
+                CallWrapper();
 
                 var dte = (DTE) GetService(typeof (DTE));
 
@@ -595,6 +665,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
+
                 var dte = (DTE) GetService(typeof (DTE));
                 if (null == dte || dte.ActiveDocument == null)
                 {
