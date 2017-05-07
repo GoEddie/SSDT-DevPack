@@ -299,6 +299,7 @@
     <Compile Include="Merge\UI\UIProperties.cs" />
     <Compile Include="Merge\UI\UiSettings.cs" />
     <Compile Include="ProjectItems\Extensions.cs" />
+    <Compile Include="ProjectVersion\VersionDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProjectItems\ScriptDom\Quote.cs" />
     <Compile Include="ProjectItems\ScriptDom\ScriptParser.cs" />

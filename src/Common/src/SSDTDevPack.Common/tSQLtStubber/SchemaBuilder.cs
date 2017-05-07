@@ -5,6 +5,7 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.ProjectItems;
+using SSDTDevPack.Common.ProjectVersion;
 using SSDTDevPack.Common.SolutionBrowser;
 using SSDTDevPack.tSQLtStubber;
 
@@ -22,7 +23,7 @@ namespace SSDTDevPack.tSQLtStubber
         public void CreateSchemas()
         {
             IList<ParseError> errors;
-            var fragment = new TSql120Parser(false).Parse(new StringReader(_scripts), out errors);
+            var fragment = VersionDetector.ParserFactory(false).Parse(new StringReader(_scripts), out errors);
             if (fragment == null)
                 return;
 
@@ -89,9 +90,11 @@ namespace SSDTDevPack.tSQLtStubber
 
         private static void CreateNewFile(ProjectItem folder, string name, string script)
         {
-            var classFolder = folder.ProjectItems.AddFromTemplate("Schema", name.UnQuote() + ".sql");
-            var filePath = classFolder.GetStringProperty("FullPath");
+            var filePath = Path.Combine(folder.GetStringProperty("FullPath"), name.UnQuote() + ".sql");
+            
             File.WriteAllText(filePath, script);
+            folder.ProjectItems.AddFromFile(filePath);
+
         }
 
         private string GetScript(string schemaName)

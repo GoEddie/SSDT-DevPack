@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
+using SSDTDevPack.Common.ProjectVersion;
 using SSDTDevPack.Common.Settings;
 
 namespace SSDTDevPack.QueryCosts
@@ -47,7 +48,7 @@ namespace SSDTDevPack.QueryCosts
         public virtual string GetPlanForQuery(string query)
         {
             IList<ParseError> errors;
-            var fragment = new TSql120Parser(false).Parse(new StringReader(query), out errors );
+            var fragment = VersionDetector.ParserFactory(false).Parse(new StringReader(query), out errors );
             var visitor = new ProcedureVisitor();
             fragment.Accept(visitor);
 

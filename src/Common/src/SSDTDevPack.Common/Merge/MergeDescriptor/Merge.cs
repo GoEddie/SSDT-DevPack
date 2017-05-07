@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
+using SSDTDevPack.Common.ProjectVersion;
 
 namespace SSDTDevPack.Merge.MergeDescriptor
 {
@@ -556,7 +557,7 @@ namespace SSDTDevPack.Merge.MergeDescriptor
         {
             var script = "";
             var generator =
-                new Sql120ScriptGenerator(new SqlScriptGeneratorOptions
+                VersionDetector.ScriptGeneratorFactory(new SqlScriptGeneratorOptions
                 {
                     IncludeSemicolons = true,
                     AlignClauseBodies = true,

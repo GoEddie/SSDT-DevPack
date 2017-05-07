@@ -8,6 +8,7 @@ using Microsoft.SqlServer.Dac.Model;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SSDTDevPack.Common.Dac;
 using SSDTDevPack.Common.ProjectItems;
+using SSDTDevPack.Common.ProjectVersion;
 using SSDTDevPack.Common.SolutionBrowser;
 
 namespace SSDTDevPack.tSQLtStubber
@@ -26,7 +27,7 @@ namespace SSDTDevPack.tSQLtStubber
         public void Go(){
 
             IList<ParseError> errors;
-            var fragment = new TSql120Parser(false).Parse(new StringReader(_scripts), out errors);
+            var fragment = VersionDetector.ParserFactory(false).Parse(new StringReader(_scripts), out errors);
             if (fragment == null)
                 return;
 

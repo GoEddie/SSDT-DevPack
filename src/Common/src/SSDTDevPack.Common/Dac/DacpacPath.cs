@@ -11,7 +11,10 @@ namespace SSDTDevPack.Common.Dac
 
         public static string Get(Project project)
         {
+
+            var config = project.ConfigurationManager.ActiveConfiguration;
             
+
             var builtGroup =
                 project.ConfigurationManager.ActiveConfiguration.OutputGroups.OfType<OutputGroup>()
                     .First(x => x.CanonicalName == "Built");
