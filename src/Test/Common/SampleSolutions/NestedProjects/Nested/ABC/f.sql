@@ -7,9 +7,10 @@ AS
 GO
 
 
-create index ix_a on dbo.thetable (id)
+CREATE INDEX ix_a ON dbo.thetable (id)
 go
-create index ix_a2 on dbo.thetable (id)
+CREATE INDEX ix_a2 ON dbo.thetable (id)
 go
-create index ix_a3 on dbo.thetable (id)
+CREATE INDEX ix_a3 ON dbo.thetable (id)
 go
+

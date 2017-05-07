@@ -205,6 +205,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
 
         private void EnableClippy(object sender, EventArgs e)
         {
+            CallWrapper();
             ClippySettings.Enabled = !ClippySettings.Enabled;
         }
 
@@ -212,6 +213,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var oldDoc = GetCurrentDocumentText();
                 var newDoc = oldDoc;
 
@@ -238,6 +240,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var task = new System.Threading.Tasks.Task(() =>
                 {
                     OutputPane.WriteMessageAndActivatePane("Finding Duplicate Indexes...");
@@ -262,6 +265,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var dte = (DTE) GetService(typeof (DTE));
 
                 if (dte.ActiveDocument == null)
@@ -295,6 +299,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 var text = GetCurrentDocumentText();
                 if (String.IsNullOrEmpty(text))
                     return;
@@ -357,8 +362,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
             {
 
                 CallWrapper();
-                ;
-
+                
                 var text = GetCurrentDocumentText();
                 if (String.IsNullOrEmpty(text))
                     return;
@@ -381,6 +385,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
                 QuickDeployer.DeployFile(GetCurrentDocumentText());
             }
             catch (Exception ex)
@@ -584,6 +589,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
+
                 var dte = (DTE) GetService(typeof (DTE));
 
                 if (dte.ActiveDocument == null)
@@ -620,7 +627,7 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
-
+                CallWrapper();
 
                 var dte = (DTE) GetService(typeof (DTE));
 
@@ -658,6 +665,8 @@ namespace TheAgileSQLClub.SSDTDevPack_VSPackage
         {
             try
             {
+                CallWrapper();
+
                 var dte = (DTE) GetService(typeof (DTE));
                 if (null == dte || dte.ActiveDocument == null)
                 {
