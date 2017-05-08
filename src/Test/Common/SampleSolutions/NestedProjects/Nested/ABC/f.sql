@@ -14,3 +14,4 @@ go
 CREATE INDEX ix_a3 ON dbo.thetable (id)
 go
 
+
